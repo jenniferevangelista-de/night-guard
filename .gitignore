@@ -14,3 +14,4 @@ eval/log_*.txt
 video/*.mp4
 video/*.wav
 video/review/
+video/review_pt/

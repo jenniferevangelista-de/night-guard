@@ -1,0 +1,109 @@
+{
+  "scenes": [
+    {
+      "id": "night",
+      "line": "São onze da noite. Uma criança joga online. E alguém está sendo gentil demais com ela.",
+      "voice": "n1.mp3",
+      "start": 1.2,
+      "voice_dur": 8.16,
+      "end": 10.76
+    },
+    {
+      "id": "stat",
+      "line": "Só em 2025, a central americana de crianças desaparecidas e exploradas recebeu mais de cinquenta mil denúncias de sextorsão. São cento e trinta e sete por dia. Quase uma a cada dez minutos.",
+      "voice": "n2.mp3",
+      "start": 10.76,
+      "voice_dur": 15.0,
+      "end": 26.96
+    },
+    {
+      "id": "fast",
+      "line": "E não demora. Dentro de um jogo, o aliciamento pode acontecer em vinte minutos.",
+      "voice": "n3.mp3",
+      "start": 26.96,
+      "voice_dur": 6.86,
+      "end": 34.82
+    },
+    {
+      "id": "platforms",
+      "line": "Roblox, Discord, Minecraft, TikTok. Cada plataforma vigia só o próprio quintal. E o golpista sabe disso: ele puxa a criança para um aplicativo criptografado, onde ninguém mais vê.",
+      "voice": "n4.mp3",
+      "start": 34.82,
+      "voice_dur": 15.29,
+      "end": 51.31
+    },
+    {
+      "id": "parents",
+      "line": "Os pais não conseguem ler cada conversa. E a criança nem sempre percebe a armadilha.",
+      "voice": "n5.mp3",
+      "start": 51.31,
+      "voice_dur": 7.1,
+      "end": 59.82
+    },
+    {
+      "id": "guard",
+      "line": "Conheça o Night Guard. Um modelo aberto que roda no computador da própria família. Ele lê o que aparece na tela, então protege até dentro do aplicativo criptografado. E a conversa nunca sai de casa.",
+      "voice": "n6.mp3",
+      "start": 59.82,
+      "voice_dur": 15.62,
+      "end": 76.24
+    },
+    {
+      "id": "alert",
+      "line": "Quando um estranho pede segredo, ele avisa na hora, com palavras que a criança entende.",
+      "voice": "n7.mp3",
+      "start": 76.24,
+      "voice_dur": 6.0,
+      "end": 92.84
+    },
+    {
+      "id": "hero",
+      "line": "Para a criança, ele é um amigo. Cada truque que ela aprende vira medalha, até ela virar a heroína da noite.",
+      "voice": "n8.mp3",
+      "start": 92.84,
+      "voice_dur": 7.87,
+      "end": 101.91
+    },
+    {
+      "id": "family",
+      "line": "Para os pais, ele é o Guarda Noturno. Um alerta só, sem a conversa inteira. O que aconteceu, e o que fazer agora, direto no celular.",
+      "voice": "n9.mp3",
+      "start": 101.91,
+      "voice_dur": 11.38,
+      "end": 114.69
+    },
+    {
+      "id": "tech",
+      "line": "Por dentro, só tecnologia aberta. O Gemma 4 lê texto e tela no próprio computador. No Tinker, treinamos um modelo que acertou o formato em setenta de setenta conversas. O Temporal aguenta queda, o Sentry acompanha cada checagem sem ler a conversa, o ElevenLabs dá voz aos avisos, e a demonstração roda no Render.",
+      "voice": "n10.mp3",
+      "start": 114.69,
+      "voice_dur": 23.3,
+      "end": 138.99
+    },
+    {
+      "id": "results",
+      "line": "Nos testes, pegou trinta e seis de trinta e seis conversas de risco, em uns quatro segundos.",
+      "voice": "n11.mp3",
+      "start": 138.99,
+      "voice_dur": 6.58,
+      "end": 146.97
+    },
+    {
+      "id": "peace",
+      "line": "Paz para a criança. Paz para os pais. E quanto mais a criança aprende, mais o guarda pode descansar.",
+      "voice": "n12.mp3",
+      "start": 146.97,
+      "voice_dur": 8.83,
+      "end": 157.4
+    },
+    {
+      "id": "end",
+      "line": "Night Guard. Parceiro dos pais. Amigo das crianças.",
+      "voice": "n13.mp3",
+      "start": 157.4,
+      "voice_dur": 6.34,
+      "end": 166.74
+    }
+  ],
+  "duration": 167.04
+}
