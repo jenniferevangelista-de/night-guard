@@ -66,52 +66,52 @@
     },
     {
       "id": "hero",
-      "line": "Para a criança, ele é um amigo. Cada truque que ela aprende vira medalha, até ela virar a heroína da noite.",
+      "line": "Para a criança, ele é um amigo que ensina aos poucos. Cada truque que ela aprende vira uma medalha, até ela virar a heroína da noite. E quanto mais ela sabe, menos o guarda precisa trabalhar.",
       "voice": "n9.mp3",
       "start": 110.08,
-      "voice_dur": 7.87,
-      "end": 119.15
+      "voice_dur": 13.58,
+      "end": 124.86
     },
     {
       "id": "family",
       "line": "Para os pais, ele é o Guarda Noturno. Um alerta só, sem a conversa inteira. O que aconteceu, e o que fazer agora, direto no celular.",
       "voice": "n10.mp3",
-      "start": 119.15,
+      "start": 124.86,
       "voice_dur": 11.38,
-      "end": 131.93
+      "end": 137.64
     },
     {
       "id": "tech",
       "line": "Por dentro, só tecnologia aberta. O Gemma 4 lê texto e tela no próprio computador. No Tinker, treinamos um modelo que acertou o formato em setenta de setenta conversas. O Temporal aguenta queda, o Sentry acompanha cada checagem sem ler a conversa, o ElevenLabs dá voz aos avisos, e a demonstração roda no Render.",
       "voice": "n11.mp3",
-      "start": 131.93,
+      "start": 137.64,
       "voice_dur": 23.3,
-      "end": 156.23
+      "end": 161.94
     },
     {
       "id": "results",
       "line": "Nos testes, pegou trinta e seis de trinta e seis conversas de risco, em uns quatro segundos.",
       "voice": "n12.mp3",
-      "start": 156.23,
+      "start": 161.94,
       "voice_dur": 6.58,
-      "end": 164.21
+      "end": 169.92
     },
     {
       "id": "peace",
       "line": "Paz para a criança. Paz para os pais. E quanto mais a criança aprende, mais o guarda pode descansar.",
       "voice": "n13.mp3",
-      "start": 164.21,
+      "start": 169.92,
       "voice_dur": 8.83,
-      "end": 174.64
+      "end": 180.35
     },
     {
       "id": "end",
       "line": "Night Guard. Parceiro dos pais. Amigo das crianças. E eu? Vou voltar pro meu cochilo.",
       "voice": "n14.mp3",
-      "start": 174.64,
+      "start": 180.35,
       "voice_dur": 10.22,
-      "end": 187.86
+      "end": 193.58
     }
   ],
-  "duration": 188.16
+  "duration": 193.88
 }

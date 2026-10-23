@@ -16,3 +16,6 @@ video/*.wav
 video/review/
 video/review_pt/
 video/review_en/
+video/walkthrough/*.mp4
+video/walkthrough/rec_*/
+video/walkthrough/_*

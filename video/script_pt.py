@@ -25,7 +25,7 @@ SCENES = [
     ("guard", "Conheça o Night Guard. Um modelo aberto que roda no computador da própria família. Ele lê o que aparece na tela, "
               "então protege até dentro do aplicativo criptografado. E a conversa nunca sai de casa.", 0.8),
     ("alert", "Quando um estranho pede segredo, ele avisa na hora, com palavras que a criança entende.", 10.6),
-    ("hero", "Para a criança, ele é um amigo. Cada truque que ela aprende vira medalha, até ela virar a heroína da noite.", 1.2),
+    ("hero", "Para a criança, ele é um amigo que ensina aos poucos. Cada truque que ela aprende vira uma medalha, até ela virar a heroína da noite. E quanto mais ela sabe, menos o guarda precisa trabalhar.", 1.2),
     ("family", "Para os pais, ele é o Guarda Noturno. Um alerta só, sem a conversa inteira. O que aconteceu, e o que fazer agora, "
                "direto no celular.", 1.4),
     ("tech", "Por dentro, só tecnologia aberta. O Gemma 4 lê texto e tela no próprio computador. No Tinker, treinamos um modelo "

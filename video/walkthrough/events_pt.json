@@ -1,0 +1,60 @@
+{
+  "segments": [
+    {
+      "id": "home",
+      "start": 1.08
+    },
+    {
+      "id": "check",
+      "start": 13.98
+    },
+    {
+      "id": "result",
+      "start": 23.22
+    },
+    {
+      "id": "tell",
+      "start": 33.77
+    },
+    {
+      "id": "benign",
+      "start": 43.77
+    },
+    {
+      "id": "practice",
+      "start": 53.02
+    },
+    {
+      "id": "parents",
+      "start": 62.76
+    },
+    {
+      "id": "game",
+      "start": 75.07
+    },
+    {
+      "id": "off",
+      "start": 98.39
+    },
+    {
+      "id": "fault",
+      "start": 103.6
+    },
+    {
+      "id": "end",
+      "start": 112.35
+    }
+  ],
+  "audio": [
+    {
+      "src": "/web/audio/pt/platform_move.mp3",
+      "t": 26.556411266326904
+    },
+    {
+      "src": "/web/audio/pt/flattery.mp3",
+      "t": 86.86741137504578
+    }
+  ],
+  "frames_t0": 0.364,
+  "video": "rec_pt.mp4"
+}

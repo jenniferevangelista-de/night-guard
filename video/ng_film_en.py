@@ -147,6 +147,8 @@ def sc_night(img, d, t):
     a0 = S("night")["start"] - 1.2
     moon_window(d, t)
     desk_set(d, t, 1.0)
+    scr = Image.open(HERE / "world.png").convert("RGB").crop((260, 40, 1260, 690)).resize((306, 206), Image.LANCZOS)
+    img.paste(scr, (867, 477)); d = ImageDraw.Draw(img)
     typing = math.sin(t * 30) * 7
     stick(d, t, (720, 800), 1.0, lean=10, armL=(30 + typing, -10), armR=(20 - typing, -20), legL=(170, 100), legR=(160, 95),
           mood="happy", look=0.6, seed=1)
@@ -319,9 +321,9 @@ def sc_alert(img, d, t):
 
 def sc_hero(img, d, t):
     a = S("hero")["start"]
-    k = eio(seg(t, a + 0.6, a + 6.0))
+    k = eio(seg(t, a + 0.6, a + 9.5))
     for i in range(14):                                                      # one medal per tactic learned
-        medal(d, t, 160 + i * 115, 200, seg(t, a + 0.6 + i * 0.38, a + 0.9 + i * 0.38), 1700 + i * 5)
+        medal(d, t, 160 + i * 115, 200, seg(t, a + 0.6 + i * 0.62, a + 0.9 + i * 0.62), 1700 + i * 5)
     x0, x1, y = 260, 1660, 330
     wrect(d, x0, y, x1, y + 44, t, 1790, 6, fill=WHITE)
     d.rectangle((x0 + 6, y + 6, x0 + 6 + (x1 - x0 - 12) * k, y + 38), fill=MOON)
@@ -334,8 +336,15 @@ def sc_hero(img, d, t):
         text(d, "NIGHT HERO!", W / 2, 520, 76, RED, "mm", "impact.ttf")
     stick(d, t, (960, hy), 1.0, armL=(-130, -110) if hero else (200, 240), armR=(-50, -70) if hero else (-30, -60),
           legL=(110, 80), legR=(70, 100), mood="happy", seed=90)
-    shield(d, t, 1550, 760, 0.6, 1.0, seed=520)
+    shield(d, t, 1550, 760, 0.6, 1.0, "sleep" if k >= 1 else "open", seed=520)
     text(d, "friend", 1550, 900, 40, NIGHT)
+    wx0, wx1, wy = 1400, 1720, 580
+    text(d, "guard's workload", (wx0 + wx1) / 2, wy - 30, 34, INK)
+    wrect(d, wx0, wy, wx1, wy + 34, t, 1798, 5, fill=WHITE)
+    load = 1 - 0.85 * k
+    d.rectangle((wx0 + 5, wy + 5, wx0 + 5 + (wx1 - wx0 - 10) * load, wy + 29), fill=RED if load > 0.5 else GREEN)
+    if k >= 1:
+        text(d, "z", 1660, 640 - (t * 40 % 60), 40, NIGHT, "mm", "impact.ttf")
 
 
 def sc_family(img, d, t):

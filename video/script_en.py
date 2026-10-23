@@ -25,7 +25,7 @@ SCENES = [
     ("guard", "Meet Night Guard. An open model that runs on the family's own computer. It reads what's on the screen, "
               "so it protects even inside encrypted apps. And the chat never leaves home.", 0.8),
     ("alert", "When a stranger asks for a secret, it warns the kid right away, in words they understand.", 10.6),
-    ("hero", "To the kid, it's a friend. Every trick she learns becomes a medal, until she's a Night Hero.", 1.2),
+    ("hero", "To the kid, it's a friend that teaches little by little. Every trick she learns becomes a medal, until she's a Night Hero. And the more she knows, the less the guard has to work.", 1.2),
     ("family", "To parents, it's the Night Guard. One alert, not the whole chat. What happened, and what to do now, "
                "right on their phone.", 1.4),
     ("tech", "Under the hood, it's all open. Gemma 4 reads text and the screen on the computer itself. On Tinker, we fine-tuned "

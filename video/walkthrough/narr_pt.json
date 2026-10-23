@@ -1,0 +1,68 @@
+[
+  {
+    "id": "home",
+    "line": "Oi, aqui é o Soneca de novo. Agora é o Night Guard de verdade, rodando no computador. No topo, a barra mostra se o guarda está ligado. Um clique liga, outro desliga.",
+    "voice": "voz_pt/w01.mp3",
+    "dur": 12.55
+  },
+  {
+    "id": "check",
+    "line": "Na aba Algo me incomodou, a criança cola uma conversa ou escolhe um exemplo. O Gemma analisa ali mesmo, sem mandar nada pra internet.",
+    "voice": "voz_pt/w02.mp3",
+    "dur": 8.88
+  },
+  {
+    "id": "result",
+    "line": "Primeiro ele pergunta o que ela acha. Depois mostra o perigo em palavras simples, com a frase exata do estranho, e o que fazer. E dá pra ouvir o aviso.",
+    "voice": "voz_pt/w03.mp3",
+    "dur": 10.2
+  },
+  {
+    "id": "benign",
+    "line": "E uma conversa normal de jogo? Nada de alarme falso.",
+    "voice": "voz_pt/w04.mp3",
+    "dur": 4.61
+  },
+  {
+    "id": "practice",
+    "line": "Em Praticar, ela treina situações curtas. Cada acerto vira medalha, ela sobe de nível, e a barra mostra o guarda ficando mais preguiçoso.",
+    "voice": "voz_pt/w05.mp3",
+    "dur": 9.38
+  },
+  {
+    "id": "tell",
+    "line": "Em Contar pra alguém, ela escolhe o que compartilhar e recebe uma mensagem pronta pra mãe, pai ou professor. Nada é enviado sozinho: quem decide é ela.",
+    "voice": "voz_pt/w06.mp3",
+    "dur": 9.65
+  },
+  {
+    "id": "parents",
+    "line": "Na área dos pais, o Guarda Noturno mostra só o que importa: o risco, o app, o trecho e o que fazer agora. Os pais escolhem as regras e podem receber aviso no celular.",
+    "voice": "voz_pt/w07.mp3",
+    "dur": 11.23
+  },
+  {
+    "id": "game",
+    "line": "No modo ao vivo, ninguém cola nada. O estranho escreve no chat do jogo, e o guarda avisa a criança sozinho, na hora, com voz.",
+    "voice": "voz_pt/w08.mp3",
+    "dur": 9.0
+  },
+  {
+    "id": "off",
+    "line": "Desligou o guarda? Ele para na hora, até o que estava na fila.",
+    "voice": "voz_pt/w09.mp3",
+    "dur": 4.85
+  },
+  {
+    "id": "fault",
+    "line": "E se o modelo cair, o selo vira Guarda pausado. Ele nunca finge que está tudo bem. Aqui a queda foi simulada.",
+    "voice": "voz_pt/w10.mp3",
+    "dur": 8.33
+  },
+  {
+    "id": "end",
+    "line": "Tudo isso com modelo aberto, no computador da família. Night Guard: parceiro dos pais, amigo das crianças.",
+    "voice": "voz_pt/w11.mp3",
+    "dur": 7.85
+  }
+]
