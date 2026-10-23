@@ -1,0 +1,933 @@
+{
+  "model": "meta-llama/llama-3.3-70b-instruct",
+  "via": "Backboard (llm_provider=openrouter)",
+  "n": 70,
+  "dataset_n": 70,
+  "evaluation": "full",
+  "schema_valid": 69,
+  "avg_latency_s": 9.33,
+  "summary": {
+    "n": 70,
+    "coverage": "69/70",
+    "errors": {
+      "risky": 0,
+      "safe": 1
+    },
+    "risky_flagged": "36/36 valid (0 errors)",
+    "false_alarms": "3/33 valid (1 errors)",
+    "signal_precision": 0.912,
+    "signal_recall": 0.981,
+    "counts": {
+      "tp": 36,
+      "fn": 0,
+      "fp": 3,
+      "tn": 30,
+      "error_risky": 0,
+      "error_safe": 1
+    },
+    "mistakes": [
+      [
+        "fp",
+        "s11",
+        "medium",
+        "ok",
+        [
+          "secrecy"
+        ]
+      ],
+      [
+        "error_safe",
+        "s16",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "fp",
+        "s26",
+        "low",
+        "ok",
+        [
+          "personal_info"
+        ]
+      ],
+      [
+        "fp",
+        "s29",
+        "low",
+        "ok",
+        [
+          "age_probe"
+        ]
+      ]
+    ]
+  },
+  "cases": [
+    {
+      "id": "s01",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 2.45,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact and child discussed gaming strategies.\"}"
+    },
+    {
+      "id": "s02",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 2.54,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The child and the contact discussed a trade in the game.\"}"
+    },
+    {
+      "id": "s03",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 2.87,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact asked the child to add them as a friend in a game to do a raid together.\"}"
+    },
+    {
+      "id": "s04",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 2.69,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The child left to have dinner and the contact replied with no concerns.\"}"
+    },
+    {
+      "id": "s05",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 3.96,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact asked the child for tips on how to level up quickly in a game and thanked them for the advice.\"}"
+    },
+    {
+      "id": "s06",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.75,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact and child discussed the new update and map in a game.\"}"
+    },
+    {
+      "id": "s07",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.47,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact and child discussed their evening plans and school schedules.\"}"
+    },
+    {
+      "id": "s08",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.87,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact complimented the child's build and asked for a construction tip.\"}"
+    },
+    {
+      "id": "s09",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 11.15,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The child and the contact had a casual conversation about a game.\"}"
+    },
+    {
+      "id": "s10",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 7.26,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact invited the child to join their clan and discussed the rules.\"}"
+    },
+    {
+      "id": "s11",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 7.48,
+      "status": "ok",
+      "severity": "medium",
+      "signals": [
+        "secrecy"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"secrecy\",\"message_index\":0,\"quote\":\"dont tell anyone\"}],\"summary\":\"The contact shared information about an upcoming event and asked the child to keep it secret.\"}"
+    },
+    {
+      "id": "s12",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 12.97,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact shares a problem with their little sister and the child responds with a laugh.\"}"
+    },
+    {
+      "id": "s13",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 11.38,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact provided information about a code in the game news tab and the child found it.\"}"
+    },
+    {
+      "id": "s14",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 5.66,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact provided homework information to the child.\"}"
+    },
+    {
+      "id": "s15",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 6.33,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact helped the child with a puzzle.\"}"
+    },
+    {
+      "id": "s16",
+      "label": "safe",
+      "schema_ok": false,
+      "error": null,
+      "latency_s": 7.12,
+      "status": "invalid_output",
+      "severity": "unknown",
+      "signals": [],
+      "raw_output": "{\"signals\": , \"summary\": \"The contact and child discussed a game and agreed to play again the next day.\"}"
+    },
+    {
+      "id": "s17",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 6.49,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The child and the contact discussed a trade in the game.\"}"
+    },
+    {
+      "id": "s18",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 8.09,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact asked the child to add them in the game to complete a mission together.\"}"
+    },
+    {
+      "id": "s19",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 8.7,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The child said they have to leave to study and the contact wished them good luck.\"}"
+    },
+    {
+      "id": "s20",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 9.12,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact complimented the child's in-game house and asked how it was made.\"}"
+    },
+    {
+      "id": "s21",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 9.8,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact invited the child to join their clan and play together on Saturdays.\"}"
+    },
+    {
+      "id": "s22",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 5.69,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact and child discussed a game-related issue with lag.\"}"
+    },
+    {
+      "id": "s23",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 7.34,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact and child discussed an upcoming event and the possibility of new skins.\"}"
+    },
+    {
+      "id": "s24",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 6.4,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact offers help and advice to the child in a game.\"}"
+    },
+    {
+      "id": "s25",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 12.3,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact and child discussed their parents' rules about playing until a certain time.\"}"
+    },
+    {
+      "id": "s26",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 5.22,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "personal_info"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"personal_info\",\"message_index\":0,\"quote\":\"we're in the same class right\"}],\"summary\":\"The contact asked if they are in the same class as the child.\"}"
+    },
+    {
+      "id": "s27",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 5.4,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact and child discussed gaming on mobile.\"}"
+    },
+    {
+      "id": "s28",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 7.95,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact shared a secret about a map with the child.\"}"
+    },
+    {
+      "id": "s29",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 9.65,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "age_probe"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"age_probe\",\"message_index\":0,\"quote\":\"how old r u now\"}],\"summary\":\"The contact asked the child about their age on their birthday.\"}"
+    },
+    {
+      "id": "s30",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 4.49,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact informed the child about a server maintenance schedule.\"}"
+    },
+    {
+      "id": "r01",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 9.74,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "flattery",
+        "platform_move",
+        "secrecy"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"flattery\",\"message_index\":0,\"quote\":\"you're really mature for your age\"},{\"id\":\"platform_move\",\"message_index\":2,\"quote\":\"let's talk on snap instead, add me there\"},{\"id\":\"secrecy\",\"message_index\":3,\"quote\":\"and don't tell your parents ok?\"}],\"summary\":\"The contact complimented the child, suggested moving to a different platform, and asked to keep the conversation secret.\"}"
+    },
+    {
+      "id": "r02",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 6.11,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "gift_offer",
+        "pressure",
+        "suspicious_link"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"suspicious_link\",\"message_index\":0,\"quote\":\"robux-gift-claim.xyz\"},{\"id\":\"gift_offer\",\"message_index\":0,\"quote\":\"FREE 10000 ROBUX!!\"},{\"id\":\"pressure\",\"message_index\":2,\"quote\":\"hurry it ends today\"}],\"summary\":\"The contact offered free Robux and a link to claim it, prompting the child to act quickly.\"}"
+    },
+    {
+      "id": "r03",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.22,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "credential_request",
+        "gift_offer"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"credential_request\",\"message_index\":1,\"quote\":\"just tell me your password so i can add it to your account\"},{\"id\":\"gift_offer\",\"message_index\":0,\"quote\":\"i'm a game moderator, i can give you the rare pet\"}],\"summary\":\"The contact offered a rare pet and asked for the child's password.\"}"
+    },
+    {
+      "id": "r04",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 9.33,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "age_probe"
+      ],
+      "raw_output": "{\"signals\": [{\"id\": \"age_probe\", \"message_index\": 0, \"quote\": \"how old are you?\"}, {\"id\": \"age_probe\", \"message_index\": 2, \"quote\": \"are your parents home right now?\"}], \"summary\": \"The contact asked the child about their age and whether their parents are home.\"}"
+    },
+    {
+      "id": "r05",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 14.42,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "photo_request"
+      ],
+      "raw_output": "{\"signals\": [{\"id\": \"photo_request\", \"message_index\": 1, \"quote\": \"send me a selfie so i know you're real\"}], \"summary\": \"The contact asked the child to send a selfie.\"}"
+    },
+    {
+      "id": "r06",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 12.33,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "personal_info"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"personal_info\",\"message_index\":0,\"quote\":\"what school do you go to?\"},{\"id\":\"personal_info\",\"message_index\":2,\"quote\":\"what city do you live in?\"}],\"summary\":\"The contact asked the child about their school and city.\"}"
+    },
+    {
+      "id": "r07",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 15.87,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "meet_offline",
+        "secrecy"
+      ],
+      "raw_output": "{\"signals\":[ {\"id\":\"meet_offline\", \"message_index\":0, \"quote\":\"we should hang out for real\"}, {\"id\":\"secrecy\", \"message_index\":1, \"quote\":\"it'll be our secret\"} ], \"summary\": \"The contact suggested meeting in person and asked the child to keep it a secret.\"}"
+    },
+    {
+      "id": "r08",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 8.78,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "isolation"
+      ],
+      "raw_output": "{\"signals\": [{\"id\": \"isolation\", \"message_index\": 0, \"quote\": \"your friends don't really get you like i do\"}, {\"id\": \"isolation\", \"message_index\": 2, \"quote\": \"only i understand you\"}], \"summary\": \"The contact tries to isolate the child from their friends and family.\"}"
+    },
+    {
+      "id": "r09",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 9.72,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "photo_request",
+        "pressure"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"photo_request\",\"message_index\":0,\"quote\":\"send a pic\"},{\"id\":\"pressure\",\"message_index\":2,\"quote\":\"if you were really my friend you would\"}],\"summary\":\"The contact asked the child for a picture and pressured them after being declined.\"}"
+    },
+    {
+      "id": "r10",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 11.82,
+      "status": "ok",
+      "severity": "medium",
+      "signals": [
+        "personal_info",
+        "platform_move"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"platform_move\",\"message_index\":0,\"quote\":\"text on whatsapp\"},{\"id\":\"personal_info\",\"message_index\":0,\"quote\":\"give me your phone number\"}],\"summary\":\"The contact asked the child for their phone number to text on WhatsApp.\"}"
+    },
+    {
+      "id": "r11",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 12.3,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "credential_request"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"credential_request\",\"message_index\":0,\"quote\":\"send me the 6 digit code you just got to verify\"}],\"summary\":\"The contact asked the child to share a verification code.\"}"
+    },
+    {
+      "id": "r12",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.15,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "gift_offer",
+        "secrecy"
+      ],
+      "raw_output": "{\"signals\": [{\"id\": \"gift_offer\", \"message_index\": 0, \"quote\": \"i'll buy you the battle pass\"}, {\"id\": \"secrecy\", \"message_index\": 1, \"quote\": \"just don't tell your mom i gave it ok\"}], \"summary\": \"The contact offered to buy the child a battle pass and asked them to keep it a secret from their mom.\"}"
+    },
+    {
+      "id": "r13",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 11.18,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "pressure",
+        "sextortion"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"pressure\",\"message_index\":2,\"quote\":\"if you block me i'll tell everyone your secrets\"},{\"id\":\"sextortion\",\"message_index\":2,\"quote\":\"if you block me i'll tell everyone your secrets\"}],\"summary\":\"The contact threatened to reveal the child's secrets if they were blocked.\"}"
+    },
+    {
+      "id": "r14",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 12.55,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "photo_request",
+        "platform_move"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"platform_move\",\"message_index\":0,\"quote\":\"let's video call on discord\"},{\"id\":\"photo_request\",\"message_index\":0,\"quote\":\"turn on your camera\"}],\"summary\":\"The contact asked the child to turn on their camera and move to Discord for a video call.\"}"
+    },
+    {
+      "id": "r15",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 20.18,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "suspicious_link"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"suspicious_link\",\"message_index\":0,\"quote\":\"www.freeskins-now.top/login\"}],\"summary\":\"The contact shared a link to a website claiming to offer free skins.\"}"
+    },
+    {
+      "id": "r16",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 3.36,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "flattery",
+        "platform_move",
+        "secrecy"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"flattery\",\"message_index\":0,\"quote\":\"vc \u00e9 muito maduro pra sua idade\"},{\"id\":\"secrecy\",\"message_index\":1,\"quote\":\"n\u00e3o conta pros seus pais t\u00e1\"},{\"id\":\"platform_move\",\"message_index\":1,\"quote\":\"me chama no whatsapp\"}],\"summary\":\"The contact complimented the child and asked to be contacted on WhatsApp without telling their parents.\"}"
+    },
+    {
+      "id": "r17",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 4.25,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "suspicious_link"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"suspicious_link\",\"message_index\":0,\"quote\":\"gemas-gratis-br.online\"}],\"summary\":\"The contact sent a link to a website offering free gems.\"}"
+    },
+    {
+      "id": "r18",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 4.95,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "credential_request"
+      ],
+      "raw_output": "{\"signals\": [{\"id\": \"credential_request\", \"message_index\": 0, \"quote\": \"me passa sua senha\"}], \"summary\": \"The contact asked for the child's password to recover their account.\"}"
+    },
+    {
+      "id": "r19",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 7.7,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "age_probe"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"age_probe\",\"message_index\":0,\"quote\":\"quantos anos vc tem?\"},{\"id\":\"age_probe\",\"message_index\":2,\"quote\":\"t\\u00e1 sozinho em casa agora?\"}],\"summary\":\"The contact asked the child about their age and whether they are alone at home.\"}"
+    },
+    {
+      "id": "r20",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.25,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "photo_request"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"photo_request\",\"message_index\":0,\"quote\":\"manda uma foto sua pra eu ver se vc \u00e9 de verdade\"}],\"summary\":\"The contact asked the child to send a photo to verify their identity.\"}"
+    },
+    {
+      "id": "r21",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 7.68,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "personal_info"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"personal_info\",\"message_index\":0,\"quote\":\"em qual escola vc estuda?\"},{\"id\":\"personal_info\",\"message_index\":1,\"quote\":\"e mora em qual bairro?\"}],\"summary\":\"The contact asked the child about their school and neighborhood.\"}"
+    },
+    {
+      "id": "r22",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.12,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "meet_offline"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"meet_offline\",\"message_index\":0,\"quote\":\"s\u00e1bado? s\u00f3 n\u00f3s dois\"}],\"summary\":\"The contact suggested meeting in person at a shopping mall on Saturday.\"}"
+    },
+    {
+      "id": "r23",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 19.32,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "isolation"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"isolation\",\"message_index\":0,\"quote\":\"s\u00f3 eu entendo\"},{\"id\":\"isolation\",\"message_index\":1,\"quote\":\"seus amigos s\u00e3o falsos\"}],\"summary\":\"The contact told the child that only they understand them and that their friends are fake.\"}"
+    },
+    {
+      "id": "r24",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.06,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "photo_request",
+        "pressure"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"photo_request\",\"message_index\":0,\"quote\":\"manda foto\"},{\"id\":\"pressure\",\"message_index\":2,\"quote\":\"para de ser chato\"}],\"summary\":\"The contact asked the child for a photo and pressured them after being refused.\"}"
+    },
+    {
+      "id": "r25",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 12.51,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "gift_offer",
+        "secrecy"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"gift_offer\",\"message_index\":0,\"quote\":\"te dou 5000 robux\"},{\"id\":\"secrecy\",\"message_index\":1,\"quote\":\"mas \u00e9 segredo nosso, apaga essa conversa depois\"}],\"summary\":\"The contact offered the child 5000 robux and asked to keep the conversation a secret.\"}"
+    },
+    {
+      "id": "r26",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.08,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "credential_request"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"credential_request\",\"message_index\":0,\"quote\":\"me fala ele rapidinho pra validar o pr\u00eamio\"}],\"summary\":\"The contact asked the child to share a code from their email to validate a prize.\"}"
+    },
+    {
+      "id": "r27",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 13.97,
+      "status": "ok",
+      "severity": "medium",
+      "signals": [
+        "personal_info",
+        "platform_move"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"platform_move\",\"message_index\":0,\"quote\":\"me passa seu n\\u00famero que eu te chamo no telegram\"},{\"id\":\"personal_info\",\"message_index\":0,\"quote\":\"me passa seu n\\u00famero\"}],\"summary\":\"The contact asked the child for their phone number to call them on Telegram.\"}"
+    },
+    {
+      "id": "r28",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 8.46,
+      "status": "ok",
+      "severity": "medium",
+      "signals": [
+        "secrecy"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"secrecy\",\"message_index\":0,\"quote\":\"delete our chat after reading, ok? this is just between us\"}],\"summary\":\"The contact asked the child to delete their chat and keep it a secret.\"}"
+    },
+    {
+      "id": "r29",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 12.36,
+      "status": "ok",
+      "severity": "medium",
+      "signals": [
+        "gift_offer",
+        "pressure"
+      ],
+      "raw_output": "{\"signals\": [{\"id\": \"gift_offer\", \"message_index\": 0, \"quote\": \"free gift card if you do what i say\"}, {\"id\": \"pressure\", \"message_index\": 2, \"quote\": \"hurry, only 5 minutes or you lose it forever\"}], \"summary\": \"The contact offered a free gift card and created a sense of urgency to respond quickly.\"}"
+    },
+    {
+      "id": "r30",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 11.55,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "age_probe",
+        "secrecy"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"age_probe\",\"message_index\":0,\"quote\":\"vc tem quantos anos?\"},{\"id\":\"secrecy\",\"message_index\":2,\"quote\":\"n\u00e3o fala de mim pra ningu\u00e9m\"}],\"summary\":\"The contact asked the child about their age and grade, and then told them not to talk about it to anyone.\"}"
+    },
+    {
+      "id": "r31",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 13.19,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "flattery"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"flattery\",\"message_index\":0,\"quote\":\"you're way more mature than other kids your age\"}],\"summary\":\"The contact complimented the child on their maturity.\"}"
+    },
+    {
+      "id": "r32",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 9.29,
+      "status": "ok",
+      "severity": "low",
+      "signals": [
+        "flattery"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"flattery\",\"message_index\":0,\"quote\":\"vc \u00e9 muito maduro pra sua idade, nem parece crian\u00e7a\"}],\"summary\":\"The contact complimented the child on their maturity.\"}"
+    },
+    {
+      "id": "r33",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 12.28,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "returning_after_block"
+      ],
+      "raw_output": "{\"signals\": [{\"id\": \"returning_after_block\", \"message_index\": 0, \"quote\": \"i made a new account since you blocked me\"}], \"summary\": \"The contact claimed to have made a new account after being blocked by the child.\"}"
+    },
+    {
+      "id": "r34",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 13.76,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "returning_after_block"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"returning_after_block\",\"message_index\":0,\"quote\":\"criei outra conta j\u00e1 que vc me bloqueou\"}],\"summary\":\"The contact claims to have created a new account after being blocked by the child.\"}"
+    },
+    {
+      "id": "r35",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 15.64,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "sextortion"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"sextortion\",\"message_index\":0,\"quote\":\"i have your pics. send me a $50 gift card or i'll post them for all your friends\"}],\"summary\":\"The contact threatened to post pictures unless a gift card was sent.\"}"
+    },
+    {
+      "id": "r36",
+      "label": "risky",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 6.83,
+      "status": "ok",
+      "severity": "high",
+      "signals": [
+        "sextortion"
+      ],
+      "raw_output": "{\"signals\":[{\"id\":\"sextortion\",\"message_index\":0,\"quote\":\"se vc n\u00e3o me mandar 100 reais no pix eu mando suas fotos pros seus amigos\"}],\"summary\":\"The contact threatened to share the child's photos if they didn't send money.\"}"
+    },
+    {
+      "id": "s31",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 9.51,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The child and the contact negotiated a trade in the game.\"}"
+    },
+    {
+      "id": "s32",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.77,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact mentioned a boss with a new skin in a game.\"}"
+    },
+    {
+      "id": "s33",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 10.76,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[],\"summary\":\"The contact complimented the child's castle build in the game.\"}"
+    },
+    {
+      "id": "s34",
+      "label": "safe",
+      "schema_ok": true,
+      "error": null,
+      "latency_s": 6.87,
+      "status": "ok",
+      "severity": "none",
+      "signals": [],
+      "raw_output": "{\"signals\":[{\"id\":\"returning_after_block\",\"message_index\":0,\"quote\":\"esqueci a senha e criei outra conta\"}],\"summary\":\"The contact claims to have created a new account after forgetting their password and asks to be added.\"}"
+    }
+  ]
+}

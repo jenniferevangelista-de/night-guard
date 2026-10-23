@@ -82,13 +82,13 @@ Tinker doesn't serve Gemma, so for the cloud demo I fine-tuned **Qwen3-8B** with
 | | Qwen3-8B base | LoRA v1 | LoRA v2 (online demo) |
 |---|---|---|---|
 | Answers that follow the app's full schema (tactic id, message index, quote, summary) | 11 / 70 | 70 / 70 | **70 / 70** |
-| Risky chats flagged, counting only schema-valid answers | 0 / 36 (none of the 36 was valid) | 36 / 36 | **36 / 36** |
+| Risky chats flagged (unusable answers never count as catches) | 0 / 36 (none of the 36 was usable) | 36 / 36 | **36 / 36** |
 | False alarms on safe chats | 0 / 11 valid (23 invalid) | 3 / 34 | **2 / 34** |
 | Signal precision / recall | n/a (no valid risky answer) | 0.84 / 0.79 | **0.88 / 0.83** |
 | Avg time per check | 3.0 s | 5.0 s | 4.5 s |
 
 
-An answer only counts if every field matches the schema the app uses, and an invalid answer is an error, never a catch. The base model often renames fields (`signal_id` instead of `id`). Read leniently, it flagged 35 of the 35 risky chats it answered readably, so it often *sees* the pattern; its strict-format failures make those answers unusable under the app's schema. Fine-tuning produced schema-valid answers on all 70 development chats and found more signals, including the three newer tactics in v2. The online demo runs v2. Two honest limits: the false-alarm gap between v1 and v2 (3 vs 2 of 34) is a single chat, and the LoRA is not faster than the base model; this is a measured format improvement on the evaluated cases, not a guarantee for future inputs. Every raw answer is saved per case in the repo, so anyone can recount.
+Strict format conformity (`valid_schema`) is reported separately from usable coverage. The common postprocessor retains valid evidence in a partial answer; an unusable answer is an error, never a catch or a correct safe result. These saved Tinker runs contain no partial answers, so strict-schema and usable-coverage totals coincide: 11/70 for base and 70/70 for each LoRA. The base model often renames fields (`signal_id` instead of `id`). Read leniently, it flagged 35 of the 35 risky chats it answered readably, so it often *sees* the pattern; its unrecognized fields made those answers unusable under the original schema. Fine-tuning produced schema-valid answers on all 70 development chats and found more signals, including the three newer tactics in v2. The online demo runs v2. Two honest limits: the false-alarm gap between v1 and v2 (3 vs 2 of 34) is a single chat, and the LoRA is not faster than the base model; this is a measured format improvement on the evaluated cases, not a guarantee for future inputs. Every raw answer is saved per case in the repo, so anyone can recount.
 
 ### Temporal: an evaluation that survives a crashing laptop
 
@@ -124,14 +124,13 @@ returned the Portuguese warning **"Não abra esse link"** ("Don't open this link
 returned HTTP 200. A separate, single SerpApi query for `night-guard-demo.onrender.com` returned HTTP 200 and six
 search results, with none matching the report heuristic. The fictional page submits no credentials.
 
-![Browserbase's screenshot of the fictional BlockQuest password-request page](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/blockquest-link-check.jpg)
+![The deployed inspector's Browserbase screenshot of the complete fictional BlockQuest login form](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/blockquest-link-check.jpg)
 
-**The deployed Render endpoint was then checked once:** `POST /api/link/check` returned HTTP 200, identified
-both Browserbase and SerpApi as checked, detected the password field and returned the same warning in 8.95 s.
-Its domain search returned six results, with none matching the report heuristic. A screenshot payload was
-returned, but its visual preview contained only the page background. An explicit page-viewport correction is
-implemented and regression-tested; deployment and a visual recheck are pending. The screenshot above is from
-the successful local run.
+**The deployed Render endpoint also passed a live check after the viewport correction:** `POST /api/link/check`
+returned HTTP 200, identified both Browserbase and SerpApi as checked, detected the password field and returned
+the same warning in 8.90 s. Its domain search returned six results, with none matching the report heuristic.
+The returned screenshot was visually verified to show the complete fictional login form; that public-endpoint
+screenshot is shown above.
 
 These checks establish provider connectivity and the observed password detection on one fictional example,
 not scam-detection accuracy.
@@ -149,13 +148,44 @@ completed the callback and the Family view displayed the signed-in parent. Logou
 the locked Parents view and sign-in button. Rejection of unverified or unlisted accounts is unit-tested; a real
 rejected-account attempt has not been performed. Local servers need restarting after `.env` changes.
 
-### Backboard: comparison still pending
+### Backboard: compare open-weight models through one API key
 
-`train/backboard_bakeoff.py` prepares the same detector prompt and scoring rules for several model candidates
-on the existing 70 fictional development conversations. Account setup is in progress, and it requires a
-Backboard key. There are **no comparison results yet**, and this reuses development cases rather than supplying
-a new holdout. Its client tests use simulated responses. Backboard remains outside the demonstrated category
-list until the comparison runs successfully.
+On October 23, 2026, **Backboard** served three complete evaluations: Gemma 3 27B, Llama 3.3 70B and Mistral
+Small 3.1 24B, each on the same 70 fictional development conversations (36 risky, 34 safe). All three received
+the shared classification `SYSTEM` and the canonical app `SCHEMA` explicitly in the user prompt, with JSON mode,
+memory off, a fresh conversation per case and unchanged app postprocessing/scoring. An initial smoke returned
+`{}` when only JSON mode was requested; adding the same format schema for every model fixed that missing
+instruction. No gold labels were added to prompts. This is a common Backboard adapter, not the identical
+prompt/decoding setup used by the older Tinker baseline or schema-constrained Ollama.
+
+| Model | Strict schema | Usable coverage | Risky chats flagged | False alarms on valid safe cases | Signal precision | Signal recall |
+|---|---|---|---|---|---|---|
+| Gemma 3 27B | 68/70 | 69/70 | 36/36 | 3/33 (1 error) | 0.938 | 0.849 |
+| Llama 3.3 70B | 69/70 | 69/70 | 36/36 | 3/33 (1 error) | 0.912 | 0.981 |
+| Mistral Small 3.1 24B | 70/70 | 70/70 | 36/36 | 3/34 | 0.852 | 0.981 |
+| Qwen 2.5 72B | — | — | — | — | Unavailable in live smoke | No full result |
+
+Strict-schema validity and usable coverage are separate. The shared scorer accepts a **partial** analysis when
+postprocessing retains valid evidence; an unusable analysis is an error, never a catch or a correct safe answer.
+Gemma's `r06` contained two valid personal-information items and one malformed empty item: the empty item was
+discarded and the partial analysis remained usable. Its safe case `s33` was unusable. Llama had one unusable safe
+case. These failures remain in the denominators and the saved raw answers; nothing was retried to improve scores.
+
+The practical difference here is format reliability and signal precision/recall, not a demonstrated safety
+advantage: all three flagged the 36 risky development cases and raised three false alarms. Mistral followed
+the strict schema on every case; Gemma had higher signal precision but lower recall. This is a single run on
+reused development cases, not a new blind holdout or proof of protection for real children. Request timings
+include shared client slots and waiting, so they are not compared with local Gemma or Tinker latency.
+
+Qwen 2.5 72B's smoke request hit a **120.65-second read timeout**. An already-started automatic retry was canceled
+locally when the other models were moved to a shared four-request limit. Both Qwen requests appear in billing,
+but no answer was observed locally and no 70-case Qwen result is claimed. The model was not silently replaced.
+
+Backboard's usage API recorded **USD 0.034062 across 216 events**, including 210 scored calls, three successful
+smokes, the initial format-debugging call and two Qwen requests. A conservative token-price/reservation budget
+tracked USD 0.065078 against the internal USD 1 cap; that estimate is separate from actual billing. Only
+fictional conversations were sent. The [raw results and summary](https://github.com/jenniferevangelista-de/night-guard/blob/main/train/backboard_summary.md)
+preserve per-case outputs, errors, coverage and signal metrics.
 
 ### What the family gets
 
@@ -179,7 +209,7 @@ Open weights made every part of this possible: Gemma reading text and screenshot
 
 ## My Agent Session
 
-I built this in about three days with an AI coding agent (Claude) as the builder and a second AI (ChatGPT) as an independent auditor, plus me as the person who decided what a kid and a parent should actually see. The auditor's review is why failures never show as "all clear", why the app does not persist demo chats on the server, and why the help message can't invent things. Each round goes through a separate private review repository: the builder delivers, the reviewer tests and writes a verdict, and only the reviewer can approve.
+I built this in about three days with an AI coding agent (Claude) as the initial builder and a second AI (ChatGPT, Kuririn) as an independent auditor, plus me as the person who decided what a kid and a parent should actually see. At my request, Codex configured and tested the final Auth0, Browserbase, SerpApi and Backboard integrations and ran the live model comparison; Kuririn remains the independent reviewer. The auditor's review is why failures never show as "all clear", why the app does not persist demo chats on the server, and why the help message can't invent things. Each round goes through a separate private review repository: the builder delivers, the reviewer tests and writes a verdict, and only the reviewer can approve.
 
 ## The Lazy Payoff
 
@@ -196,12 +226,15 @@ I built this in about three days with an AI coding agent (Claude) as the builder
 - **Best Use of ElevenLabs:** spoken child warnings in two languages.
 - **Best Use of Sentry Agent Tracing:** agent runs and model calls traced with no chat content.
 - **Best Use of Browserbase:** isolated link inspection with a live local run showing password detection,
-  screenshot capture and session cleanup on the fictional BlockQuest page. The deployed API also detects the
-  password field; a viewport correction is tested locally and awaits deployment and visual recheck.
+  screenshot capture and session cleanup on the fictional BlockQuest page. The deployed API also detected the
+  password field and returned a visually verified screenshot of the complete form.
 - **Best Use of SerpApi:** live domain-report search used by the link inspector, verified with one successful
   local query and a deployed API check. Missing search reports are never treated as proof of safety.
 - **Best Use of Auth0 for AI Agents:** parent authentication for local family controls, with a real verified,
   allowlisted Google login and logout. Rejection of unlisted accounts is covered by unit tests.
+- **Best Use of Backboard:** three open-weight models compared live through one API key on the same 70
+  fictional development chats, with a common format adapter, saved raw answers, shared scoring and explicit
+  errors. Qwen's smoke timeout is disclosed and has no full comparison result.
 
 These entries describe the implemented uses and their observed evidence. Final category eligibility is for
 the judges under the [challenge criteria](https://dev.to/challenges/hf26).

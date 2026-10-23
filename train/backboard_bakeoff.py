@@ -1,7 +1,10 @@
 """Open-model bake-off through Backboard (one API key, many open-weight models), on the same 70 fictional test chats.
 
-Same system prompt, same JSON contract, same scoring as every other evaluation (guard/scoring.py): an answer that
-does not follow the app's schema is an error, never a catch. Raw answers are saved per case.
+Shared classification SYSTEM and app SCHEMA; the schema is supplied in the user prompt for Backboard JSON mode.
+All Backboard models use that same adapter and the existing scoring rule (guard/scoring.py). This is not an
+identical prompt/decoding setup to the older Tinker baseline or schema-constrained Ollama evaluation.
+Strict schema validity is reported separately from usable coverage. The shared postprocessor keeps valid items
+in a partial analysis; unusable outputs are errors, never catches. Raw answers are saved per case.
 
   .venv\\Scripts\\python train\\backboard_bakeoff.py            (all models below)
   .venv\\Scripts\\python train\\backboard_bakeoff.py google/gemma-3-27b-it
@@ -21,7 +24,7 @@ import httpx
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "train"))
-from guard.detector import SYSTEM, _format_chat, postprocess, valid_schema  # noqa: E402
+from guard.detector import SCHEMA, SYSTEM, _format_chat, postprocess, valid_schema  # noqa: E402
 from guard.env import load_env  # noqa: E402
 from guard.scoring import summarize  # noqa: E402
 
@@ -53,7 +56,13 @@ def ask(model, row):
         raise BackboardConfigError("Add BACKBOARD_API_KEY=... to .env first.")
     # Omitting both IDs creates a fresh thread and assistant for EACH case.
     # Never send a previous response's IDs: that would mix evaluation history.
-    body = {"content": "Chat:\n" + _format_chat(row["messages"]) + "\n\nReturn the JSON.", "system_prompt": SYSTEM,
+    # json_output only requests a JSON object; it does not supply our schema.
+    # The first live smoke returned {}. State the same app schema explicitly so
+    # every compared model receives the identical output contract.
+    content = ("Chat:\n" + _format_chat(row["messages"]) +
+               "\n\nReturn ONLY a JSON object matching this JSON schema:\n" +
+               json.dumps(SCHEMA, separators=(",", ":")))
+    body = {"content": content, "system_prompt": SYSTEM,
             "llm_provider": "openrouter", "model_name": model, "json_output": True, "memory": "off",
             "web_search": "off", "stream": False}
     t0 = time.perf_counter()

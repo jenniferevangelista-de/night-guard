@@ -100,21 +100,22 @@ conversation. A URL can itself contain personal information, so use fictional li
   screenshot and released the session (200). The app returned **"Don't open this link"** in Portuguese in 12.68 s.
   A separate SerpApi domain query returned HTTP 200 and six search results; none matched the report heuristic.
   This checks provider connectivity and parsing on one fictional example, not scam-detection accuracy.
-  **The deployed Render endpoint also passed one live check:** HTTP 200, both providers reported as checked,
-  password detection and the same warning in 8.95 s. It returned six search results and a screenshot payload.
-  The public screenshot preview showed only the page background. An explicit page-viewport correction is now
-  implemented and regression-tested; deployment and a visual recheck are pending. The local screenshot includes
-  the fictional login form.
-- **Backboard:** `train/backboard_bakeoff.py` prepares a comparison using the same 70 fictional conversations,
-  detector prompt and scoring rules. `BACKBOARD_API_KEY` is required. No comparison results have been produced
-  or claimed yet; account setup is in progress. These are development cases, not a new blind test.
+  **The deployed Render endpoint also passed a live check after the viewport correction:** HTTP 200, both
+  providers reported as checked, password detection and the same warning in 8.90 s. It returned six search
+  results and a screenshot that was visually verified to show the complete fictional login form.
+- **Backboard:** three live evaluations completed on October 23, 2026: Gemma 3 27B, Llama 3.3 70B and
+  Mistral Small 3.1, each on the same 70 fictional development chats through one Backboard API key.
+  All three received the shared classification `SYSTEM` plus the canonical app `SCHEMA` explicitly in the
+  user prompt, using Backboard JSON mode and the unchanged postprocessing/scoring. This adapter differs from
+  the older Tinker prompt and Ollama's constrained decoding. Qwen 2.5 72B was unavailable in its live smoke
+  (120.65 s read timeout); no full Qwen result is claimed. Results and limits are below.
 - **Auth0:** a real Google login with a verified, allowlisted parent completed the callback on a separate local
   server (port 8766), and the Family area showed the signed-in parent. Before login, the alerts endpoint returned
   HTTP 401 and the login route redirected (302). Logout returned home and restored the locked Family view and
   sign-in button. Unlisted-account rejection is covered by unit tests, not a live rejected-account check.
 
-Browserbase, SerpApi and Auth0 now have code and successful live checks supporting their additional category
-entries in the article. Backboard remains outside that demonstrated list until its comparison has run.
+Browserbase, SerpApi, Auth0 and Backboard now have code and successful live checks supporting their additional
+category entries in the article, which lists ten implemented partner uses.
 Final eligibility is determined by the challenge judges.
 
 ## Results (fictional test set, 70 chats: 34 safe, 36 risky)
@@ -139,6 +140,34 @@ new account) were first flagged wrongly; the prompt and two evidence rules were 
 those two cases are no longer a blind test. All conversations are **fictional**, written for testing; no real
 children's data is used. The 60-chat and 70-chat columns are different development evaluations; the 70 cases have
 already informed changes and do not establish performance on an independent holdout.
+
+### Live comparison through Backboard
+
+The same 70 development chats (36 risky, 34 safe), without retraining or changes to the scoring rules:
+
+| Model | Strict schema | Usable coverage | Risky flagged | False alarms on valid safe cases | Signal precision / recall |
+|---|---|---|---|---|---|
+| Gemma 3 27B | 68/70 | 69/70 | 36/36 | 3/33 (1 error) | 0.938 / 0.849 |
+| Llama 3.3 70B | 69/70 | 69/70 | 36/36 | 3/33 (1 error) | 0.912 / 0.981 |
+| Mistral Small 3.1 24B | 70/70 | 70/70 | 36/36 | 3/34 | 0.852 / 0.981 |
+| Qwen 2.5 72B | — | — | — | — | Unavailable in live smoke; no full result |
+
+Coverage follows the existing shared scorer: usable partial analyses count, while unusable outputs are errors,
+never detections or correct safe answers. Gemma had one partial risky answer with two valid items and one
+discarded malformed item, plus one unusable safe answer. This explains its 68 strict-schema answers but
+69 usable analyses. Llama had one unusable safe answer. Strict schema and coverage are both reported.
+
+All three flagged the 36 risky development cases but raised three false alarms; signal-level precision/recall
+show additional differences. These reused development cases are not a blind holdout or evidence of real-world
+protection. Cloud timings include shared request slots and client waiting, so they are not speed comparisons
+with local Gemma or Tinker. Backboard billing recorded **USD 0.034062** across 216 usage events, including the
+210 scored calls, smoke tests and two Qwen requests whose outputs were not observed locally.
+
+Raw fictional answers: [Gemma](train/backboard_gemma-3-27b-it.json),
+[Llama](train/backboard_llama-3.3-70b-instruct.json),
+[Mistral](train/backboard_mistral-small-3.1-24b-instruct.json) and
+[summary](train/backboard_summary.md). Reproduce with `BACKBOARD_API_KEY` configured and
+`python train/backboard_bakeoff.py <model-id>`; `--limit 1` writes a separate smoke result. Keys are never committed.
 
 ## Run it
 
@@ -174,14 +203,16 @@ shared with the test set. Two runs: **v1** (11 tactics, 800 chats, ~740k tokens)
 | | Qwen3-8B base | LoRA v1 | **LoRA v2 (online demo)** |
 |---|---|---|---|
 | Answers that follow the app's full schema (tactic id, message index, quote, summary) | 11 / 70 | 70 / 70 | **70 / 70** |
-| Risky chats flagged, counting only schema-valid answers | 0 / 36 (none of the 36 was valid) | 36 / 36 | **36 / 36** |
+| Risky chats flagged (unusable answers never count as catches) | 0 / 36 (none of the 36 was usable) | 36 / 36 | **36 / 36** |
 | False alarms on safe chats | 0 / 11 valid (23 invalid) | 3 / 34 | **2 / 34** |
 | Signal precision / recall | n/a (no valid risky answer) | 0.84 / 0.79 | **0.88 / 0.83** |
 | Avg time per check on Tinker | 3.0 s | 5.0 s | 4.5 s |
 
 
-An answer counts as valid only if every field matches the schema the app uses (the same `valid_schema` check
-the app applies), and an invalid answer is an error, never a catch or a correct "safe". The base model often renames
+`valid_schema` reports strict format conformity separately from usable coverage. The common postprocessor
+retains valid evidence in a partial answer; an unusable answer is an error, never a catch or a correct "safe".
+The saved Tinker runs contain no partial answers, so their strict-schema and usable-coverage totals coincide:
+11/70 for base and 70/70 for each LoRA. The base model often renames
 fields (`signal_id` instead of `id`). Read leniently, accepting those renamed fields, it flagged 35 of the 35 risky
 chats it answered readably (3/27 false alarms, precision/recall 0.89/0.77, 8 answers still unreadable), so it often
 sees the pattern; its strict-format failures make those answers unusable under the app's schema. Fine-tuning fixed the format on

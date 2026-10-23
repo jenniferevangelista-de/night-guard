@@ -237,7 +237,7 @@ const T = {
     sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
     sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
     sh3:"③ See what parents get", sh3d:"Family rules, alerts with what to do now, and phone alerts.",
-    linksTitle:"🔗 Links in this chat", linkCheck:"🔍 Check it without opening", linkChecking:"Opening it safely in an isolated browser…", linkOnly:"Only the link left this computer, never the chat.", linkWith:"Checked with", linkOff:"The link inspector is off on this computer. Don't open links strangers send.", linkErr:"Couldn't check this link right now. That is not an all-clear: don't open it.",
+    linksTitle:"🔗 Links in this chat", linkCheck:"🔍 Check it without opening", linkChecking:"Opening it safely in an isolated browser…", linkOnly:"This link check sent only the URL, without the chat.", linkWith:"Checked with", linkOff:"The link inspector is off on this computer. Don't open links strangers send.", linkErr:"Couldn't check this link right now. That is not an all-clear: don't open it.",
     gbChecking:"Checking Night Guard…", gbUnknown:"Can't check Night Guard right now", gbUnknownSub:"The server didn't answer. This is not an \"all clear\": trying again every few seconds.", gbRetry:"Try again",
     gbOn:"🟢 Night Guard is ON", gbOff:"⚪ Night Guard is OFF", gbTurnOn:"Turn on", gbTurnOff:"Turn off", gbLive:"▶ See it live",
     gbDemoOn:"Online demo: it watches the fictional game chat and warns the kid by itself. Press ▶ See it live.",
@@ -255,7 +255,7 @@ const T = {
     famWhat:"What happened and why it matters", famDo:"What to do now",
     pasteHelp:"Paste the chat, one message per line. Start your own lines with “Me:”. Fictional examples below.",
     analyze:"Check this chat", examples:"Try:", innocent:"innocent secret",
-    checking:"Reading locally…",
+    checking:"Reading locally…", checkingCloud:"Analyzing in the cloud…", checkingUnknown:"Analyzing…",
     before:"Before I show you: did anything in this chat feel off to you?",
     yes:"Yes", unsure:"Not sure", no:"No",
     noneTitle:"Nothing worrying found",
@@ -277,7 +277,7 @@ const T = {
     footerDemo:"Online demo: the text you check is sent to a fine-tuned model on Tinker to be analyzed and is not saved by this server. Family rules and alerts stay in your browser. Use fictional examples only. A helper, not a replacement for trusted adults.",
     unknownTitle:"Couldn't analyze this chat",
     unknownBody:"Something went wrong with the analysis, so this is NOT an all-clear. Try again in a moment. If the chat made you uncomfortable, you can still tell someone you trust.",
-    local:"local", sev:{none:"OK",low:"Low",medium:"Medium",high:"High risk"}
+    local:"local", cloud:"cloud", modeUnknown:"analysis", sev:{none:"OK",low:"Low",medium:"Medium",high:"High risk"}
   },
   pt:{
     tagline:"Te ajuda a entender o que aconteceu e escolher como pedir ajuda.",
@@ -303,7 +303,7 @@ const T = {
     sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
     sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
     sh3:"③ Veja o que os pais recebem", sh3d:"Regras da família, alertas com o que fazer e aviso no celular.",
-    linksTitle:"🔗 Links nesta conversa", linkCheck:"🔍 Conferir sem abrir", linkChecking:"Abrindo com segurança num navegador isolado…", linkOnly:"Só o link saiu deste computador, nunca a conversa.", linkWith:"Conferido com", linkOff:"O inspetor de links está desligado neste computador. Não abra links que estranhos mandam.", linkErr:"Não consegui conferir esse link agora. Isso não quer dizer que é seguro: não abra.",
+    linksTitle:"🔗 Links nesta conversa", linkCheck:"🔍 Conferir sem abrir", linkChecking:"Abrindo com segurança num navegador isolado…", linkOnly:"Esta checagem enviou só o link, sem a conversa.", linkWith:"Conferido com", linkOff:"O inspetor de links está desligado neste computador. Não abra links que estranhos mandam.", linkErr:"Não consegui conferir esse link agora. Isso não quer dizer que é seguro: não abra.",
     gbChecking:"Verificando o Night Guard…", gbUnknown:"Não consegui verificar o Night Guard agora", gbUnknownSub:"O servidor não respondeu. Isso não quer dizer que está tudo bem: tentando de novo a cada poucos segundos.", gbRetry:"Tentar de novo",
     gbOn:"🟢 Night Guard LIGADO", gbOff:"⚪ Night Guard DESLIGADO", gbTurnOn:"Ligar", gbTurnOff:"Desligar", gbLive:"▶ Ver ao vivo",
     gbDemoOn:"Demo online: ele vigia o chat de jogo fictício e avisa a criança sozinho. Aperte ▶ Ver ao vivo.",
@@ -321,7 +321,7 @@ const T = {
     famWhat:"O que aconteceu e por que importa", famDo:"O que fazer agora",
     pasteHelp:"Cole a conversa, uma mensagem por linha. Comece suas falas com “Eu:”. Exemplos fictícios abaixo.",
     analyze:"Conferir conversa", examples:"Teste:", innocent:"segredo inocente",
-    checking:"Lendo aqui no computador…",
+    checking:"Lendo aqui no computador…", checkingCloud:"Analisando na nuvem…", checkingUnknown:"Analisando…",
     before:"Antes de eu mostrar: alguma coisa nessa conversa te pareceu estranha?",
     yes:"Sim", unsure:"Não sei", no:"Não",
     noneTitle:"Não encontrei nada preocupante",
@@ -343,7 +343,7 @@ const T = {
     footerDemo:"Demo online: o texto que você confere é enviado a um modelo ajustado no Tinker para análise e não é salvo por este servidor. Regras e alertas da família ficam no seu navegador. Use só exemplos fictícios. Uma ajuda, não substitui adultos de confiança.",
     unknownTitle:"Não consegui analisar esta conversa",
     unknownBody:"Algo deu errado na análise, então isto NÃO quer dizer que está tudo bem. Tente de novo daqui a pouco. Se a conversa te incomodou, você ainda pode contar para alguém de confiança.",
-    local:"local", sev:{none:"OK",low:"Baixo",medium:"Médio",high:"Risco alto"}
+    local:"local", cloud:"nuvem", modeUnknown:"análise", sev:{none:"OK",low:"Baixo",medium:"Médio",high:"Risco alto"}
   }
 };
 const EX = {
@@ -414,7 +414,7 @@ async function gateFamily(){
 }
 document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{$("#paste").value=EX[lang][b.dataset.ex];});
 
-let DEMO = false, VOICE = false, voiceEl = null;
+let DEMO = null, VOICE = false, voiceEl = null;
 // Calm voice (ElevenLabs, generated once from the fixed alert texts; no chat is ever sent).
 function say(id){ try{ if(voiceEl) voiceEl.pause(); voiceEl = new Audio(`/web/audio/${lang}/${id}.mp3`); voiceEl.play(); }catch(e){} }
 const demoStore = {  // public demo: this visitor's family rules and events live only in this browser
@@ -423,8 +423,8 @@ const demoStore = {  // public demo: this visitor's family rules and events live
 };
 fetch("/api/health").then(r=>r.json()).then(h=>{
   DEMO = !!h.demo; VOICE = !!h.voice;
-  $("#health").innerHTML = h.demo ? `☁️ ${esc(h.model)} · <b>${t("demoPill")}</b>` : `🔒 ${esc(h.model)} · <b>${t("local")}</b>`;
-  if(h.demo){ const d=document.createElement("div"); d.className="famnote"; d.innerHTML=`<b>☁️ ${t("demoTitle")}</b><div class="small" style="margin-top:4px">${t("demoBody")}</div>`; document.querySelector("nav").before(d);
+  $("#health").innerHTML = h.demo ? `☁️ ${esc(h.model)} · <b data-t="demoPill">${t("demoPill")}</b>` : `🔒 ${esc(h.model)} · <b data-t="local">${t("local")}</b>`;
+  if(h.demo){ const d=document.createElement("div"); d.className="famnote"; d.innerHTML=`<b>☁️ <span data-t="demoTitle">${t("demoTitle")}</span></b><div class="small" style="margin-top:4px" data-t="demoBody">${t("demoBody")}</div>`; document.querySelector("nav").before(d);
     document.querySelector("footer").dataset.t="footerDemo"; document.querySelector("footer").textContent=t("footerDemo");
     fam.rules = {...fam.rules, ...demoStore.get("rules",{})}; renderFamily(); }
 }).catch(()=>{$("#health").textContent="⚠️ offline"});
@@ -433,7 +433,7 @@ fetch("/api/health").then(r=>r.json()).then(h=>{
 $("#analyzeBtn").onclick = async ()=>{
   const text = $("#paste").value.trim(); if(!text) return;
   const btn=$("#analyzeBtn"); btn.disabled=true;
-  $("#result").innerHTML = `<div class="card muted"><span class="spin">🌙</span> ${t("checking")}</div>`;
+  $("#result").innerHTML = `<div class="card muted"><span class="spin">🌙</span> ${t(DEMO === null ? "checkingUnknown" : DEMO ? "checkingCloud" : "checking")}</div>`;
   try{
     const body = {text,lang,app:$("#app").value};
     if(DEMO) body.family_rules = fam.rules;
@@ -521,7 +521,7 @@ function renderResult(res, rerender){
     ${kidActions}
     <div class="row" style="margin-top:12px">
       <button class="btn" id="toTell">${t("tellBtn")}</button>
-      <span class="small muted">🔒 ${esc(res.model)} · ${res.latency_s}s · ${t("local")}</span>
+      <span class="small muted">${DEMO === null ? "⚙️" : DEMO ? "☁️" : "🔒"} ${esc(res.model)} · ${res.latency_s}s · ${t(DEMO === null ? "modeUnknown" : DEMO ? "cloud" : "local")}</span>
     </div></div>`;
   $("#toTell").onclick=()=>{renderQuotes(); show("tell");};
   $("#result").querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>say(b.dataset.say));
@@ -579,7 +579,7 @@ $("#draftBtn").onclick = async ()=>{
   const note = $("#note").value.trim();
   if(!chosen.length && !note) return;
   const btn=$("#draftBtn"); btn.disabled=true;
-  $("#draftOut").innerHTML = `<div class="card muted"><span class="spin">🌙</span> ${t("checking")}</div>`;
+  $("#draftOut").innerHTML = `<div class="card muted"><span class="spin">🌙</span> ${t(DEMO === null ? "checkingUnknown" : DEMO ? "checkingCloud" : "checking")}</div>`;
   try{
     const r = await fetch("/api/help",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({quotes:chosen,who:$("#who").value,note,lang})});
     const {message} = await r.json();

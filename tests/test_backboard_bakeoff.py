@@ -61,6 +61,9 @@ def test_each_case_creates_new_thread_with_same_prompt(monkeypatch):
         assert body["llm_provider"] == "openrouter" and body["model_name"] == "model/test"
         assert body["memory"] == "off" and body["web_search"] == "off"
         assert body["json_output"] is True and body["stream"] is False
+        schema_text = body["content"].split("JSON schema:\n", 1)[1]
+        assert json.loads(schema_text) == bakeoff.SCHEMA
+        assert json.loads(schema_text)["required"] == ["signals", "summary"]
     assert "don't tell" in requests[0][1]["json"]["content"]
     assert "don't tell" not in requests[1][1]["json"]["content"]
 
