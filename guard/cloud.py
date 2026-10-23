@@ -26,6 +26,8 @@ def _clean_key():
     key = raw.strip().strip('"').strip("'").strip()
     if "=" in key and not key.startswith("tml-"):
         key = key.split("=", 1)[1].strip().strip('"').strip("'")
+    if key and not key.startswith("tml-"):
+        key = "tml-" + key.removeprefix("tml").lstrip("-")  # prefix lost when copying
     if key:
         os.environ["TINKER_API_KEY"] = key
     # Diagnostic without revealing the key.
