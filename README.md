@@ -82,18 +82,26 @@ the message index must point to a contact message, and a paraphrased quote is re
 
 Cloud services otherwise only touch **fictional test data** (evaluation, scenarios).
 
-## Results (fictional test set, 60 chats: 30 safe, 30 risky)
+## Results (fictional test set, 70 chats: 34 safe, 36 risky)
 
-Baseline `gemma4:e4b`, zero-shot, on an RTX 4050 laptop GPU:
+`gemma4:e4b`, zero-shot, on an RTX 4050 laptop GPU:
 
-| Metric | Value |
-|---|---|
-| Risky chats flagged | 30/30 (100%) |
-| False alarms on safe chats | 4/30 (13%) |
-| Signal precision / recall | 89% / 87% |
-| Avg latency | 3.8 s |
+| Metric | First version (60 chats, 11 signals) | Now (70 chats, 14 signals) |
+|---|---|---|
+| Risky chats flagged | 30/30 | **36/36** |
+| False alarms on safe chats | 4/30 (13%) | **3/34 (9%)** |
+| Signal precision / recall | 89% / 87% | 88% / 87% |
+| Avg latency (text) | 3.8 s | 4.3 s |
+| Reading a chat from a screenshot (vision) | n/a | ~7 s warm, ~23 s cold |
 
-The false alarms are deliberate hard cases: an in-game "secret" about a hidden chest, a classmate saying "see you at school", a birthday "how old r u now". All conversations are **fictional**, written for testing; no real children's data is used.
+Why it isn't a bad-words filter or sentiment analysis: groomers are usually **nice** ("you're so mature", "free
+Robux for you") and rarely swear. Night Guard reads the whole conversation and looks for documented tactics.
+
+The remaining false alarms are deliberate hard cases: an in-game "secret" about a hidden chest, a classmate saying
+"see you at school", a birthday "how old r u now". Honesty note: two new hard cases (a fair coin trade, a classmate's
+new account) were first flagged wrongly; the prompt and two evidence rules were adjusted **after** seeing them, so
+those two cases are no longer a blind test. All conversations are **fictional**, written for testing; no real
+children's data is used.
 
 ## Run it
 
