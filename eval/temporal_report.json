@@ -1,0 +1,768 @@
+{
+  "model": "gemma4:e4b",
+  "results": [
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s01",
+      "label": "safe",
+      "latency_s": 24.45,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s02",
+      "label": "safe",
+      "latency_s": 3.19,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s03",
+      "label": "safe",
+      "latency_s": 3.2,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s04",
+      "label": "safe",
+      "latency_s": 3.14,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s05",
+      "label": "safe",
+      "latency_s": 3.27,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s06",
+      "label": "safe",
+      "latency_s": 3.06,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s07",
+      "label": "safe",
+      "latency_s": 3.24,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s08",
+      "label": "safe",
+      "latency_s": 3.13,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s09",
+      "label": "safe",
+      "latency_s": 3.19,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s10",
+      "label": "safe",
+      "latency_s": 3.36,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [
+        "secrecy"
+      ],
+      "id": "s11",
+      "label": "safe",
+      "latency_s": 3.63,
+      "model": "gemma4:e4b",
+      "severity": "medium"
+    },
+    {
+      "attempt": 5,
+      "expected": [],
+      "got": [],
+      "id": "s12",
+      "label": "safe",
+      "latency_s": 70.17,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s13",
+      "label": "safe",
+      "latency_s": 7.21,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s14",
+      "label": "safe",
+      "latency_s": 4.32,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s15",
+      "label": "safe",
+      "latency_s": 3.98,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s16",
+      "label": "safe",
+      "latency_s": 3.4,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s17",
+      "label": "safe",
+      "latency_s": 3.54,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s18",
+      "label": "safe",
+      "latency_s": 3.33,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s19",
+      "label": "safe",
+      "latency_s": 3.37,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s20",
+      "label": "safe",
+      "latency_s": 3.21,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s21",
+      "label": "safe",
+      "latency_s": 3.27,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s22",
+      "label": "safe",
+      "latency_s": 3.53,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s23",
+      "label": "safe",
+      "latency_s": 3.66,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s24",
+      "label": "safe",
+      "latency_s": 3.36,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s25",
+      "label": "safe",
+      "latency_s": 3.51,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [
+        "personal_info"
+      ],
+      "id": "s26",
+      "label": "safe",
+      "latency_s": 4.49,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s27",
+      "label": "safe",
+      "latency_s": 3.36,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [
+        "secrecy"
+      ],
+      "id": "s28",
+      "label": "safe",
+      "latency_s": 3.65,
+      "model": "gemma4:e4b",
+      "severity": "medium"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [
+        "age_probe"
+      ],
+      "id": "s29",
+      "label": "safe",
+      "latency_s": 3.5,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [],
+      "got": [],
+      "id": "s30",
+      "label": "safe",
+      "latency_s": 3.26,
+      "model": "gemma4:e4b",
+      "severity": "none"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "secrecy",
+        "platform_move"
+      ],
+      "got": [
+        "platform_move",
+        "secrecy"
+      ],
+      "id": "r01",
+      "label": "risky",
+      "latency_s": 4.44,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "gift_offer",
+        "suspicious_link"
+      ],
+      "got": [
+        "pressure",
+        "suspicious_link"
+      ],
+      "id": "r02",
+      "label": "risky",
+      "latency_s": 4.28,
+      "model": "gemma4:e4b",
+      "severity": "medium"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "credential_request",
+        "gift_offer"
+      ],
+      "got": [
+        "credential_request"
+      ],
+      "id": "r03",
+      "label": "risky",
+      "latency_s": 3.91,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "age_probe"
+      ],
+      "got": [
+        "age_probe"
+      ],
+      "id": "r04",
+      "label": "risky",
+      "latency_s": 4.02,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "photo_request"
+      ],
+      "got": [
+        "photo_request"
+      ],
+      "id": "r05",
+      "label": "risky",
+      "latency_s": 3.5,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "personal_info"
+      ],
+      "got": [
+        "personal_info"
+      ],
+      "id": "r06",
+      "label": "risky",
+      "latency_s": 4.66,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "meet_offline",
+        "secrecy"
+      ],
+      "got": [
+        "meet_offline",
+        "secrecy"
+      ],
+      "id": "r07",
+      "label": "risky",
+      "latency_s": 4.54,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "isolation"
+      ],
+      "got": [
+        "isolation"
+      ],
+      "id": "r08",
+      "label": "risky",
+      "latency_s": 4.0,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "pressure",
+        "photo_request"
+      ],
+      "got": [
+        "photo_request",
+        "pressure"
+      ],
+      "id": "r09",
+      "label": "risky",
+      "latency_s": 3.95,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "platform_move",
+        "personal_info"
+      ],
+      "got": [
+        "platform_move"
+      ],
+      "id": "r10",
+      "label": "risky",
+      "latency_s": 3.74,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "credential_request"
+      ],
+      "got": [
+        "credential_request"
+      ],
+      "id": "r11",
+      "label": "risky",
+      "latency_s": 3.67,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "gift_offer",
+        "secrecy"
+      ],
+      "got": [
+        "gift_offer",
+        "secrecy"
+      ],
+      "id": "r12",
+      "label": "risky",
+      "latency_s": 4.2,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "pressure"
+      ],
+      "got": [
+        "pressure"
+      ],
+      "id": "r13",
+      "label": "risky",
+      "latency_s": 3.78,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "photo_request",
+        "platform_move"
+      ],
+      "got": [
+        "photo_request"
+      ],
+      "id": "r14",
+      "label": "risky",
+      "latency_s": 3.68,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "suspicious_link"
+      ],
+      "got": [
+        "suspicious_link"
+      ],
+      "id": "r15",
+      "label": "risky",
+      "latency_s": 3.79,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "secrecy",
+        "platform_move"
+      ],
+      "got": [
+        "platform_move",
+        "secrecy"
+      ],
+      "id": "r16",
+      "label": "risky",
+      "latency_s": 4.13,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "gift_offer",
+        "suspicious_link"
+      ],
+      "got": [
+        "suspicious_link"
+      ],
+      "id": "r17",
+      "label": "risky",
+      "latency_s": 4.41,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "credential_request"
+      ],
+      "got": [
+        "credential_request"
+      ],
+      "id": "r18",
+      "label": "risky",
+      "latency_s": 3.87,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "age_probe"
+      ],
+      "got": [
+        "age_probe"
+      ],
+      "id": "r19",
+      "label": "risky",
+      "latency_s": 4.12,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "photo_request"
+      ],
+      "got": [
+        "photo_request"
+      ],
+      "id": "r20",
+      "label": "risky",
+      "latency_s": 3.58,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "personal_info"
+      ],
+      "got": [
+        "personal_info"
+      ],
+      "id": "r21",
+      "label": "risky",
+      "latency_s": 3.97,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "meet_offline"
+      ],
+      "got": [
+        "meet_offline"
+      ],
+      "id": "r22",
+      "label": "risky",
+      "latency_s": 3.81,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "isolation"
+      ],
+      "got": [
+        "isolation"
+      ],
+      "id": "r23",
+      "label": "risky",
+      "latency_s": 4.08,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "pressure",
+        "photo_request"
+      ],
+      "got": [
+        "photo_request",
+        "pressure"
+      ],
+      "id": "r24",
+      "label": "risky",
+      "latency_s": 3.99,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "gift_offer",
+        "secrecy"
+      ],
+      "got": [
+        "gift_offer",
+        "secrecy"
+      ],
+      "id": "r25",
+      "label": "risky",
+      "latency_s": 4.37,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "credential_request"
+      ],
+      "got": [
+        "credential_request"
+      ],
+      "id": "r26",
+      "label": "risky",
+      "latency_s": 4.17,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "platform_move",
+        "personal_info"
+      ],
+      "got": [
+        "platform_move"
+      ],
+      "id": "r27",
+      "label": "risky",
+      "latency_s": 4.75,
+      "model": "gemma4:e4b",
+      "severity": "low"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "secrecy"
+      ],
+      "got": [
+        "secrecy"
+      ],
+      "id": "r28",
+      "label": "risky",
+      "latency_s": 4.17,
+      "model": "gemma4:e4b",
+      "severity": "medium"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "gift_offer",
+        "pressure"
+      ],
+      "got": [
+        "gift_offer",
+        "pressure"
+      ],
+      "id": "r29",
+      "label": "risky",
+      "latency_s": 4.57,
+      "model": "gemma4:e4b",
+      "severity": "medium"
+    },
+    {
+      "attempt": 1,
+      "expected": [
+        "age_probe",
+        "secrecy"
+      ],
+      "got": [
+        "age_probe",
+        "secrecy"
+      ],
+      "id": "r30",
+      "label": "risky",
+      "latency_s": 4.69,
+      "model": "gemma4:e4b",
+      "severity": "high"
+    }
+  ],
+  "summary": {
+    "false_alarms": "4/30",
+    "n": 60,
+    "retried_conversations": [
+      "s12"
+    ],
+    "risky_flagged": "30/30",
+    "signal_precision": 0.886,
+    "signal_recall": 0.867
+  }
+}

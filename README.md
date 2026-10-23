@@ -46,6 +46,22 @@ python -m venv .venv && .venv/Scripts/pip install fastapi uvicorn httpx
 
 Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
 
+## Durable evaluation with Temporal
+
+Evaluating a local model on a laptop is fragile: Ollama crashes, the GPU runs out of memory, the lid gets closed.
+The evaluation runs as a [Temporal](https://temporal.io) workflow where **each conversation is one activity with automatic retries**
+(`guard/temporal_flow.py`, `guard/temporal_activities.py`).
+
+Crash test: Ollama was killed on purpose at conversation 11 of 60. The workflow paused, retried 6 times with backoff
+while the model was down, and resumed at conversation 12 when Ollama came back. No conversation was lost or re-run.
+
+```bash
+temporal server start-dev --db-filename .temporal.db
+python -m eval.temporal_worker          # terminal 1
+python -m eval.temporal_run             # terminal 2 (re-attaches if already running)
+python -m eval.temporal_run --status    # progress, e.g. 23/60
+```
+
 ## Limits
 
 Night Guard is a learning and support tool, not a guarantee of safety. It can miss things and can raise false alarms. It does not replace trusted adults or platform reporting tools.
