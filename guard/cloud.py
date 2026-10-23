@@ -19,6 +19,21 @@ FT_PATH = os.environ.get(
 )
 IM_END = 151645  # Qwen <|im_end|>
 
+
+def _clean_key():
+    """Tolerate common paste mistakes in the dashboard: spaces, quotes, 'TINKER_API_KEY=' prefix."""
+    raw = os.environ.get("TINKER_API_KEY", "")
+    key = raw.strip().strip('"').strip("'").strip()
+    if "=" in key and not key.startswith("tml-"):
+        key = key.split("=", 1)[1].strip().strip('"').strip("'")
+    if key:
+        os.environ["TINKER_API_KEY"] = key
+    # Diagnostic without revealing the key.
+    print(f"[night-guard] TINKER_API_KEY set={bool(key)} len={len(key)} starts_tml={key.startswith('tml-')}", flush=True)
+
+
+_clean_key()
+
 _lock = threading.RLock()  # re-entrant: _client() calls _get() while holding it
 _state = {}
 
