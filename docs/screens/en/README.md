@@ -12,8 +12,10 @@ Every chat is fictional. The failure in the last screenshot is simulated (the re
 | 5 | ![](05_result_kid_words.png) | **The kid's warning.** Danger in plain words, the contact's exact message, a Listen button and what to do. |
 | 6 | ![](06_tell_someone_message.png) | **Tell someone.** She picks the quotes and gets a ready message to edit. Nothing is sent on its own. |
 | 7 | ![](07_normal_chat_no_alarm.png) | **A normal chat.** "Nothing worrying found": no false alarm. |
+| 7b | ![](07b_link_check_without_opening.png) | **Check a link without opening it.** Browserbase opens the link in an isolated cloud browser (password field found, real destination, screenshot); SerpApi looks for scam reports. Only the URL leaves the computer. |
 | 8 | ![](08_practice_levels.png) | **Practice.** Rank (Rookie to Night Hero) and the guard's workload going down. |
 | 9 | ![](09_practice_medal.png) | **A right answer becomes a medal.** Feedback explains why. |
+| 10a | ![](10a_parents_locked_auth0.png) | **Parents sign in (Auth0).** On the family's computer the parents' area stays locked until a verified, listed parent account signs in. |
 | 10 | ![](10_parents_area.png) | **Parents' area (Night Guard).** Automatic protection and phone alerts. |
 | 11 | ![](11_parent_alerts.png) | **Alerts for parents.** Risk, app, message, why it matters and what to do now. |
 | 12 | ![](12_family_rules.png) | **Family rules.** For each tactic: tell the family or let the child decide. |

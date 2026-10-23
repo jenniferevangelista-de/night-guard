@@ -375,19 +375,33 @@ def sc_family(img, d, t):
 
 
 def sc_tech(img, d, t):
-    s = S("tech"); a, v = s["start"], s["voice_dur"]
-    cards = [(0.08, "GEMMA 4", "reads text and screen", "on the computer itself", NIGHT),
-             (0.27, "TINKER", "fine-tuned Qwen3-8B", "70/70 valid format", RED),
-             (0.55, "TEMPORAL", "survives crashes", "nothing is lost", GREEN),
-             (0.66, "SENTRY", "when on: traces each check", "without reading the chat", (120, 70, 160)),
-             (0.80, "ELEVENLABS", "voices the warnings", "for kids who read slowly", (200, 120, 30)),
-             (0.91, "RENDER", "online demo", "one click", (40, 110, 160))]
-    for i, (f, ti, l1, l2, col) in enumerate(cards):
-        t0 = a + f * v
-        x = 70 + (i % 3) * 600; y = 70 + (i // 3) * 420
-        card_small(d, t, x, y, seg(t, t0, t0 + 0.4), ti, l1, l2, col, 1600 + i * 20)
+    s = S("tech"); a, v, line = s["start"], s["voice_dur"], s["line"]
+    cards = [("Gemma", "GEMMA 4", "reads text + screen", "on the computer", NIGHT),
+             ("Tinker", "TINKER", "fine-tuned Qwen3-8B", "70/70 valid format", RED),
+             ("Backboard", "BACKBOARD", "compares open models", "one API key", (90, 90, 200)),
+             ("Temporal", "TEMPORAL", "survives crashes", "nothing is lost", GREEN),
+             ("Sentry", "SENTRY", "when on: traces checks", "no chat inside", (120, 70, 160)),
+             ("ElevenLabs", "ELEVENLABS", "voices the warnings", "for slow readers", (200, 120, 30)),
+             ("Auth0", "AUTH0", "parents sign in", "family area locked", (235, 87, 34)),
+             ("Browserbase", "BROWSERBASE", "opens a link safely", "isolated browser", (60, 60, 60)),
+             ("SerpApi", "SERPAPI", "finds scam reports", "only the domain", (30, 130, 120)),
+             ("Render", "RENDER", "online demo", "one click", (40, 110, 160))]
+    for i, (kw, ti, l1, l2, col) in enumerate(cards):
+        t0 = a + v * line.find(kw) / len(line)          # each card pops when the narrator says its name
+        x = 22 + (i % 5) * 378; y = 90 + (i // 5) * 400
+        card_tiny(d, t, x, y, seg(t, t0, t0 + 0.4), ti, l1, l2, col, 1600 + i * 20)
     if t > a + v - 0.5:
         stamp(img, "OPEN TECH", W / 2, 470, -4, RED, 80)
+
+
+def card_tiny(d, t, x, y, k, title, l1, l2, col, seed):
+    if k <= 0: return
+    s = eout(k); w, h = 350 * s, 300 * s; cx, cy = x + 175, y + 150
+    wrect(d, cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2, t, seed, 6, fill=(255, 252, 242))
+    if k > 0.7:
+        d.rectangle((cx - w / 2 + 7, cy - h / 2 + 7, cx + w / 2 - 7, cy - h / 2 + 20), fill=col)
+        text(d, title, cx, cy - 62, 50, col, "mm", "impact.ttf")
+        text(d, l1, cx, cy + 20, 26, INK); text(d, l2, cx, cy + 72, 26, SOFT)
 
 
 def card_small(d, t, x, y, k, title, l1, l2, col, seed):
@@ -403,7 +417,7 @@ def card_small(d, t, x, y, k, title, l1, l2, col, seed):
 def sc_results(img, d, t):
     a = S("results")["start"]
     stats = [("36/36", "risky chats caught"), ("~4 s", "per check, on a laptop"),
-             ("70/70", "answers in the right format"), ("28", "automated tests")]
+             ("70/70", "answers in the right format"), ("64", "automated tests")]
     for i, (big, small) in enumerate(stats):
         t0 = a + 0.4 + i * 1.3
         if t < t0: continue

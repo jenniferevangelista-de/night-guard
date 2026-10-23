@@ -29,8 +29,10 @@ SCENES = [
     ("family", "To parents, it's the Night Guard. One alert, not the whole chat. What happened, and what to do now, "
                "right on their phone.", 1.4),
     ("tech", "Under the hood, it's all open. Gemma 4 reads text and the screen on the computer itself. On Tinker, we fine-tuned "
-             "a model that got the format right in seventy out of seventy chats. Temporal survives crashes, Sentry, when it's switched on, "
-             "traces each check without reading the chat, ElevenLabs gives the warnings a voice, and the demo runs on Render.", 1.0),
+             "a model that got the format right in seventy out of seventy chats, and Backboard let us compare more open models "
+             "with one key. Temporal survives crashes. Sentry, when it's switched on, traces each check without reading the chat. "
+             "ElevenLabs gives the warnings a voice. Auth0 keeps the parents' area locked. Browserbase and SerpApi check a "
+             "suspicious link without opening it. And the demo runs on Render.", 1.0),
     ("results", "In testing, it caught thirty six out of thirty six risky chats, in about four seconds.", 1.4),
     ("peace", "Peace for the kid. Peace for the parents. And the more the kid learns, the more the guard can rest.", 1.6),
     ("end", "Night Guard. A partner for parents. A friend for kids. And me? Back to my nap.", 3.0),

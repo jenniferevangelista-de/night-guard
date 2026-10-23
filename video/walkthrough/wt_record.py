@@ -152,6 +152,19 @@ def main():
                 scroll_to("#result"); click("#result [data-a]", 0.6)
             scroll_to("#result"); shot("07_normal_chat_no_alarm")
 
+        with seg("link"):
+            page.evaluate("window.scrollTo({top:0,behavior:'smooth'})"); sleep(0.3)
+            click('.chip[data-ex="scam"]', 0.3)
+            click("#analyzeBtn", 0.2)
+            page.wait_for_selector("#result [data-a], #result .verdict", timeout=90000); sleep(0.3)
+            if page.locator("#result [data-a]").count():
+                scroll_to("#result"); click("#result [data-a]", 0.5)
+            scroll_to("#result [data-link]")
+            click("#result [data-link]", 0.3)
+            page.wait_for_selector("#lk0 .sig, #lk0 .small", timeout=90000)
+            page.wait_for_function("!document.querySelector('#lk0 .spin')", timeout=90000); sleep(0.6)
+            scroll_to("#lk0"); sleep(0.8); shot("07b_link_check_without_opening")
+
         with seg("practice"):
             page.evaluate("window.scrollTo({top:0,behavior:'smooth'})"); sleep(0.3)
             click('nav button[data-p="practice"]', 0.6); shot("08_practice_levels")
@@ -160,6 +173,13 @@ def main():
             click('#scnPlay .opt[data-c="ask"]', 1.2)
             scroll_to("#fb"); shot("09_practice_medal")
             page.evaluate("window.scrollTo({top:0,behavior:'smooth'})"); sleep(0.8)
+
+        with seg("auth"):
+            auth_base = __import__("os").environ.get("NG_AUTH_BASE", "http://127.0.0.1:8765")
+            page.goto(f"{auth_base}/?tab=family&lang={LANG}"); page.wait_for_selector("#gbToggle"); sleep(0.6)
+            scroll_to("#lockCard"); sleep(0.8); shot("10a_parents_locked_auth0")
+            move_to("#lockCard a"); sleep(1.0)
+            page.goto(f"{BASE}/?lang={LANG}"); page.wait_for_selector("#gbToggle"); sleep(0.4)
 
         with seg("parents"):
             page.evaluate("window.scrollTo({top:0,behavior:'smooth'})"); sleep(0.3)

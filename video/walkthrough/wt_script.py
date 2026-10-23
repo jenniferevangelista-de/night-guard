@@ -22,10 +22,14 @@ LINES = {
         ("result", "Primeiro ele pergunta o que ela acha. Depois mostra o perigo em palavras simples, com a frase exata do "
                    "estranho, e o que fazer. E dá pra ouvir o aviso."),
         ("benign", "E uma conversa normal de jogo? Nada de alarme falso."),
+        ("link", "Recebeu um link estranho? Confira sem abrir. O Browserbase abre num navegador isolado na nuvem, o SerpApi "
+                 "procura denúncias de golpe, e só o link sai do computador."),
         ("practice", "Em Praticar, ela treina situações curtas. Cada acerto vira medalha, ela sobe de nível, e a barra mostra o "
                      "guarda ficando mais preguiçoso."),
         ("tell", "Em Contar pra alguém, ela escolhe o que compartilhar e recebe uma mensagem pronta pra mãe, pai ou professor. "
                  "Nada é enviado sozinho: quem decide é ela."),
+        ("auth", "No computador da família, a área dos pais fica trancada com o Auth0. Só a conta verificada de um responsável "
+                 "vê os alertas, muda as regras ou desliga o guarda."),
         ("parents", "Na área dos pais, o Guarda Noturno mostra só o que importa: o risco, o app, o trecho e o que fazer agora. "
                     "Os pais escolhem as regras e podem receber aviso no celular."),
         ("game", "No modo ao vivo, ninguém cola nada. O estranho escreve no chat do jogo, e o guarda avisa a criança sozinho, "
@@ -42,10 +46,14 @@ LINES = {
         ("result", "First it asks what she thinks. Then it shows the danger in plain words, with the stranger's exact message, "
                    "and what to do. And she can listen to the warning."),
         ("benign", "And a normal game chat? No false alarm."),
+        ("link", "Got a suspicious link? Check it without opening. Browserbase opens it in an isolated cloud browser, "
+                 "SerpApi looks for scam reports, and only the link leaves the computer."),
         ("practice", "In Practice, she tries short scenarios. Every right answer becomes a medal, she levels up, and the bar "
                      "shows the guard getting lazier."),
         ("tell", "In Tell someone, she picks what to share and gets a ready message for Mom, Dad or a teacher. Nothing is "
                  "sent on its own: she decides."),
+        ("auth", "On the family's computer, the parents' area is locked with Auth0. Only a verified parent's account "
+                 "can see alerts, change the rules or turn the guard off."),
         ("parents", "In the parents' area, the Night Guard shows only what matters: the risk, the app, the message and what "
                     "to do now. Parents set the rules and can get a phone alert."),
         ("game", "In live mode, nobody pastes anything. The stranger writes in the game chat, and the guard warns the kid "

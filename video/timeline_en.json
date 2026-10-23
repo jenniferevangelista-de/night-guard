@@ -82,36 +82,36 @@
     },
     {
       "id": "tech",
-      "line": "Under the hood, it's all open. Gemma 4 reads text and the screen on the computer itself. On Tinker, we fine-tuned a model that got the format right in seventy out of seventy chats. Temporal survives crashes, Sentry, when it's switched on, traces each check without reading the chat, ElevenLabs gives the warnings a voice, and the demo runs on Render.",
+      "line": "Under the hood, it's all open. Gemma 4 reads text and the screen on the computer itself. On Tinker, we fine-tuned a model that got the format right in seventy out of seventy chats, and Backboard let us compare more open models with one key. Temporal survives crashes. Sentry, when it's switched on, traces each check without reading the chat. ElevenLabs gives the warnings a voice. Auth0 keeps the parents' area locked. Browserbase and SerpApi check a suspicious link without opening it. And the demo runs on Render.",
       "voice": "n11.mp3",
       "start": 111.31,
-      "voice_dur": 23.02,
-      "end": 135.33
+      "voice_dur": 34.61,
+      "end": 146.92
     },
     {
       "id": "results",
       "line": "In testing, it caught thirty six out of thirty six risky chats, in about four seconds.",
       "voice": "n12.mp3",
-      "start": 135.33,
+      "start": 146.92,
       "voice_dur": 5.59,
-      "end": 142.32
+      "end": 153.91
     },
     {
       "id": "peace",
       "line": "Peace for the kid. Peace for the parents. And the more the kid learns, the more the guard can rest.",
       "voice": "n13.mp3",
-      "start": 142.32,
+      "start": 153.91,
       "voice_dur": 6.36,
-      "end": 150.28
+      "end": 161.87
     },
     {
       "id": "end",
       "line": "Night Guard. A partner for parents. A friend for kids. And me? Back to my nap.",
       "voice": "n14.mp3",
-      "start": 150.28,
+      "start": 161.87,
       "voice_dur": 6.43,
-      "end": 159.71
+      "end": 171.3
     }
   ],
-  "duration": 160.01
+  "duration": 171.6
 }

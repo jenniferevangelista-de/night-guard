@@ -27,10 +27,10 @@ FX, FY, FW, FH = 40, 40, 1536, 960                     # where the recording sit
 NIGHT = (38, 50, 108); SOFT = (120, 112, 125)
 TITLES = {
     "pt": {"home": "Liga e desliga", "check": "Algo me incomodou", "result": "O aviso pra criança", "tell": "Contar pra alguém",
-           "benign": "Conversa normal", "practice": "Praticar e medalhas", "parents": "Área dos pais", "game": "Modo ao vivo",
+           "benign": "Conversa normal", "link": "Conferir link", "auth": "Login dos pais", "practice": "Praticar e medalhas", "parents": "Área dos pais", "game": "Modo ao vivo",
            "off": "Desligar de verdade", "fault": "Falha simulada", "end": "Night Guard"},
     "en": {"home": "On and off", "check": "Something felt off", "result": "The kid's warning", "tell": "Tell someone",
-           "benign": "A normal chat", "practice": "Practice and medals", "parents": "Parents' area", "game": "Live mode",
+           "benign": "A normal chat", "link": "Check a link", "auth": "Parents sign in", "practice": "Practice and medals", "parents": "Parents' area", "game": "Live mode",
            "off": "Off means off", "fault": "Simulated failure", "end": "Night Guard"},
 }[LANG]
 

@@ -94,7 +94,8 @@ add(sfx, a + 9.5, chime(1760), 1.0)
 a = S("family")["start"]; add(sfx, a + 2.0, chime(1568)); add(sfx, a + 2.12, chime(2093))
 for t0 in (4.4, 5.4, 6.4): add(sfx, a + t0, pop(), 0.7)
 s = S("tech")
-for f in (0.08, 0.27, 0.55, 0.66, 0.80, 0.91): add(sfx, s["start"] + f * s["voice_dur"], swish())
+for kw in ("Gemma", "Tinker", "Backboard", "Temporal", "Sentry", "ElevenLabs", "Auth0", "Browserbase", "SerpApi", "Render"):
+    add(sfx, s["start"] + s["voice_dur"] * s["line"].find(kw) / len(s["line"]), swish())
 add(sfx, s["start"] + s["voice_dur"] - 0.5, thud())
 a = S("results")["start"]
 for i in range(4): add(sfx, a + 0.4 + i * 1.3, chime(1047 + 130 * i), 0.7)
