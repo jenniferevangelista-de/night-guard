@@ -41,7 +41,7 @@ The online demo runs the **Tinker fine-tuned model** in the cloud so judges can 
 
 {% github jenniferevangelista-de/night-guard %}
 
-The repo has 24 automated tests (`pytest tests`), including the exact failure cases our auditor reported, so those bugs can't quietly come back.
+The repo has 28 automated tests (`pytest tests`), including the exact failure cases our auditor reported, so those bugs can't quietly come back.
 
 ## How I Built It
 

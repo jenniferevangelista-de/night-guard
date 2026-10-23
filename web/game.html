@@ -41,6 +41,7 @@
     <span class="small" id="srv" style="font-size:13px;color:#cfe"></span>
     <div class="spacer"></div>
     <select id="lang"><option value="en">EN</option><option value="pt">PT</option></select>
+    <button id="gToggle" class="ghost" style="font-size:15px"></button>
     <button id="play">▶ Play scenario</button>
     <button id="reset" class="ghost">Reset</button>
   </div>
@@ -75,7 +76,7 @@ const S = {
               ["Alex_17","bora conversar no snap, me adiciona lá"],["Alex_17","e não conta pros seus pais tá? eles não iam entender"],
               ["Alex_17","manda uma selfie pra eu ver que vc é de verdade"]]}
 };
-let lang = new URLSearchParams(location.search).get("lang") || "en";
+let lang = new URLSearchParams(location.search).get("lang") || (()=>{ try{ return localStorage.getItem("ng_lang"); }catch(e){ return null; } })() || "en";
 const msgs = [], $ = s=>document.querySelector(s);
 let guard = null, timers = [], DEMO = false, VOICE = false;
 
@@ -92,9 +93,18 @@ function startGuard(){
   // If the browser extension is installed it watches this page itself; otherwise the built-in guard does.
   if(document.documentElement.dataset.nightGuardExt) return;
   if(new URLSearchParams(location.search).get("guard")==="off") return; // let the screen guard do it
-  if(guard) guard.destroy();
+  if(guard) { guard.destroy(); guard = null; }
+  if(!guardOn()) { renderToggle(); return; }
   guard = NightGuardLive.create({analyze, app:"Roblox", lang, tellUrl:"/?tab=tell&lang="+lang,
                                  voiceBase: VOICE ? "/web/audio/"+lang : null});
+  renderToggle();
+}
+function guardOn(){ try{ return localStorage.getItem("ng_live_guard")!=="off"; }catch(e){ return true; } }
+function renderToggle(){
+  const on = guardOn();
+  $("#gToggle").textContent = lang==="pt" ? (on ? "🛡️ Guarda ligado · desligar" : "😴 Guarda desligado · ligar")
+                                          : (on ? "🛡️ Guard on · turn off" : "😴 Guard off · turn on");
+  $("#gToggle").style.background = on ? "#2f9e6a" : "transparent"; $("#gToggle").style.color = on ? "#fff" : "";
 }
 function render(){
   $("#msgs").innerHTML = msgs.map(m=>`<div class="m ${m.from}" data-ng-from="${m.from}" data-ng-name="${m.name||""}"><span class="who">${m.from==="me"?(lang==="pt"?"Você":"You"):m.name}</span><span data-ng-text>${m.text.replace(/</g,"&lt;")}</span></div>`).join("");
@@ -106,10 +116,12 @@ function add(name, text){
   if(guard) guard.update(msgs.map(m=>({from:m.from, text:m.text, name:m.name})));
 }
 function applyLang(){
+  renderToggle();
   $("#lang").value = lang; $("#note").textContent = S[lang].note; $("#inp").placeholder = S[lang].ph;
   $("#play").textContent = S[lang].play; $("#reset").textContent = S[lang].reset;
 }
 function reset(){ timers.forEach(clearTimeout); timers=[]; msgs.length=0; render(); if(guard) guard.reset(); }
+$("#gToggle").onclick = ()=>{ try{ localStorage.setItem("ng_live_guard", guardOn() ? "off" : "on"); }catch(e){} startGuard(); renderToggle(); };
 $("#play").onclick = ()=>{ reset(); S[lang].script.forEach(([who,text],i)=>timers.push(setTimeout(()=>add(who,text), 900+i*2600))); };
 $("#reset").onclick = reset;
 $("#lang").onchange = e=>{ lang=e.target.value; applyLang(); reset(); startGuard(); };

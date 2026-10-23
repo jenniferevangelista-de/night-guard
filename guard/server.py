@@ -1,6 +1,7 @@
 """Local Night Guard server. Run:  .venv\\Scripts\\python -m uvicorn guard.server:app --port 8765"""
 
 import json
+import os
 import re
 import subprocess
 import sys
@@ -206,7 +207,8 @@ def guard_start(req: GuardStart, request: Request):
     if _guard["proc"] is None or _guard["proc"].poll() is not None:
         server = f"http://127.0.0.1:{request.url.port or 80}"
         _guard["proc"] = subprocess.Popen(
-            [sys.executable, "-m", "guard.screen_guard", "--server", server, "--lang", req.lang],
+            [sys.executable, "-m", "guard.screen_guard", "--server", server, "--lang", req.lang]
+            + (["--demo-page"] if os.environ.get("NG_SCREEN_DEMO") == "1" else []),
             cwd=ROOT, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     return guard_status()
 

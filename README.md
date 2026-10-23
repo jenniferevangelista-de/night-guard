@@ -121,7 +121,7 @@ Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
 .venv\Scripts\python -m pytest tests
 ```
 
-24 tests cover scoring (an error is never a catch), malformed model answers, window selection by process, per-contact warnings, typed input, the Sentry allowlist, the parent allowlist, Temporal retries and the browser overlay (Node). They include the exact failure cases from the independent review.
+28 tests cover scoring (an error is never a catch), malformed model answers, window selection by process, per-contact warnings, typed input, the Sentry allowlist, the parent allowlist, Temporal retries and the browser overlay (Node). They include the exact failure cases from the independent review.
 
 ## Fine-tuning with Tinker
 

@@ -49,7 +49,7 @@ class EvalWorkflow:
                     initial_interval=timedelta(seconds=3),
                     backoff_coefficient=2.0,
                     maximum_interval=timedelta(seconds=30),
-                    maximum_attempts=0,  # keep trying until Ollama is back
+                    maximum_attempts=20,  # ~9 min of retries for a crashed Ollama; unreadable output is not retried
                 ),
             )
             results.append(r)

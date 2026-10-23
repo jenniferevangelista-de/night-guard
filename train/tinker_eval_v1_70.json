@@ -1190,5 +1190,6 @@
       "strict_signals": [],
       "lenient_signals": []
     }
-  ]
+  ],
+  "rescored": "re-scored from saved raw outputs with the current schema rules (no new model calls)"
 }

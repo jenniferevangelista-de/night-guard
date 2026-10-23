@@ -74,6 +74,13 @@
   .bar{flex:1;height:8px;border-radius:99px;background:var(--bg2);overflow:hidden}
   .bar i{display:block;height:100%;background:var(--good);width:0;transition:width .4s}
   .spin{display:inline-block;animation:s 1s linear infinite} @keyframes s{to{transform:rotate(360deg)}}
+  .gbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:2px solid var(--good);border-radius:18px;padding:14px 18px;margin:12px 0;background:linear-gradient(90deg,#163a32,#1b2350)}
+  .gbar.off{border-color:var(--line);background:var(--bg2)}
+  .gbar .gb-icon{font-size:34px}
+  .gbar .gb-main{font-weight:900;font-size:20px}
+  .gbar .gb-sub{font-size:13px;color:var(--muted);margin-top:2px}
+  .gbar .gb-btn{font-size:17px;padding:12px 22px;border-radius:14px}
+  .gbar .gb-off{background:transparent;color:var(--ink);border:1px solid var(--line)}
   footer{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}
   @media (max-width:560px){nav{grid-template-columns:1fr}.b{max-width:92%}}
 </style>
@@ -92,6 +99,17 @@
     <div class="pill" id="health">…</div>
     <div class="lang"><button data-l="en">EN</button> <button data-l="pt">PT</button></div>
   </header>
+
+  <!-- Guard on/off: always the first thing on the page -->
+  <div class="gbar" id="gbar">
+    <div class="gb-icon" id="gbIcon">🛡️</div>
+    <div style="flex:1;min-width:220px">
+      <div class="gb-main" id="gbMain">…</div>
+      <div class="gb-sub" id="gbSub"></div>
+    </div>
+    <button class="btn gb-btn" id="gbToggle"></button>
+    <a class="btn gb-btn gb-off" id="gbLive" href="/game" target="_blank" style="text-decoration:none" data-t="gbLive"></a>
+  </div>
 
   <nav>
     <button data-p="check" class="on"><span data-t="tab1sub"></span></button>
@@ -219,6 +237,10 @@ const T = {
     sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
     sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
     sh3:"③ See what parents get", sh3d:"Family rules, alerts with what to do now, and phone alerts.",
+    gbOn:"🟢 Night Guard is ON", gbOff:"⚪ Night Guard is OFF", gbTurnOn:"Turn on", gbTurnOff:"Turn off", gbLive:"▶ See it live",
+    gbDemoOn:"Online demo: it watches the fictional game chat and warns the kid by itself. Press ▶ See it live.",
+    gbDemoOff:"Turn it on, then press ▶ See it live to watch it warn the kid.",
+    gbLocalOn:"Watching this computer's game and chat apps", gbLocalOff:"Turn on to watch Roblox, Discord, Minecraft, WhatsApp and more on this computer.",
     gTitle:"🛡️ Automatic protection (this computer)",
     gHelp:"Watches Roblox, Discord, Minecraft, Fortnite, TikTok, WhatsApp and Instagram only while they're in front. It reads the chat from a screenshot kept in memory and never saved. Other windows are never captured.",
     gOn:"🟢 On", gWatching:"watching {app}", gWaiting:"waiting for a game or chat app", gOff:"⚪ Off",
@@ -279,6 +301,10 @@ const T = {
     sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
     sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
     sh3:"③ Veja o que os pais recebem", sh3d:"Regras da família, alertas com o que fazer e aviso no celular.",
+    gbOn:"🟢 Night Guard LIGADO", gbOff:"⚪ Night Guard DESLIGADO", gbTurnOn:"Ligar", gbTurnOff:"Desligar", gbLive:"▶ Ver ao vivo",
+    gbDemoOn:"Demo online: ele vigia o chat de jogo fictício e avisa a criança sozinho. Aperte ▶ Ver ao vivo.",
+    gbDemoOff:"Ligue e depois aperte ▶ Ver ao vivo para ver ele avisando a criança.",
+    gbLocalOn:"Vigiando os apps de jogo e chat deste computador", gbLocalOff:"Ligue para vigiar Roblox, Discord, Minecraft, WhatsApp e outros neste computador.",
     gTitle:"🛡️ Proteção automática (este computador)",
     gHelp:"Vigia Roblox, Discord, Minecraft, Fortnite, TikTok, WhatsApp e Instagram só quando estão na frente. Lê o chat de um print guardado só na memória, nunca salvo. Outras janelas nunca são capturadas.",
     gOn:"🟢 Ligada", gWatching:"vigiando {app}", gWaiting:"esperando um app de jogo ou chat", gOff:"⚪ Desligada",
@@ -345,6 +371,7 @@ const esc = s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;
 function known(sig){ return (progress.practiced[sig]||0)>=1 || (progress.seen[sig]||0)>=2; }
 
 function applyLang(){
+  try{ renderBar(); }catch(e){}
   document.documentElement.lang = lang;
   if($("#liveLink")) $("#liveLink").href = "/game?lang=" + lang;
   if($("#sh1")) $("#sh1").href = "/game?lang=" + lang;
@@ -544,7 +571,29 @@ async function loadGuard(){
   try{ nState = await (await fetch("/api/family/notify")).json(); }catch(e){ nState = {available:false}; }
   renderGuard();
 }
+const liveGuard = { get(){ try{ return localStorage.getItem("ng_live_guard")!=="off"; }catch(e){ return true; } },
+                    set(on){ try{ localStorage.setItem("ng_live_guard", on?"on":"off"); }catch(e){} } };
+function renderBar(){
+  const local = gState && gState.available, on = local ? !!gState.running : liveGuard.get();
+  $("#gbar").classList.toggle("off", !on);
+  $("#gbIcon").textContent = on ? "🛡️" : "😴";
+  $("#gbMain").textContent = t(on ? "gbOn" : "gbOff");
+  $("#gbSub").textContent = local ? (on ? (gState.watching ? t("gWatching").replace("{app}", gState.watching) : t("gbLocalOn")) : t("gbLocalOff"))
+                                  : t(on ? "gbDemoOn" : "gbDemoOff");
+  $("#gbToggle").textContent = t(on ? "gbTurnOff" : "gbTurnOn");
+  $("#gbToggle").classList.toggle("gb-off", on);
+  $("#gbLive").href = "/game?lang=" + lang; $("#liveLink").href = "/game?lang=" + lang; $("#sh1").href = "/game?lang=" + lang;
+}
+$("#gbToggle").onclick = async ()=>{
+  if(gState && gState.available){
+    const r = await fetch(gState.running ? "/api/guard/stop" : "/api/guard/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({lang})});
+    if(r.status===401){ show("family"); return; }   // parents must sign in first
+    gState = await r.json();
+  } else liveGuard.set(!liveGuard.get());
+  renderGuard();
+};
 function renderGuard(){
+  renderBar();
   if(!gState) return;
   if(!gState.available){ $("#gStatus").textContent = t("gDemo"); $("#gStatus").style.fontWeight="400"; $("#gBtn").style.display="none"; }
   else {
@@ -612,6 +661,7 @@ function renderFamily(){
 }
 
 applyLang();
+loadGuard(); setInterval(()=>{ if(gState && gState.available) loadGuard(); }, 4000);
 $("#liveLink").href = "/game?lang=" + lang;
 if(["check","practice","tell","family"].includes(QS.get("tab"))) show(QS.get("tab"));
 </script>

@@ -918,7 +918,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -963,7 +963,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -978,7 +978,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -993,7 +993,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1008,7 +1008,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1023,7 +1023,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1038,7 +1038,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1053,7 +1053,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1068,7 +1068,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1084,7 +1084,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1099,7 +1099,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1114,7 +1114,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1129,7 +1129,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1144,7 +1144,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1159,7 +1159,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1174,7 +1174,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1190,7 +1190,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1205,7 +1205,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1220,7 +1220,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1235,7 +1235,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1250,7 +1250,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1265,7 +1265,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1280,7 +1280,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1295,7 +1295,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1310,7 +1310,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1326,7 +1326,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1341,7 +1341,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1356,7 +1356,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1371,7 +1371,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1387,7 +1387,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 2
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1403,7 +1403,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1418,7 +1418,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1433,7 +1433,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1448,7 +1448,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1463,7 +1463,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": []
@@ -1476,7 +1476,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1491,7 +1491,7 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": [
@@ -1532,10 +1532,11 @@
       "strict": {
         "severity": "unknown",
         "analysis_status": "invalid_output",
-        "malformed_items": 1
+        "malformed_items": 0
       },
       "strict_signals": [],
       "lenient_signals": []
     }
-  ]
+  ],
+  "rescored": "re-scored from saved raw outputs with the current schema rules (no new model calls)"
 }

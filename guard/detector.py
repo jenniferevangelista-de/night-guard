@@ -104,7 +104,11 @@ def _call_model(messages, timeout=120):
     }
     r = httpx.post(f"{OLLAMA_URL}/api/chat", json=payload, timeout=timeout)
     r.raise_for_status()
-    return json.loads(r.json()["message"]["content"])
+    content = r.json()["message"]["content"]   # transport/HTTP problems above are transient (retry)
+    try:
+        return json.loads(content)
+    except ValueError:
+        return None  # the model answered, but not in JSON: permanent invalid_output, not "unavailable"
 
 
 def severity(signal_ids):
@@ -148,7 +152,8 @@ def analyze(messages, lang="en"):
 
 def valid_item(s):
     """One signal item exactly as the schema requires."""
-    return (isinstance(s, dict) and s.get("id") in SIGNALS and type(s.get("message_index")) is int
+    return (isinstance(s, dict) and isinstance(s.get("id"), str) and s["id"] in SIGNALS
+            and type(s.get("message_index")) is int
             and isinstance(s.get("quote"), str))
 
 
@@ -169,7 +174,8 @@ def postprocess(raw, messages, lang="en", model=MODEL):
     Evidence is checked against the chat: the index must point to a contact message, and a
     quote that isn't in that message is replaced by the message itself.
     """
-    if not isinstance(raw, dict) or not isinstance(raw.get("signals"), list):
+    if not isinstance(raw, dict) or not isinstance(raw.get("signals"), list) or not isinstance(raw.get("summary"), str):
+        # the whole answer must follow the schema; a missing or wrong summary is not "no risk" either
         return {"severity": "unknown", "analysis_status": "invalid_output", "signals": [], "links": [],
                 "summary": "", "notify_family": False, "model": model, "malformed_items": 0}
 

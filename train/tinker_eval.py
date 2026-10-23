@@ -48,6 +48,8 @@ def parse_json(text, lenient=False):
                 if key:
                     fixed.append({**x, "id": x[key]})
         data["signals"] = fixed
+        if not isinstance(data.get("summary"), str):
+            data["summary"] = ""  # lenient: a missing summary is forgiven too
     return data, ok
 
 

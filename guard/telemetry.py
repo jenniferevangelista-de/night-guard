@@ -8,6 +8,7 @@ quotes, names or prompts. send_default_pii is off and every event is scrubbed be
 
 import contextlib
 import os
+import re
 
 try:
     import sentry_sdk
@@ -21,6 +22,21 @@ SAFE_TOP = {"event_id", "timestamp", "start_timestamp", "level", "platform", "lo
             "sdk", "type", "transaction", "transaction_info", "measurements", "_meta"}
 SAFE_FRAME = {"filename", "abs_path", "function", "module", "lineno", "colno", "in_app"}
 OUR_PREFIX = "night-guard:"   # only our own fixed messages are kept as text
+SAFE_SPAN_FIELDS = {"span_id", "trace_id", "parent_span_id", "op", "status", "start_timestamp", "timestamp",
+                    "same_process_as_parent", "origin", "exclusive_time"}
+SAFE_TRACE_FIELDS = SAFE_SPAN_FIELDS | {"type"}
+# Span names are kept only when they are one of our fixed labels (model name included, never chat text).
+SAFE_DESCRIPTION = re.compile(r"^(chat [\w.:\-/]+|check evidence and severity|night-guard\.check)$")
+
+
+def _span(sp, fields):
+    out = {k: v for k, v in sp.items() if k in fields}
+    desc = sp.get("description")
+    if isinstance(desc, str) and SAFE_DESCRIPTION.match(desc):
+        out["description"] = desc
+    out["data"] = {k: v for k, v in (sp.get("data") or {}).items()
+                   if k in SAFE_SPAN_KEYS and isinstance(v, (int, float, bool, str)) and len(str(v)) <= 200}
+    return out
 
 
 def _allow(event):
@@ -29,8 +45,7 @@ def _allow(event):
     ctx = event.get("contexts") or {}
     out["contexts"] = {k: v for k, v in ctx.items() if k in ("trace", "runtime", "os")}
     if isinstance(out["contexts"].get("trace"), dict):
-        tr = out["contexts"]["trace"]
-        tr["data"] = {k: v for k, v in (tr.get("data") or {}).items() if k in SAFE_SPAN_KEYS}
+        out["contexts"]["trace"] = _span(out["contexts"]["trace"], SAFE_TRACE_FIELDS)
     out["extra"] = {k: v for k, v in (event.get("extra") or {}).items() if k in SAFE_KEYS}
     msg = event.get("message") or (event.get("logentry") or {}).get("message") or ""
     if isinstance(msg, str) and msg.startswith(OUR_PREFIX):
@@ -44,9 +59,7 @@ def _allow(event):
                          "stacktrace": {"frames": frames}, "mechanism": ex.get("mechanism")})
         out["exception"] = {"values": vals}
     if event.get("spans"):
-        out["spans"] = [{**{k: v for k, v in sp.items() if k not in ("data", "tags")},
-                         "data": {k: v for k, v in (sp.get("data") or {}).items() if k in SAFE_SPAN_KEYS}}
-                        for sp in event["spans"]]
+        out["spans"] = [_span(sp, SAFE_SPAN_FIELDS) for sp in event["spans"] if isinstance(sp, dict)]
     return out  # request, user, breadcrumbs, server_name, tags and anything new are dropped
 
 

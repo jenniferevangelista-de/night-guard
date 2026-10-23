@@ -110,14 +110,14 @@ def foreground_window():
     return hwnd, buf.value, process_exe(hwnd), (rect.left, rect.top, rect.right, rect.bottom)
 
 
-def watched_app(title, exe):
+def watched_app(title, exe, allow_demo_page=False):
     """Which watched app this window belongs to, or None. Decided by the owning process first."""
     exe = (exe or "").lower()
     if exe in WATCHED_EXE:
         return WATCHED_EXE[exe]
     if exe in JAVA_EXE and title.lower().startswith("minecraft"):
         return "Minecraft"
-    if exe in BROWSERS and title.startswith(DEMO_TITLE):
+    if allow_demo_page and exe in BROWSERS and title.startswith(DEMO_TITLE):  # opt-in only (--demo-page)
         return "Roblox"  # fictional demo page only; real web chats go through the extension
     return None
 
@@ -169,7 +169,8 @@ def alert_key(app, signal, messages):
 
 
 class Guard:
-    def __init__(self, server, lang, me, interval):
+    def __init__(self, server, lang, me, interval, demo_page=False):
+        self.demo_page = demo_page
         self.server, self.lang, self.me, self.interval = server.rstrip("/"), lang, me.lower(), interval
         self.t = TXT.get(lang, TXT["en"])
         self.q = queue.Queue()
@@ -191,7 +192,7 @@ class Guard:
         while True:
             try:
                 hwnd, title, exe, bbox = foreground_window()
-                app = watched_app(title, exe)
+                app = watched_app(title, exe, self.demo_page)
                 self.q.put(("status", app))
                 try:  # tell the local server what we're watching (never the title or content)
                     httpx.post(f"{self.server}/api/guard/heartbeat", json={"app": app}, timeout=3)
@@ -285,5 +286,7 @@ if __name__ == "__main__":
     ap.add_argument("--lang", default="en", choices=["en", "pt"])
     ap.add_argument("--me", default="", help="the child's username, so their own messages aren't analyzed as the contact's")
     ap.add_argument("--interval", type=float, default=5.0, help="seconds between checks")
+    ap.add_argument("--demo-page", action="store_true",
+                    help="also watch the fictional BlockQuest demo page in a browser (off by default: a browser title proves nothing)")
     a = ap.parse_args()
-    Guard(a.server, a.lang, a.me, a.interval).run()
+    Guard(a.server, a.lang, a.me, a.interval, a.demo_page).run()

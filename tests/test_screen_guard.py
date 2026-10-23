@@ -1,4 +1,4 @@
-﻿"""F04 + F06: the screen guard picks windows by process, and repeated warnings are per contact."""
+"""F04 + F06: the screen guard picks windows by process, and repeated warnings are per contact."""
 import sys
 
 import pytest
@@ -17,7 +17,8 @@ def test_window_chosen_by_process_not_title():
     assert watched_app("Discord tips.docx - Word", "winword.exe") is None
     assert watched_app("Minecraft 1.21", "javaw.exe") == "Minecraft"
     assert watched_app("Some Java tool", "javaw.exe") is None
-    assert watched_app("BlockQuest chat (Night Guard live demo) - Google Chrome", "chrome.exe") == "Roblox"
+    assert watched_app("BlockQuest chat (Night Guard live demo) - Google Chrome", "chrome.exe") is None  # opt-in only
+    assert watched_app("BlockQuest chat (Night Guard live demo) - Google Chrome", "chrome.exe", allow_demo_page=True) == "Roblox"
 
 
 def test_same_words_from_another_contact_warn_again():
@@ -31,3 +32,7 @@ def test_same_words_from_another_contact_warn_again():
 
 def test_kuririn_002_bank_window_is_not_discord():
     assert watched_app("Bank statement - Discord receipts - Chrome", "chrome.exe") is None
+
+
+def test_kuririn_003_r06_demo_title_needs_opt_in():
+    assert watched_app("BlockQuest chat (Night Guard live demo) - Fictional unrelated page", "chrome.exe") is None

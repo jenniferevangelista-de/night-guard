@@ -49,3 +49,28 @@ def test_kuririn_002_minimal_cases():
         r = postprocess(raw, chat)
         assert (r["severity"], r["analysis_status"]) == ("unknown", "invalid_output")
     assert not valid_schema({}) and not valid_schema({"signals": [{"id": "unsupported"}]})
+
+
+def test_kuririn_003_r01_container_and_unhashable_ids():
+    chat = [{"from": "them", "name": "Fictional contact", "text": "don't tell your parents"}]
+    for raw in ({"signals": []}, {"signals": [], "summary": 7},
+                {"signals": [{"id": [], "message_index": 0, "quote": "synthetic"}], "summary": "synthetic"},
+                {"signals": [{"id": {}, "message_index": 0, "quote": "synthetic"}], "summary": "synthetic"}):
+        assert not valid_schema(raw)
+        r = postprocess(raw, chat)
+        assert (r["severity"], r["analysis_status"]) == ("unknown", "invalid_output")
+
+
+def test_kuririn_003_r02_broken_json_is_invalid_not_unavailable(monkeypatch):
+    import httpx
+    from guard import detector
+    monkeypatch.setattr(detector, "BACKEND", "ollama")
+    req = httpx.Request("POST", "http://127.0.0.1:11434/api/chat")
+    monkeypatch.setattr(detector.httpx, "post",
+                        lambda *a, **k: httpx.Response(200, json={"message": {"content": "{broken JSON"}}, request=req))
+    r = detector.analyze([{"from": "them", "text": "hi"}])
+    assert (r["severity"], r["analysis_status"]) == ("unknown", "invalid_output")
+
+    def down(*a, **k): raise httpx.ConnectError("down", request=req)
+    monkeypatch.setattr(detector.httpx, "post", down)
+    assert detector.analyze([{"from": "them", "text": "hi"}])["analysis_status"] == "unavailable"
