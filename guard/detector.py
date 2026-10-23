@@ -104,7 +104,13 @@ def analyze(messages, lang="en"):
     """Analyze one conversation. Returns a dict ready for the UI."""
     t0 = time.time()
     raw = _call_model(messages)
+    res = postprocess(raw, messages, lang)
+    res["latency_s"] = round(time.time() - t0, 2)
+    return res
 
+
+def postprocess(raw, messages, lang="en", model=MODEL):
+    """Clean the model's JSON into the UI/eval result (shared with other backends)."""
     found = {}
     for s in raw.get("signals", []):
         sid = s.get("id")
@@ -135,6 +141,5 @@ def analyze(messages, lang="en"):
         "links": links,
         "summary": raw.get("summary", ""),
         "notify_family": sev == "high",
-        "model": MODEL,
-        "latency_s": round(time.time() - t0, 2),
+        "model": model,
     }
