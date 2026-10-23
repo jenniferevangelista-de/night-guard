@@ -6,6 +6,10 @@ Chats never leave the device.
 
 > Existing tools watch kids. Night Guard watches out *for* them.
 
+**Try the online demo:** https://night-guard-demo.onrender.com
+(fictional examples only; it runs the Tinker fine-tuned model in the cloud so anyone can try it. The real app runs
+on the child's computer with Gemma. Free instance: the first visit after a quiet period takes ~50 s to wake up.)
+
 ## What it does
 
 | Screen | What happens |
