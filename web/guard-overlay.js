@@ -44,13 +44,17 @@
     badge.className = "ng-badge"; badge.innerHTML = `🛡️ <b>${esc(t.on)}</b>`;
     document.body.appendChild(badge);
 
-    const seen = new Set();   // signal ids already shown, so the child isn't nagged
+    // Remember the exact message + tactic already shown, not the tactic alone: if someone
+    // insists ("don't tell anyone" again, a second photo request), that's escalation and the
+    // kid must be warned again.
+    const seen = new Set();
+    const key = s => `${s.id}|${(s.quote || "").trim().toLowerCase()}`;
     let timer = null, busy = false, pending = null;
 
     function show(res) {
-      const fresh = res.signals.filter(s => !seen.has(s.id));
+      const fresh = res.signals.filter(s => !seen.has(key(s)));
       if (!fresh.length) return;
-      fresh.forEach(s => seen.add(s.id));
+      fresh.forEach(s => seen.add(key(s)));
       document.querySelectorAll(".ng-pop").forEach(n => n.remove());
       const pop = document.createElement("div");
       pop.className = "ng-pop " + (res.severity === "high" ? "high" : "");

@@ -164,10 +164,13 @@ class Guard:
         self.root.after(300, self.pump)
 
     def show(self, app, res):
-        fresh = [s for s in res["signals"] if (app, s["id"]) not in self.seen]
+        # Same message + tactic is shown once; a new message with the same tactic (someone
+        # insisting) is escalation and is shown again.
+        k = lambda s: (app, s["id"], (s.get("quote") or "").strip().lower())
+        fresh = [s for s in res["signals"] if k(s) not in self.seen]
         if not fresh:
             return
-        self.seen.update((app, s["id"]) for s in fresh)
+        self.seen.update(k(s) for s in fresh)
         high = res["severity"] == "high"
         win = tk.Toplevel(self.root)
         win.title("Night Guard")
