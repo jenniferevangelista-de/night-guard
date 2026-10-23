@@ -39,8 +39,58 @@ ev = json.loads((HERE / f"events_{LANG}.json").read_text(encoding="utf-8"))
 off = ev["frames_t0"]
 segs = [{**s, "vstart": round(s["start"] - off, 2)} for s in ev["segments"]]
 rec = HERE / ev["video"]
-REC_DUR = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(rec)],
-                               capture_output=True, text=True).stdout)
+
+
+def _dur(p):
+    return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(p)],
+                                capture_output=True, text=True).stdout)
+
+
+# A warning the app spoke while Snoozy was still talking gets its own moment: when his line ends, the picture
+# holds still, the app's voice plays in full, then everything after continues (shifted by that pause).
+WARN = []                                                  # (time in the final video, mp3 path)
+_holds = []
+for a in sorted(ev["audio"], key=lambda a: a["t"]):
+    p = ROOT / a["src"].lstrip("/")
+    if not p.exists():
+        continue
+    t0 = a["t"] - off
+    seg_ = next((s for s in segs if s["vstart"] <= t0 < s["vstart"] + narr[s["id"]]["dur"] + 0.3), None)
+    if seg_ is None:
+        WARN.append([t0, p]); continue
+    nxt = next((s2["vstart"] for s2 in segs if s2["vstart"] > seg_["vstart"]), seg_["vstart"] + narr[seg_["id"]]["dur"] + 0.4)
+    hold_at = round(nxt - 0.02, 2)                         # right when his line is over, before the next part
+    _holds.append((hold_at, round(_dur(p) + 0.5, 2), p))
+if _holds:
+    held = HERE / f"_held_{LANG}.mp4"
+    pieces, last = [], 0.0
+    for k, (at, d, _) in enumerate(_holds):
+        a_ = HERE / f"_part{k}a.mp4"; still = HERE / f"_still{k}.png"; f_ = HERE / f"_part{k}f.mp4"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(last), "-to", str(at), "-i", str(rec), "-an", "-r", "24",
+                        "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", str(a_)], check=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(max(0, at - 0.05)), "-i", str(rec), "-frames:v", "1", str(still)], check=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-i", str(still), "-t", str(d), "-r", "24",
+                        "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", str(f_)], check=True)
+        pieces += [a_, f_]; last = at
+    b_ = HERE / "_partZ.mp4"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(last), "-i", str(rec), "-an", "-r", "24",
+                    "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", str(b_)], check=True)
+    pieces.append(b_)
+    lst = HERE / "_parts.txt"; lst.write_text("\n".join(f"file '{x.name}'" for x in pieces), encoding="utf-8")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(held)], check=True)
+    for x in list(pieces) + [lst] + list(HERE.glob("_still*.png")): x.unlink()
+    rec = held
+    shift = 0.0
+    for at, d, p in _holds:
+        WARN.append([at + shift, p])
+        for s in segs:
+            if s["vstart"] >= at + shift: s["vstart"] = round(s["vstart"] + d, 2)
+        for w in WARN[:-1]:
+            if w[0] >= at + shift: w[0] += d
+        shift += d
+    # warnings already outside narration that come after a hold move with the picture
+REC_DUR = _dur(rec)
+print("recording", rec.name, round(REC_DUR, 2), "holds", [(h[0], h[1]) for h in _holds])
 DUR = round(min(REC_DUR, segs[-1]["vstart"] + narr["end"]["dur"] + 1.6), 2)
 
 
@@ -136,13 +186,10 @@ def mix():
     for s in segs:
         a = load(HERE / narr[s["id"]]["voice"]); add(voice, s["vstart"], a / (np.abs(a).max() + 1e-9))
     spoken = [(s["vstart"], s["vstart"] + narr[s["id"]]["dur"] + 0.3) for s in segs]
-    for a in ev["audio"]:                                   # the real spoken warnings, when the app played them
-        p = ROOT / a["src"].lstrip("/")
-        if not p.exists():
-            continue
-        w = load(p); t0 = a["t"] - off; t1 = t0 + len(w) / SR
+    for t0, p in WARN:                                      # the real spoken warnings, never over Snoozy's voice
+        w = load(p); t1 = t0 + len(w) / SR
         if any(t0 < b and t1 > s0 for s0, b in spoken):
-            continue                                        # never talk over Snoozy: keep only warnings that fit a silence
+            print("skipped (would overlap):", round(t0, 1), p.name); continue
         add(fx, t0, w / (np.abs(w).max() + 1e-9), 0.85)
         print("warning voice at", round(t0, 1), p.name)
     music = load(ROOT.parent / "codegames" / "pipeline" / "music" / "incompetech" / "Funkorama.mp3")
