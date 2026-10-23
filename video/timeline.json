@@ -1,0 +1,77 @@
+{
+  "scenes": [
+    {
+      "id": "night",
+      "line": "It's eleven p.m. A kid is playing online. And someone is being very, very nice.",
+      "voice": "n1.mp3",
+      "start": 0.4,
+      "voice_dur": 6.05,
+      "end": 8.05
+    },
+    {
+      "id": "stat",
+      "line": "Last year, one US hotline got more than fifty thousand sextortion reports. About one hundred thirty seven a day.",
+      "voice": "n2.mp3",
+      "start": 8.05,
+      "voice_dur": 7.54,
+      "end": 16.78
+    },
+    {
+      "id": "parents",
+      "line": "Parents can't read every chat. And kids don't always see the trick.",
+      "voice": "n3.mp3",
+      "start": 16.78,
+      "voice_dur": 4.58,
+      "end": 22.37
+    },
+    {
+      "id": "guard",
+      "line": "Meet Night Guard. An open model that reads the chat on the family's own computer.",
+      "voice": "n4.mp3",
+      "start": 22.37,
+      "voice_dur": 5.38,
+      "end": 28.74
+    },
+    {
+      "id": "alert",
+      "line": "When a stranger asks for a secret, it warns the kid right away, in words they get.",
+      "voice": "n5.mp3",
+      "start": 28.74,
+      "voice_dur": 4.78,
+      "end": 43.12
+    },
+    {
+      "id": "family",
+      "line": "Parents get one alert. Not the whole chat. Just what happened, and what to do now.",
+      "voice": "n6.mp3",
+      "start": 43.12,
+      "voice_dur": 5.71,
+      "end": 51.03
+    },
+    {
+      "id": "tech",
+      "line": "Gemma runs it locally and even reads the screen. Tinker taught a model our format. Temporal survives crashes. Sentry traces every check, with no chat inside.",
+      "voice": "n7.mp3",
+      "start": 51.03,
+      "voice_dur": 11.45,
+      "end": 63.88
+    },
+    {
+      "id": "hero",
+      "line": "The more the kid learns, the lazier the guard gets. That's the lazy payoff.",
+      "voice": "n8.mp3",
+      "start": 63.88,
+      "voice_dur": 5.02,
+      "end": 70.5
+    },
+    {
+      "id": "end",
+      "line": "Night Guard. Try it today.",
+      "voice": "n9.mp3",
+      "start": 70.5,
+      "voice_dur": 2.4,
+      "end": 75.5
+    }
+  ],
+  "duration": 75.8
+}

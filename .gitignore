@@ -11,3 +11,6 @@ data/
 train/log_*.txt
 eval/log_*.txt
 .pytest_cache/
+video/*.mp4
+video/*.wav
+video/review/
