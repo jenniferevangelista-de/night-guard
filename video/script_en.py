@@ -14,7 +14,7 @@ VOICE = "en-US-BrianMultilingualNeural"
 
 # scene id, narration, extra seconds after the line
 SCENES = [
-    ("intro", "Hi, I'm Snoozy, Gemmy's cousin, and the laziest night watchman you'll ever meet. Slow and steady is my thing. So let me show you how a lazy guard helps keep kids safe.", 0.8),
+    ("intro", "Hi, I'm Snoozy, the laziest night watchman you'll ever meet. Slow and steady is my thing. So let me show you how a lazy guard helps keep kids safe.", 0.8),
     ("night", "It's eleven p.m. A kid is playing online. And someone is being way too nice to her.", 1.4),
     ("stat", "In 2025 alone, the US National Center for Missing and Exploited Children received more than fifty thousand "
              "sextortion reports. That's one hundred thirty seven a day. Almost one every ten minutes.", 1.2),

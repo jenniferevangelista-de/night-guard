@@ -1,7 +1,6 @@
-"""Snoozy / Soneca: Gemmy's cousin, a sloth dressed as a night watchman. He narrates the film.
+"""Snoozy / Soneca: a kawaii sloth dressed as a night watchman. He narrates the film.
 
-Drawn with the same ink + paper language as the stick figures, with Gemmy's family traits: big glossy eyes
-and the cyan gem (on his cap). The mouth follows the narration loudness; he blinks slowly and yawns at the end.
+Kawaii look: round body, thick outline, big glossy eyes, blush, watchman cap with a moon badge. The mouth follows the narration loudness; he blinks slowly and yawns at the end.
   python video/ng_sloth.py   -> video/review_en/sloth_sheet.png
 """
 import math
@@ -19,89 +18,88 @@ FUR = (152, 116, 84); FUR_D = (112, 82, 58); MASK = (236, 214, 178); PATCH = (88
 NAVY = (38, 50, 108); NAVY_D = (26, 34, 78); GEM = (60, 200, 235); GOLD = (255, 211, 110); WHITE = (255, 255, 255)
 
 
-def sloth(img, t, cx, by, h=420, m=0.0, mood="talk", wave=0.0, seed=7000):
-    """Draw Snoozy with his feet at (cx, by) and total height h.
-    m: mouth open 0..1 · mood: talk | listen | sleep | yawn · wave: 0..1 how much the right arm waves."""
-    s = h / 430.0
-    d = ImageDraw.Draw(img)
-    X = lambda u: cx + u * s
-    Y = lambda v: by - v * s
-    w = max(3, int(6 * s))
-    sway = math.sin(dr(t) / 12 * 1.6) * 3 * s                       # slow, lazy sway on twos
+LINE = (42, 32, 72); FUR_K = (192, 152, 114); FACE = (247, 234, 210); BELLY = (244, 232, 210); PATCH_K = (116, 84, 62)
+BLUSH = (245, 150, 175, 150); TONGUE = (240, 120, 140)
 
-    # legs and feet
-    for sx in (-1, 1):
-        d.ellipse((X(sx * 40 - 28), Y(40), X(sx * 40 + 28), Y(0)), fill=FUR, outline=INK, width=w)
-    # body: navy uniform with a moon badge and a belt
-    body = [(X(-80), Y(230)), (X(80), Y(230)), (X(92), Y(60)), (X(70), Y(30)), (X(-70), Y(30)), (X(-92), Y(60))]
-    d.polygon([jit(p, t, seed + i, 1.6 * s) for i, p in enumerate(body)], fill=NAVY)
-    wline(d, body + [body[0]], t, seed + 10, w)
-    wline(d, [(X(-88), Y(85)), (X(88), Y(85))], t, seed + 11, w, GOLD)
-    bx, bdy = X(-38), Y(175)
-    d.ellipse((bx - 20 * s, bdy - 20 * s, bx + 20 * s, bdy + 20 * s), fill=GOLD, outline=INK, width=max(2, w // 2))
-    d.ellipse((bx - 4 * s, bdy - 22 * s, bx + 26 * s, bdy + 12 * s), fill=NAVY)   # crescent cut
-    # left arm: long and relaxed, holding a flashlight
-    sh_l = (X(-78), Y(210)); el_l = (X(-112), Y(130)); ha_l = (X(-96), Y(70))
-    wline(d, [sh_l, el_l, ha_l], t, seed + 20, int(26 * s), FUR)
-    wrect(d, ha_l[0] - 14 * s, ha_l[1] - 40 * s, ha_l[0] + 14 * s, ha_l[1] + 10 * s, t, seed + 21, max(2, w // 2), fill=(90, 90, 100))
-    d.polygon([(ha_l[0] - 14 * s, ha_l[1] + 10 * s), (ha_l[0] + 14 * s, ha_l[1] + 10 * s), (ha_l[0] + 34 * s, ha_l[1] + 60 * s),
-               (ha_l[0] - 34 * s, ha_l[1] + 60 * s)], fill=(255, 240, 170))
-    # right arm: waves slowly when greeting
-    # angles in degrees, screen coords (90 = straight down, -90 = straight up)
-    a1 = math.radians(80 - 105 * wave)                                   # upper arm: hanging -> raised
-    a2 = math.radians(80 - 165 * wave + 22 * wave * math.sin(dr(t) / 12 * 5))   # forearm waves slowly
-    sh_r = (X(78), Y(210))
-    el_r = (sh_r[0] + 75 * s * math.cos(a1), sh_r[1] + 75 * s * math.sin(a1))
-    ha_r = (el_r[0] + 72 * s * math.cos(a2), el_r[1] + 72 * s * math.sin(a2))
-    ang = a2
-    wline(d, [sh_r, el_r, ha_r], t, seed + 30, int(26 * s), FUR)
-    for k in (-1, 0, 1):                                              # sloth claws
-        a2 = ang + k * 0.35
-        wline(d, [ha_r, (ha_r[0] + 22 * s * math.cos(a2), ha_r[1] + 22 * s * math.sin(a2))], t, seed + 31 + k, max(2, w // 2), (240, 230, 210))
 
-    # head
-    hx, hy, hr = X(0) + sway, Y(310), 100 * s
-    wcircle(d, hx, hy, hr, t, seed + 40, w, fill=FUR)
-    d.ellipse((hx - 80 * s, hy - 52 * s, hx + 80 * s, hy + 66 * s), fill=MASK)
-    for sx in (-1, 1):                                                # droopy eye patches + Gemmy-style eyes
-        ex, ey = hx + sx * 38 * s, hy + 2 * s
-        rot = math.radians(sx * 28)                                   # teardrop patch drooping outward
-        pts = []
-        for k in range(24):
-            th = 2 * math.pi * k / 24
-            rx, ry = 30 * s, 20 * s * (1.25 if math.sin(th) > 0 else 1.0)
-            px, py = rx * math.cos(th), ry * math.sin(th)
-            pts.append((ex + sx * 4 * s + px * math.cos(rot) - py * math.sin(rot), ey + 4 * s + px * math.sin(rot) + py * math.cos(rot)))
-        d.polygon(pts, fill=PATCH)
-        if mood == "sleep" or (mood != "yawn" and (t % 4.1) < 0.18):
-            d.arc((ex - 15 * s, ey - 6 * s, ex + 15 * s, ey + 14 * s), 20, 160, fill=WHITE, width=max(2, int(5 * s)))
+def _rot_ellipse(cx, cy, rx, ry, ang, n=36):
+    c, s_ = math.cos(ang), math.sin(ang)
+    return [(cx + rx * math.cos(2 * math.pi * k / n) * c - ry * math.sin(2 * math.pi * k / n) * s_,
+             cy + rx * math.cos(2 * math.pi * k / n) * s_ + ry * math.sin(2 * math.pi * k / n) * c) for k in range(n)]
+
+
+def sloth(img, t, cx, by, h=420, m=0.0, mood="talk", wave=0.0, seed=7000, emo="happy"):
+    """Draw Snoozy (kawaii style: round body, thick outline, big glossy eyes, blush) with feet at (cx, by).
+    m: mouth 0..1 · mood: talk | listen | sleep | yawn · wave: 0..1 right paw greeting · emo: happy | angry."""
+    SS = 2                                             # draw at 2x, then downscale for smooth edges
+    k = SS * h / 420.0
+    W_, H_ = int(420 * k), int(440 * k)
+    lay = Image.new("RGBA", (W_, H_), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    P = lambda x, y: (x * k, y * k)
+    B = lambda x0, y0, x1, y1: (x0 * k, y0 * k, x1 * k, y1 * k)
+    lw = max(2, int(7 * k))
+    bob = math.sin(dr(t) / 12 * 2.2) * 3                # lazy bounce on twos
+
+    d.ellipse(B(110, 418, 310, 436), fill=(0, 0, 0, 40))                                   # soft shadow
+    for x0 in (128, 222):                                                                  # tiny feet
+        d.ellipse(B(x0, 392, x0 + 70, 424), fill=FUR_K, outline=LINE, width=lw)
+    # left paw with a little flashlight
+    d.polygon([P(*p) for p in _rot_ellipse(64, 292 + bob, 26, 44, math.radians(28))], fill=FUR_K, outline=LINE, width=lw)
+    d.rounded_rectangle(B(34, 318 + bob, 68, 352 + bob), radius=int(6 * k), fill=(110, 112, 128), outline=LINE, width=max(2, lw // 2))
+    d.polygon([P(38, 352 + bob), P(64, 352 + bob), P(84, 400 + bob), P(18, 400 + bob)], fill=(255, 238, 160, 200))
+    # right paw: down, or waving hello
+    ang = math.radians(-25 + 130 * wave + 14 * wave * math.sin(dr(t) / 12 * 6))
+    ax, ay = 336, 292 + bob - 40 * wave
+    d.polygon([P(*p) for p in _rot_ellipse(ax + 30 * wave, ay - 20 * wave, 26, 44, -ang)], fill=FUR_K, outline=LINE, width=lw)
+    # round body + belly
+    d.ellipse(B(52, 112 + bob, 348, 408), fill=FUR_K, outline=LINE, width=lw)
+    d.ellipse(B(128, 300 + bob, 272, 398), fill=BELLY)
+    # face mask, droopy eye patches, glossy eyes, blush
+    d.ellipse(B(92, 168 + bob, 308, 312 + bob), fill=FACE)
+    for sx, ex in ((-1, 152), (1, 248)):
+        ey = 228 + bob
+        d.polygon([P(*p) for p in _rot_ellipse(ex + sx * 4, ey + 6, 44, 30, math.radians(-sx * 28))], fill=PATCH_K)
+        if mood == "sleep" or (mood != "yawn" and (t % 4.3) < 0.16):
+            d.arc(B(ex - 22, ey - 8, ex + 22, ey + 18), 20, 160, fill=LINE, width=lw)
         else:
-            d.ellipse((ex - 15 * s, ey - 13 * s, ex + 15 * s, ey + 17 * s), fill=INK)
-            d.ellipse((ex - 9 * s, ey - 9 * s, ex - 1 * s, ey - 1 * s), fill=WHITE)
-            d.chord((ex - 17 * s, ey - 16 * s, ex + 17 * s, ey + 8 * s), 180, 360, fill=PATCH)   # lazy half-closed lids
-    d.ellipse((hx - 14 * s, hy + 22 * s, hx + 14 * s, hy + 38 * s), fill=INK)                      # nose
-    my = hy + 46 * s
+            d.ellipse(B(ex - 25, ey - 26, ex + 25, ey + 26), fill=LINE)
+            d.ellipse(B(ex - 15, ey - 18, ex - 1, ey - 4), fill=(255, 255, 255))
+            d.ellipse(B(ex + 6, ey + 6, ex + 14, ey + 14), fill=(255, 255, 255))
+    for x0 in (102, 262):
+        d.ellipse(B(x0, 262 + bob, x0 + 38, 280 + bob), fill=BLUSH if emo == "happy" else (235, 90, 90, 120))
+    if emo == "angry" and mood != "sleep":             # frowning brows + anger mark
+        for ex, sx in ((152, -1), (248, 1)):
+            d.line([P(ex + sx * 30, 186 + bob), P(ex - sx * 18, 200 + bob)], fill=LINE, width=int(lw * 1.4))
+        ax0, ay0 = 330, 120 + bob
+        for a0 in (0, 90, 180, 270):
+            d.arc(B(ax0 - 18, ay0 - 18, ax0 + 18, ay0 + 18), a0 + 20, a0 + 70, fill=(220, 50, 60), width=lw)
+    d.ellipse(B(188, 252 + bob, 212, 266 + bob), fill=LINE)                                 # nose
+    my = 272 + bob
     if mood == "yawn":
-        d.ellipse((hx - 22 * s, my - 4 * s, hx + 22 * s, my + 44 * s), fill=INK)
+        d.ellipse(B(182, my - 2, 218, my + 40), fill=LINE); d.ellipse(B(190, my + 20, 210, my + 36), fill=TONGUE)
+    elif m > 0.06 and emo == "angry":
+        o = 0.35 + 0.65 * min(1.0, m)
+        d.chord(B(180, my - 4, 220, my + 10 + 30 * o), 180, 360, fill=LINE)          # grumpy open mouth
     elif m > 0.06:
         o = 0.35 + 0.65 * min(1.0, m)
-        d.chord((hx - 24 * s, my - 6 * s, hx + 24 * s, my + 34 * s * o + 6 * s), 0, 180, fill=INK)
-        d.chord((hx - 12 * s, my + 8 * s * o, hx + 12 * s, my + 30 * s * o + 6 * s), 0, 180, fill=(232, 110, 120))
+        d.chord(B(178, my - 8, 222, my + 34 * o), 0, 180, fill=LINE)
+        d.chord(B(188, my + 4 * o, 212, my + 30 * o), 0, 180, fill=TONGUE)
+    elif emo == "angry":
+        d.arc(B(182, my + 2, 218, my + 24), 200, 340, fill=LINE, width=lw)     # frown
     else:
-        d.arc((hx - 22 * s, my - 14 * s, hx + 22 * s, my + 12 * s), 20, 160, fill=INK, width=max(2, int(5 * s)))
-    # watchman cap with Gemmy's cyan gem
-    cap = [(hx - 92 * s, hy - 54 * s), (hx - 78 * s, hy - 112 * s), (hx, hy - 136 * s), (hx + 78 * s, hy - 112 * s), (hx + 92 * s, hy - 54 * s)]
-    d.polygon([jit(p, t, seed + 60 + i, 1.4 * s) for i, p in enumerate(cap)], fill=NAVY)
-    wline(d, cap + [cap[0]], t, seed + 61, w)
-    d.polygon([(hx - 104 * s, hy - 56 * s), (hx + 112 * s, hy - 60 * s), (hx + 128 * s, hy - 40 * s), (hx - 96 * s, hy - 38 * s)], fill=NAVY_D)
-    wline(d, [(hx - 104 * s, hy - 56 * s), (hx + 112 * s, hy - 60 * s), (hx + 128 * s, hy - 40 * s), (hx - 96 * s, hy - 38 * s), (hx - 104 * s, hy - 56 * s)], t, seed + 62, max(2, w - 1))
-    gx, gy, gs = hx, hy - 96 * s, 20 * s
-    d.polygon([(gx, gy - gs), (gx + gs * 0.75, gy), (gx, gy + gs), (gx - gs * 0.75, gy)], fill=GEM, outline=INK)
+        d.arc(B(182, my - 14, 218, my + 10), 20, 160, fill=LINE, width=lw)
+    # watchman cap with a gold moon badge
+    d.chord(B(78, 52 + bob, 322, 252 + bob), 180, 360, fill=NAVY, outline=LINE, width=lw)
+    d.rounded_rectangle(B(66, 140 + bob, 346, 170 + bob), radius=int(14 * k), fill=NAVY_D, outline=LINE, width=lw)
+    d.ellipse(B(178, 82 + bob, 222, 126 + bob), fill=GOLD, outline=LINE, width=max(2, lw // 2))
+    d.ellipse(B(190, 78 + bob, 228, 118 + bob), fill=NAVY)                                   # crescent cut
     if mood == "sleep":
-        r = random.Random(3)
         for i in range(3):
             zt = (t * 0.6 + i * 0.33) % 1
-            d.text((hx + 110 * s + zt * 60 * s, hy - 120 * s - zt * 120 * s), "z", fill=NAVY, font=font("impact.ttf", int((30 + 24 * zt) * s * 1.6)), anchor="mm")
+            d.text(P(330 + zt * 50, 120 - zt * 100), "z", fill=NAVY, font=font("impact.ttf", int((26 + 22 * zt) * k)), anchor="mm")
+    w2, h2 = int(W_ / SS), int(H_ / SS)
+    lay = lay.resize((w2, h2), Image.LANCZOS)
+    img.paste(lay, (int(cx - w2 / 2), int(by - h2 * 424 / 440)), lay)
 
 
 def kid_in_bed(d, t, label=None, label_font=None):
@@ -126,8 +124,8 @@ def kid_in_bed(d, t, label=None, label_font=None):
 if __name__ == "__main__":
     from palito import paper
     img = paper().copy()
-    for i, (mood, m, wv) in enumerate([("talk", 0.0, 0.0), ("talk", 0.9, 0.0), ("talk", 0.4, 1.0), ("listen", 0, 0), ("yawn", 0, 0), ("sleep", 0, 0)]):
-        sloth(img, i * 0.3, 170 + i * 320, 900, 420, m, mood, wv)
-    kid_in_bed(ImageDraw.Draw(img), 0.0)
+    for i, (mood, m, wv, emo) in enumerate([("listen", 0.0, 0.0, "angry"), ("talk", 0.7, 0.0, "angry"), ("talk", 0.4, 1.0, "happy"),
+                                            ("listen", 0, 0, "happy"), ("yawn", 0, 0, "happy"), ("sleep", 0, 0, "happy")]):
+        sloth(img, i * 0.3, 170 + i * 320, 900, 420, m, mood, wv, emo=emo)
     out = HERE / "review_en"; out.mkdir(exist_ok=True)
     img.save(out / "sloth_sheet.png"); print("ok")

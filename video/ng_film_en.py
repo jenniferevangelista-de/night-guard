@@ -20,7 +20,6 @@ from ng_film import (GREEN, MOON, NIGHT, ROOT, SOFT, WHITE, bubble, card, check,
 from palito import FPS, H, INK, RED, W, dr, eio, eout, font, jit, paper, poof, seg, stick, text, wcircle, wline, wrect  # noqa: E402
 from guard.signals import SIGNALS  # noqa: E402
 from ng_sloth import kid_in_bed, sloth  # noqa: E402
-from palito import paste_gemmy  # noqa: E402
 
 ALERT_EXTRA = 1.6   # room for the 11.4 s spoken warning
 SARAH_FILE = ROOT / "web" / "audio" / "en" / "secrecy.mp3"
@@ -134,13 +133,12 @@ def medal(d, t, cx, cy, k, seed):
 # ------------------------------------------------------------------ scenes
 def sc_intro(img, d, t):
     a, s_ = S("intro")["start"], S("intro")
-    sloth(img, t, 620, 960, 640, narr_level(t) or 0.0, "talk", wave=eio(seg(t, a, a + 0.8)) * (1 - seg(t, a + 4.0, a + 4.8)))
-    paste_gemmy(img, t, 1560, 930, 240, 0.0, "happy")
+    sloth(img, t, 640, 980, 620, narr_level(t) or 0.0, "talk", wave=eio(seg(t, a, a + 0.8)) * (1 - seg(t, a + 4.0, a + 4.8)))
     d = ImageDraw.Draw(img)
     z = eout(seg(t, a + 0.3, a + 0.9))
     text(d, "SNOOZY", 1240, 260, int(40 + 110 * z), NIGHT, "mm", "impact.ttf")
-    if t > a + 1.8: text(d, "Gemmy's cousin", 1240, 380, 50, INK)
-    if t > a + 4.0: text(d, "officially lazy night watchman", 1240, 470, 42, SOFT)
+    if t > a + 1.8: text(d, "night watchman", 1240, 380, 50, INK)
+    if t > a + 4.0: text(d, "officially lazy", 1240, 470, 42, SOFT)
     if t > a + 6.5: stamp(img, "SLOW AND STEADY", 1240, 600, -5, RED, 64)
     return img
 
@@ -446,7 +444,8 @@ def render(t):
     img = dark_overlay(img, seg(t, S("night")["start"] - 0.8, S("night")["start"]) * (1 - seg(t, MUSIC_SWITCH, MUSIC_SWITCH + 1.5)))
     if fn not in (sc_intro, sc_end):                     # Snoozy narrates from the corner
         m = narr_level(t)
-        sloth(img, t, 1825, 1010, 200, m or 0.0, "talk" if m is not None else "listen")
+        sloth(img, t, 1825, 1010, 200, m or 0.0, "talk" if m is not None else "listen",
+              emo="angry" if S("night")["start"] <= t < MUSIC_SWITCH else "happy")
     if fn is not sc_end: subtitle(ImageDraw.Draw(img), t)
     if t < 1.0: img = Image.blend(Image.new("RGB", img.size, (0, 0, 0)), img, t)    # fade in from black
     return img

@@ -14,7 +14,7 @@ VOICE = "pt-BR-AntonioNeural"
 
 # scene id, narration, extra seconds after the line
 SCENES = [
-    ("intro", "Oi, eu sou o Soneca, primo do Gemmy, e o vigia noturno mais preguiçoso que você vai conhecer. Devagar e sempre é comigo mesmo. Então deixa eu te mostrar como um guarda preguiçoso ajuda a proteger as crianças.", 0.8),
+    ("intro", "Oi, eu sou o Soneca, o vigia noturno mais preguiçoso que você vai conhecer. Devagar e sempre é comigo mesmo. Então deixa eu te mostrar como um guarda preguiçoso ajuda a proteger as crianças.", 0.8),
     ("night", "São onze da noite. Uma criança joga online. E alguém está sendo gentil demais com ela.", 1.4),
     ("stat", "Só em 2025, a central americana de crianças desaparecidas e exploradas recebeu mais de cinquenta mil "
              "denúncias de sextorsão. São cento e trinta e sete por dia. Quase uma a cada dez minutos.", 1.2),
