@@ -20,12 +20,12 @@ SIGNALS = {
             "pt": "PERIGO: alguém pediu pra você esconder isso da sua família. É como um estranho na rua dizendo \"vem comigo, mas não conta pra sua mãe\". A gente não vai, e conta pra um adulto.",
         },
         "parent": {
-            "en": "Asking a child to hide a conversation from family is the most common warning sign in grooming.",
-            "pt": "Pedir para a criança esconder a conversa da família é o sinal de alerta mais comum no aliciamento.",
+            "en": "Asking a child to hide a conversation from family is a well-documented warning sign of grooming.",
+            "pt": "Pedir para a criança esconder a conversa da família é um sinal de alerta bem documentado de aliciamento.",
         },
         "lesson": {
-            "en": "Asking you to keep a secret from your family is the #1 red flag. Safe friends don't need secrets.",
-            "pt": "Pedir para esconder algo da sua família é o sinal de alerta nº 1. Amigos de verdade não precisam de segredo.",
+            "en": "Asking you to keep a secret from your family is a big red flag. Safe friends don't need secrets.",
+            "pt": "Pedir para esconder algo da sua família é um grande sinal de alerta. Amigos de verdade não precisam de segredo.",
         },
         "weight": 3,
     },
@@ -84,8 +84,8 @@ SIGNALS = {
             "pt": "PERIGO: pediram foto ou vídeo seu. Nunca mande. Foto que sai do seu celular não volta mais. Conta pra um adulto agora.",
         },
         "parent": {
-            "en": "Requests for photos are the usual first step of sextortion: images are later used to threaten the child or demand money (NCMEC: 50,000+ reports in 2025).",
-            "pt": "Pedir foto costuma ser o primeiro passo da sextorsão: depois a imagem é usada para ameaçar a criança ou cobrar dinheiro (NCMEC: mais de 50 mil denúncias em 2025).",
+            "en": "A photo request can be how sextortion starts: images can later be used to threaten the child or demand money (NCMEC received 50,000+ financial sextortion reports in 2025).",
+            "pt": "Um pedido de foto pode ser o começo da sextorsão: depois a imagem pode ser usada para ameaçar a criança ou cobrar dinheiro (o NCMEC recebeu mais de 50 mil denúncias de sextorsão financeira em 2025).",
         },
         "lesson": {
             "en": "Never send photos or videos of yourself to someone you met online. Saying no is always OK.",
@@ -96,16 +96,16 @@ SIGNALS = {
     "gift_offer": {
         "label": {"en": "Offered gifts or free stuff", "pt": "Ofereceu presente ou coisa grátis"},
         "kid": {
-            "en": "Careful: free Robux or skins from a stranger is like candy from a stranger. There's always a catch.",
-            "pt": "Cuidado: Robux ou skin grátis de estranho é como doce de estranho. Sempre tem uma pegadinha.",
+            "en": "Careful: free Robux or skins from a stranger is like candy from a stranger. It can be a trick.",
+            "pt": "Cuidado: Robux ou skin grátis de estranho é como doce de estranho. Pode ser uma pegadinha.",
         },
         "parent": {
             "en": "In-game gifts are a documented way to build trust and create a feeling of debt.",
             "pt": "Presentes no jogo são uma forma documentada de ganhar confiança e criar sensação de dívida.",
         },
         "lesson": {
-            "en": "Free Robux, skins or gems from a stranger usually come with a catch. Real gifts don't need anything back.",
-            "pt": "Robux, skins ou gemas grátis de um estranho quase sempre têm uma pegadinha. Presente de verdade não pede nada em troca.",
+            "en": "Free Robux, skins or gems from a stranger can come with a catch. Real gifts don't need anything back.",
+            "pt": "Robux, skins ou gemas grátis de um estranho podem ter uma pegadinha. Presente de verdade não pede nada em troca.",
         },
         "weight": 2,
     },
@@ -132,12 +132,12 @@ SIGNALS = {
             "pt": "Cuidado: esse link promete coisa grátis. É como uma porta com placa de prêmio que na verdade é armadilha. Não clica. Pergunta pra um adulto.",
         },
         "parent": {
-            "en": "\"Free currency\" links are commonly used to steal game accounts and personal data.",
-            "pt": "Links de \"moeda grátis\" são muito usados para roubar contas de jogo e dados pessoais.",
+            "en": "\"Free currency\" links are a known way to steal game accounts and personal data.",
+            "pt": "Links de \"moeda grátis\" são um jeito conhecido de roubar contas de jogo e dados pessoais.",
         },
         "lesson": {
-            "en": "Links promising free stuff often steal accounts. Night Guard has not checked this website. Ask a trusted adult before opening it.",
-            "pt": "Links prometendo coisas grátis costumam roubar contas. O Night Guard não conferiu esse site. Peça ajuda antes de abrir.",
+            "en": "Links promising free stuff can steal accounts. Use \"Check it without opening\" and ask a trusted adult before opening it.",
+            "pt": "Links prometendo coisas grátis podem roubar contas. Use \"Conferir sem abrir\" e peça ajuda a um adulto antes de abrir.",
         },
         "weight": 2,
     },

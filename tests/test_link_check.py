@@ -160,3 +160,42 @@ def test_existing_browser_page_uses_screenshot_viewport_before_loading(monkeypat
     assert events[:2] == [("viewport", {"width": 1024, "height": 640}), ("goto", "https://example.test")]
     assert result["asks_password"] is True
     assert result["screenshot"].startswith("data:image/jpeg;base64,")
+
+
+# Review 006, R09: a provider failure is never shown as a positive inspection.
+def _failing(monkeypatch, bb=True, serp=False, bb_ok=None):
+    def bad_browser(u):
+        raise lc.httpx.ConnectError("synthetic offline")
+    def bad_search(h):
+        raise lc.httpx.ConnectError("synthetic offline")
+    monkeypatch.setattr(lc, "enabled", lambda: {"browserbase": bb, "serpapi": serp})
+    monkeypatch.setattr(lc, "open_in_browserbase", (lambda u: bb_ok) if bb_ok else bad_browser)
+    monkeypatch.setattr(lc, "search_reports", bad_search)
+
+
+@pytest.mark.parametrize("url", ["https://www.roblox.com/login", "https://discord.com/login"])
+def test_kuririn_006_r09_browser_failure_is_not_ok(monkeypatch, url):
+    _failing(monkeypatch)
+    r = lc.check_link(url, "en")
+    assert r["level"] != "ok" and r["checked"] == [] and r["failed"] == ["Browserbase"]
+    assert r["level"] == "error" and any("couldn't check" in x for x in r["reasons"])
+
+
+def test_kuririn_006_r09_both_providers_down(monkeypatch):
+    _failing(monkeypatch, bb=True, serp=True)
+    r = lc.check_link("https://www.roblox.com/login", "pt")
+    assert r["level"] == "error" and set(r["failed"]) == {"Browserbase", "SerpApi"}
+
+
+def test_kuririn_006_r09_search_ok_but_page_not_seen_is_unknown(monkeypatch):
+    monkeypatch.setattr(lc, "enabled", lambda: {"browserbase": True, "serpapi": True})
+    monkeypatch.setattr(lc, "open_in_browserbase", lambda u: (_ for _ in ()).throw(RuntimeError("down")))
+    monkeypatch.setattr(lc, "search_reports", lambda h: [])
+    r = lc.check_link("https://www.roblox.com/login", "en")
+    assert r["level"] == "unknown" and any("could not be checked" in x for x in r["reasons"])
+
+
+def test_kuririn_006_r09_recovery_official_page_inspected_is_ok(monkeypatch):
+    _failing(monkeypatch, bb_ok={"final_url": "https://www.roblox.com/login", "asks_password": True})
+    r = lc.check_link("https://www.roblox.com/login", "en")
+    assert r["level"] == "ok" and r["failed"] == []

@@ -249,7 +249,7 @@ const T = {
     gStart:"Turn on", gStop:"Turn off", gDemo:"Available in the family's computer version (runs locally with Gemma). The online demo shows it with the ① game chat.",
     nTitle:"📱 Alerts on the parent's phone",
     nHelp:"The phone gets only the risk level, the app and the kind of risk. Never the chat. Uses ntfy (free, no account).",
-    nStep1:"Install the ntfy app (Android or iPhone).", nStep2:"Tap + and subscribe to this private topic:", nStep3:"Turn on below: a test alert is sent right away.",
+    nStep1:"Install the ntfy app (Android or iPhone).", nStep2:"Tap + and subscribe to this private topic:", nStep3:"Turn on below: a test alert is sent right away.", nShowTopic:"👁 Show", nHide:"Hide",
     nOn:"🟢 On", nOff:"⚪ Off", nStart:"Turn on", nStop:"Turn off", nSent:"Test sent ✓", nDemo:"Available in the family's computer version.",
     actNoReply:"Don't reply", actBlock:"Block", actTell:"Tell an adult",
     famWhat:"What happened and why it matters", famDo:"What to do now",
@@ -315,7 +315,7 @@ const T = {
     gStart:"Ligar", gStop:"Desligar", gDemo:"Disponível na versão do computador da família (roda local com Gemma). Na demo online, veja pelo ① chat do jogo.",
     nTitle:"📱 Avisos no celular dos pais",
     nHelp:"O celular recebe só o nível de risco, o app e o tipo de risco. Nunca a conversa. Usa o ntfy (grátis, sem cadastro).",
-    nStep1:"Instale o app ntfy (Android ou iPhone).", nStep2:"Toque em + e assine este tópico privado:", nStep3:"Ligue abaixo: um aviso de teste chega na hora.",
+    nStep1:"Instale o app ntfy (Android ou iPhone).", nStep2:"Toque em + e assine este tópico privado:", nStep3:"Ligue abaixo: um aviso de teste chega na hora.", nShowTopic:"👁 Mostrar", nHide:"Esconder",
     nOn:"🟢 Ligado", nOff:"⚪ Desligado", nStart:"Ligar", nStop:"Desligar", nSent:"Teste enviado ✓", nDemo:"Disponível na versão do computador da família.",
     actNoReply:"Não responda", actBlock:"Bloqueie", actTell:"Conte pra um adulto",
     famWhat:"O que aconteceu e por que importa", famDo:"O que fazer agora",
@@ -475,9 +475,9 @@ async function checkLink(btn){
     const r = await fetch("/api/link/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:btn.dataset.link, lang})});
     if(!r.ok) throw new Error(r.status);
     const j = await r.json();
-    const col = {bad:"var(--bad)", unknown:"var(--warn)", ok:"var(--good)"}[j.level];
+    const col = {bad:"var(--bad)", unknown:"var(--warn)", error:"var(--warn)", ok:"var(--good)"}[j.level] || "var(--warn)";
     const shot = j.browser && j.browser.screenshot ? `<img src="${j.browser.screenshot}" alt="" style="width:100%;max-width:420px;border-radius:10px;margin-top:8px;border:1px solid var(--line)">` : "";
-    out.innerHTML = `<div class="sig" style="border-left-color:${col};margin-top:8px"><div class="kid">${j.level==="bad"?"🛑":"⚠️"} ${esc(j.verdict)}</div>
+    out.innerHTML = `<div class="sig" style="border-left-color:${col};margin-top:8px"><div class="kid">${j.level==="bad"?"🛑":j.level==="ok"?"✅":"⚠️"} ${esc(j.verdict)}</div>
       <ul class="steps small">${j.reasons.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>${shot}
       <div class="small muted" style="margin-top:6px">${t("linkWith")} ${esc(j.checked.join(" · ") || "-")} · ${t("linkOnly")}</div></div>`;
   }catch(e){ out.innerHTML = `<div class="small" style="color:var(--bad);margin-top:6px">${t("linkErr")}</div>`; }
@@ -594,7 +594,7 @@ $("#draftBtn").onclick = async ()=>{
 /* ---------- Start here + automatic protection + phone alerts ---------- */
 $("#sh2").onclick = e=>{ e.preventDefault(); show("check"); $("#paste").value=EX[lang].secret; $("#paste").scrollIntoView({behavior:"smooth"}); };
 $("#sh3").onclick = e=>{ e.preventDefault(); show("family"); };
-let gState = null, nState = null, gTimer = null;
+let gState = null, nState = null, gTimer = null, TOPIC_SHOWN = false;
 async function loadGuard(){
   try{
     const r = await fetch("/api/guard/status");
@@ -643,7 +643,10 @@ function renderGuard(){
   }
   if(!nState) return;
   if(!nState.available){ $("#nSteps").innerHTML=""; $("#nStatus").textContent = t("nDemo"); $("#nStatus").style.fontWeight="400"; $("#nBtn").style.display="none"; return; }
-  $("#nSteps").innerHTML = `<li>${esc(t("nStep1"))}</li><li>${esc(t("nStep2"))} <code style="color:var(--accent)">${esc(nState.topic)}</code></li><li>${esc(t("nStep3"))}</li>`;
+  // The topic works like a password for the family's phone alerts: hidden until a parent asks to see it.
+  const tp = nState.topic || "", masked = tp.replace(/-(.{4}).*$/, "-$1••••••••");
+  $("#nSteps").innerHTML = `<li>${esc(t("nStep1"))}</li><li>${esc(t("nStep2"))} <code id="nTopic" style="color:var(--accent)">${esc(TOPIC_SHOWN ? tp : masked)}</code> <button class="chip" id="nShow">${t(TOPIC_SHOWN ? "nHide" : "nShowTopic")}</button></li><li>${esc(t("nStep3"))}</li>`;
+  $("#nShow").onclick = ()=>{ TOPIC_SHOWN = !TOPIC_SHOWN; renderGuard(); };
   $("#nStatus").textContent = (nState.enabled ? t("nOn") : t("nOff")) + (nState.test_sent ? " · " + t("nSent") : "");
   $("#nBtn").textContent = nState.enabled ? t("nStop") : t("nStart");
 }

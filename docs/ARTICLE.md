@@ -69,7 +69,7 @@ The three remaining false alarms are on purpose hard cases: an in-game "secret" 
 
 ### Proactive: it doesn't wait for a kid to paste anything
 
-Pressure can escalate within a single chat session, so "paste your chat here" often comes too late. Night Guard watches as messages arrive:
+A "paste your chat here" tool only helps if the kid thinks to use it, and pressure can escalate within a single chat session. So Night Guard also watches as messages arrive:
 
 - **Screen guard with Gemma's vision.** Kids chat inside *installed* apps (the Roblox app, the Discord app, Minecraft). Every few seconds Night Guard checks which **program** owns the window in front (by its process, not its title, so a browser tab or a document called "Roblox" is ignored). Only if it is one of those apps does it take a screenshot **in memory**, Gemma 4 reads the chat from the image locally (~7 s warm), and the text goes to the same detector. The image is never saved and never leaves the computer. Banking, email or school windows are not on the list, so they are never captured. If the window changes before the capture, nothing is read.
 - **A Chrome extension** for web chats (Discord web and WhatsApp Web, experimental), which only talks to the local server and refuses any other address.

@@ -379,7 +379,7 @@ def sc_tech(img, d, t):
     cards = [(0.08, "GEMMA 4", "lê texto e tela", "no próprio computador", NIGHT),
              (0.27, "TINKER", "Qwen3-8B treinado", "70/70 no formato", RED),
              (0.55, "TEMPORAL", "aguenta queda", "nada se perde", GREEN),
-             (0.66, "SENTRY", "acompanha cada checagem", "sem ler a conversa", (120, 70, 160)),
+             (0.66, "SENTRY", "quando ligado: cada checagem", "sem ler a conversa", (120, 70, 160)),
              (0.80, "ELEVENLABS", "voz nos avisos", "pra quem lê devagar", (200, 120, 30)),
              (0.91, "RENDER", "demonstração online", "um clique", (40, 110, 160))]
     for i, (f, ti, l1, l2, col) in enumerate(cards):

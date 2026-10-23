@@ -2,75 +2,63 @@
   "segments": [
     {
       "id": "home",
-      "start": 1.41
+      "start": 1.26
     },
     {
       "id": "check",
-      "start": 11.99
+      "start": 11.84
     },
     {
       "id": "result",
-      "start": 24.35
+      "start": 22.61
     },
     {
       "id": "tell",
-      "start": 34.19
+      "start": 32.45
     },
     {
       "id": "benign",
-      "start": 43.23
+      "start": 41.46
     },
     {
       "id": "practice",
-      "start": 54.91
+      "start": 51.8
     },
     {
       "id": "parents",
-      "start": 63.36
+      "start": 60.44
     },
     {
       "id": "game",
-      "start": 73.54
+      "start": 72.29
     },
     {
       "id": "off",
-      "start": 125.8
+      "start": 138.8
     },
     {
       "id": "fault",
-      "start": 130.06
+      "start": 143.64
     },
     {
       "id": "end",
-      "start": 138.15
+      "start": 152.32
     }
   ],
   "audio": [
     {
       "src": "/web/audio/en/flattery.mp3",
-      "t": 28.861838579177856
+      "t": 26.10007953643799
     },
     {
       "src": "/web/audio/en/flattery.mp3",
-      "t": 86.39683866500854
-    },
-    {
-      "src": "/web/audio/en/flattery.mp3",
-      "t": 92.6828384399414
-    },
-    {
-      "src": "/web/audio/en/platform_move.mp3",
-      "t": 99.1588385105133
+      "t": 103.99907946586609
     },
     {
       "src": "/web/audio/en/secrecy.mp3",
-      "t": 107.22283864021301
-    },
-    {
-      "src": "/web/audio/en/family.mp3",
-      "t": 118.21983861923218
+      "t": 127.49907946586609
     }
   ],
-  "frames_t0": 0.786,
+  "frames_t0": 0.658,
   "video": "rec_en.mp4"
 }

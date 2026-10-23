@@ -29,8 +29,8 @@ SCENES = [
     ("family", "Para os pais, ele é o Guarda Noturno. Um alerta só, sem a conversa inteira. O que aconteceu, e o que fazer agora, "
                "direto no celular.", 1.4),
     ("tech", "Por dentro, só tecnologia aberta. O Gemma 4 lê texto e tela no próprio computador. No Tinker, treinamos um modelo "
-             "que acertou o formato em setenta de setenta conversas. O Temporal aguenta queda, o Sentry acompanha cada "
-             "checagem sem ler a conversa, o ElevenLabs dá voz aos avisos, e a demonstração roda no Render.", 1.0),
+             "que acertou o formato em setenta de setenta conversas. O Temporal aguenta queda, o Sentry, quando ligado, acompanha "
+             "cada checagem sem ler a conversa, o ElevenLabs dá voz aos avisos, e a demonstração roda no Render.", 1.0),
     ("results", "Nos testes, pegou trinta e seis de trinta e seis conversas de risco, em uns quatro segundos.", 1.4),
     ("peace", "Paz para a criança. Paz para os pais. E quanto mais a criança aprende, mais o guarda pode descansar.", 1.6),
     ("end", "Night Guard. Parceiro dos pais. Amigo das crianças. E eu? Vou voltar pro meu cochilo.", 3.0),

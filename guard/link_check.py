@@ -120,7 +120,10 @@ TXT = {
            "reports": "People online report this site as a scam ({n} results).",
            "noreports": "No reports found online yet. That does not mean it is safe: new scam pages often have none.",
            "official": "This is the official site of {host}. Still, only log in by typing the address yourself.",
-           "verdict_bad": "Don't open this link", "verdict_ok": "Looks like the official site", "verdict_unknown": "Be careful with this link"},
+           "verdict_bad": "Don't open this link", "verdict_ok": "Looks like the official site", "verdict_unknown": "Be careful with this link",
+           "failed": "{tool} couldn't check this link right now, so this is not a full check.",
+           "listed": "{host} is on the list of official sites, but the page itself could not be checked.",
+           "verdict_error": "Couldn't check this link"},
     "pt": {"password": "Essa página pede senha e não é o site oficial do jogo ou app. Nunca faça login por um link que alguém te mandou.",
            "moved": "Esse link leva para outro site, diferente do que mostra: {final}.",
            "unofficial": "{host} não é um site oficial do jogo ou do app.",
@@ -128,7 +131,10 @@ TXT = {
            "reports": "Tem gente na internet denunciando esse site como golpe ({n} resultados).",
            "noreports": "Nenhuma denúncia encontrada ainda. Isso não quer dizer que é seguro: páginas de golpe novas costumam não ter.",
            "official": "Esse é o site oficial de {host}. Mesmo assim, só faça login digitando o endereço você mesmo.",
-           "verdict_bad": "Não abra esse link", "verdict_ok": "Parece o site oficial", "verdict_unknown": "Cuidado com esse link"},
+           "verdict_bad": "Não abra esse link", "verdict_ok": "Parece o site oficial", "verdict_unknown": "Cuidado com esse link",
+           "failed": "O {tool} não conseguiu conferir esse link agora, então esta não é uma checagem completa.",
+           "listed": "{host} está na lista de sites oficiais, mas a página em si não pôde ser conferida.",
+           "verdict_error": "Não consegui conferir esse link"},
 }
 
 
@@ -166,9 +172,21 @@ def check_link(url, lang="en"):
         n = sum(1 for h in res["reports"] if h["mentions_scam"])
         res["reasons"].append(t["reports"].format(n=n) if n else t["noreports"])
         bad = bad or n > 0
+    # A provider that was asked and failed is reported, and never turned into a positive verdict (review R09).
+    failed = [n for n, k in (("Browserbase", "browserbase"), ("SerpApi", "serpapi")) if on[k] and n not in res["checked"]]
+    res["failed"] = failed
+    for n in failed:
+        res["reasons"].append(t["failed"].format(tool=n))
+    page_seen = "Browserbase" in res["checked"]
     if official and not bad:
-        res["reasons"].append(t["official"].format(host=final_host))
-    res["verdict"] = t["verdict_bad"] if bad else (t["verdict_ok"] if official else t["verdict_unknown"])
-    res["level"] = "bad" if bad else ("ok" if official else "unknown")
+        res["reasons"].append(t["official"].format(host=final_host) if page_seen else t["listed"].format(host=final_host))
+    if bad:
+        res["verdict"], res["level"] = t["verdict_bad"], "bad"
+    elif not res["checked"]:
+        res["verdict"], res["level"] = t["verdict_error"], "error"          # nothing could be checked at all
+    elif official and page_seen:
+        res["verdict"], res["level"] = t["verdict_ok"], "ok"               # only after the page itself was inspected
+    else:
+        res["verdict"], res["level"] = t["verdict_unknown"], "unknown"
     res["latency_s"] = round(time.time() - t0, 2)
     return res

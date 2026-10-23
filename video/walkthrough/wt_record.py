@@ -14,7 +14,7 @@ from playwright.sync_api import sync_playwright
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-BASE = "http://127.0.0.1:8765"
+BASE = __import__("os").environ.get("NG_BASE", "http://127.0.0.1:8765")
 LANG = sys.argv[1] if len(sys.argv) > 1 else "pt"
 NARR = {n["id"]: n["dur"] for n in json.loads((HERE / f"narr_{LANG}.json").read_text(encoding="utf-8"))}
 SHOTS = ROOT / "docs" / "screens" / LANG

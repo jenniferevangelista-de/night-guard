@@ -82,36 +82,36 @@
     },
     {
       "id": "tech",
-      "line": "Por dentro, só tecnologia aberta. O Gemma 4 lê texto e tela no próprio computador. No Tinker, treinamos um modelo que acertou o formato em setenta de setenta conversas. O Temporal aguenta queda, o Sentry acompanha cada checagem sem ler a conversa, o ElevenLabs dá voz aos avisos, e a demonstração roda no Render.",
+      "line": "Por dentro, só tecnologia aberta. O Gemma 4 lê texto e tela no próprio computador. No Tinker, treinamos um modelo que acertou o formato em setenta de setenta conversas. O Temporal aguenta queda, o Sentry, quando ligado, acompanha cada checagem sem ler a conversa, o ElevenLabs dá voz aos avisos, e a demonstração roda no Render.",
       "voice": "n11.mp3",
       "start": 137.64,
-      "voice_dur": 23.3,
-      "end": 161.94
+      "voice_dur": 24.58,
+      "end": 163.22
     },
     {
       "id": "results",
       "line": "Nos testes, pegou trinta e seis de trinta e seis conversas de risco, em uns quatro segundos.",
       "voice": "n12.mp3",
-      "start": 161.94,
+      "start": 163.22,
       "voice_dur": 6.58,
-      "end": 169.92
+      "end": 171.19
     },
     {
       "id": "peace",
       "line": "Paz para a criança. Paz para os pais. E quanto mais a criança aprende, mais o guarda pode descansar.",
       "voice": "n13.mp3",
-      "start": 169.92,
+      "start": 171.19,
       "voice_dur": 8.83,
-      "end": 180.35
+      "end": 181.62
     },
     {
       "id": "end",
       "line": "Night Guard. Parceiro dos pais. Amigo das crianças. E eu? Vou voltar pro meu cochilo.",
       "voice": "n14.mp3",
-      "start": 180.35,
+      "start": 181.62,
       "voice_dur": 10.22,
-      "end": 193.58
+      "end": 194.85
     }
   ],
-  "duration": 193.88
+  "duration": 195.15
 }
