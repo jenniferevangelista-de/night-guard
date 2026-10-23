@@ -21,7 +21,14 @@ from palito import FPS, H, INK, RED, W, dr, eio, eout, font, jit, paper, poof, s
 from guard.signals import SIGNALS  # noqa: E402
 from ng_sloth import kid_in_bed, sloth  # noqa: E402
 
-ALERT_EXTRA = 1.6   # room for the 11.4 s spoken warning
+def _mp3_dur(p):
+    import subprocess
+    return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(p)],
+                                capture_output=True, text=True).stdout)
+
+
+FAMILY_FILE = Path(__file__).resolve().parent.parent / "web" / "audio" / "pt" / "family.mp3"
+ALERT_EXTRA = 1.6 + _mp3_dur(FAMILY_FILE) + 0.3   # room for the warning AND the "tell your parents" line   # room for the 11.4 s spoken warning
 SARAH_FILE = ROOT / "web" / "audio" / "pt" / "secrecy.mp3"
 PANEL = (29, 37, 80); PANEL2 = (40, 52, 110)
 
@@ -45,6 +52,7 @@ def S(sid): return timeline()[sid]
 
 DUR = round(S("end")["end"] + 0.6, 2)
 SARAH_AT = round(S("alert")["start"] + S("alert")["voice_dur"] + 0.2, 2)
+FAMILY_AT = round(SARAH_AT + _mp3_dur(SARAH_FILE) + 0.3, 2)
 MUSIC_SWITCH = S("guard")["start"]           # drama -> joy when Night Guard appears
 
 
@@ -275,7 +283,7 @@ def sc_guard(img, d, t):
         text(d, "a conversa nunca sai de casa", 1340, 735, 44, NIGHT, "lm", "impact.ttf")
 
 
-def popup(d, t, x, y, k):
+def popup(d, t, x, y, k):  # noqa: C901
     """The child's warning, redrawn in the app's colors (Portuguese text from guard/signals.py)."""
     if k <= 0: return
     w, h = 720, 640; yy = y + (1 - eout(k)) * 80
@@ -286,7 +294,9 @@ def popup(d, t, x, y, k):
     for i, ln in enumerate(textwrap.wrap(kid, 40)[:6]):
         text(d, ln, x + 36, yy + 120 + i * 44, 32, WHITE, "lm", "segoeui.ttf")
     text(d, '"não conta pros seus pais tá? eles não iam entender"', x + 36, yy + 400, 26, (166, 174, 214), "lm", "segoeuii.ttf")
-    d.rounded_rectangle((x + 30, yy + 440, x + w - 30, yy + 510), 14, fill=(42, 47, 94), outline=MOON, width=2)
+    fam_on = FAMILY_AT <= t < FAMILY_AT + _mp3_dur(FAMILY_FILE) and int(t * 3) % 2 == 0
+    d.rounded_rectangle((x + 30, yy + 440, x + w - 30, yy + 510), 14, fill=(70, 62, 30) if fam_on else (42, 47, 94),
+                        outline=MOON, width=6 if fam_on else 2)
     text(d, "Sua família vai saber. Você não está encrencado.", x + 50, yy + 475, 25, WHITE, "lm", "segoeui.ttf")
     d.rounded_rectangle((x + 30, yy + 545, x + 200, yy + 610), 12, fill=MOON)
     text(d, "Entendi", x + 115, yy + 577, 32, (42, 32, 0), "mm", "segoeuib.ttf")
@@ -314,7 +324,7 @@ def sc_alert(img, d, t):
     game_chat(d, t, a)
     popup(d, t, 1060, 150, seg(t, SARAH_AT - 0.8, SARAH_AT - 0.3))
     if t >= SARAH_AT - 0.3:
-        speaker(d, t, 930, 470, level(SARAH_FILE, SARAH_AT, t))
+        speaker(d, t, 930, 470, max(level(SARAH_FILE, SARAH_AT, t), level(FAMILY_FILE, FAMILY_AT, t)))
         stamp(img, "PERIGO", 1420, 880, 6, RED, 74)
     return img
 

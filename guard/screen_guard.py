@@ -62,14 +62,27 @@ AUDIO = __import__("pathlib").Path(__file__).resolve().parent.parent / "web" / "
 winmm = ctypes.windll.winmm
 
 
-def play_voice(lang, signal_id):
-    """Read the warning aloud with the pre-generated ElevenLabs MP3 (Windows MCI, no extra packages)."""
-    mp3 = AUDIO / lang / f"{signal_id}.mp3"
-    if not mp3.exists():
-        return
-    winmm.mciSendStringW("close ngvoice", None, 0, 0)
-    winmm.mciSendStringW(f'open "{mp3}" type mpegvideo alias ngvoice', None, 0, 0)
-    winmm.mciSendStringW("play ngvoice", None, 0, 0)
+_voice_n = [0]
+
+
+def play_voice(lang, *clip_ids):
+    """Read the warning aloud with the pre-generated ElevenLabs MP3s, one after the other
+    (e.g. the warning, then "family": tell your mom, dad or an adult you trust). Windows MCI, no extra packages."""
+    _voice_n[0] += 1
+    n = _voice_n[0]
+
+    def run():
+        for cid in clip_ids:
+            if n != _voice_n[0]:
+                return                       # a newer warning started: stop this one
+            mp3 = AUDIO / lang / f"{cid}.mp3"
+            if not mp3.exists():
+                continue
+            alias = f"ngvoice{n}"
+            winmm.mciSendStringW(f'open "{mp3}" type mpegvideo alias {alias}', None, 0, 0)
+            winmm.mciSendStringW(f"play {alias} wait", None, 0, 0)
+            winmm.mciSendStringW(f"close {alias}", None, 0, 0)
+    threading.Thread(target=run, daemon=True).start()
 
 
 user32 = ctypes.windll.user32
@@ -274,7 +287,7 @@ class Guard:
         win.lift()
         # Speak the most serious new warning (a kid may not be looking at the corner of the screen).
         loudest = next((s for s in fresh if str(s.get("kid", "")).startswith(("PERIGO", "DANGER"))), fresh[0])
-        play_voice(self.lang, loudest["id"])
+        play_voice(self.lang, loudest["id"], *(["family"] if res.get("family_alert") else []))
 
     def run(self):
         self.root.mainloop()

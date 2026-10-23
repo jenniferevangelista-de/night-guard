@@ -25,6 +25,10 @@ API = "https://api.elevenlabs.io/v1"
 PREFERRED = ["Sarah", "Rachel", "Laura", "Alice", "Matilda"]  # warm, calm voices from the premade library
 
 
+FAMILY = {
+    "en": "Your family will know about this. You're not in trouble. Go tell your mom, your dad or an adult you trust, right now.",
+    "pt": "Sua família vai ficar sabendo. Você não está encrencado. Vai agora contar pra sua mãe, seu pai ou um adulto de confiança.",
+}
 SARAH = "EXAVITQu4vr4xnSDxMaL"  # premade "Sarah": soft, reassuring; works with a text-to-speech-only key
 
 
@@ -67,4 +71,9 @@ if __name__ == "__main__":
             speak(meta["kid"][lang], voice_id, out)
             total += len(meta["kid"][lang])
             print(f"  {lang}/{sid}.mp3")
+    for lang, txt in FAMILY.items():                       # fixed "tell your parents" line, played when the family is told
+        out = ROOT / "web" / "audio" / lang / "family.mp3"
+        if out.exists() and "--force" not in sys.argv:
+            continue
+        speak(txt, voice_id, out); total += len(txt); print(f"  {lang}/family.mp3")
     print(f"done ({total} characters sent, fixed alert texts only)")

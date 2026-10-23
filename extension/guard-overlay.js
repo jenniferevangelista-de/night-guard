@@ -38,7 +38,16 @@
     // voiceBase: folder with the pre-generated spoken alerts (e.g. "/web/audio/pt"); the first new
     // warning is read aloud, since a kid may not be looking at the corner of the screen.
     let audio = null;
-    const say = id => { if (!voiceBase) return; try { if (audio) audio.pause(); audio = new Audio(`${voiceBase}/${id}.mp3`); audio.play().catch(() => {}); } catch (e) {} };
+    // then: a second clip played right after (e.g. "family": tell your mom, dad or an adult you trust)
+    const say = (id, then) => {
+      if (!voiceBase) return;
+      try {
+        if (audio) audio.pause();
+        audio = new Audio(`${voiceBase}/${id}.mp3`);
+        if (then) audio.addEventListener("ended", () => { if (!closed) say(then); }, { once: true });
+        audio.play().catch(() => {});
+      } catch (e) {}
+    };
     ensureStyle();
     const t = TXT[lang] || TXT.en;
     const badge = document.createElement("div");
@@ -78,7 +87,7 @@
       pop.querySelectorAll(".ng-say").forEach(b => b.onclick = () => say(b.dataset.say));
       document.body.appendChild(pop);
       const loudest = fresh.find(s => /^(PERIGO|DANGER)/.test(s.kid || "")) || fresh[0];
-      say(loudest.id);
+      say(loudest.id, res.family_alert ? "family" : null);   // when the family is told, the kid hears it too
     }
 
     async function run(messages) {

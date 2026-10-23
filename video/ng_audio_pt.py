@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
-from ng_film_pt import DUR, MUSIC_SWITCH, S, SARAH_AT, SARAH_FILE, timeline
+from ng_film_pt import DUR, FAMILY_AT, FAMILY_FILE, MUSIC_SWITCH, S, SARAH_AT, SARAH_FILE, timeline
 
 HERE = Path(__file__).resolve().parent
 SR = 48000; N = int(SR * DUR); rng = np.random.default_rng(7)
@@ -66,6 +66,7 @@ voice = np.zeros(N); sfx = np.zeros(N)
 for s in timeline().values():
     v = load(HERE / "voz_pt" / s["voice"]); add(voice, s["start"], v / (np.abs(v).max() + 1e-9) * 0.9)
 v = load(SARAH_FILE); add(voice, SARAH_AT, v / (np.abs(v).max() + 1e-9) * 0.9)
+v = load(FAMILY_FILE); add(voice, FAMILY_AT, v / (np.abs(v).max() + 1e-9) * 0.9)   # tell your parents
 
 def pop(): t = tt(0.18); return np.sin(2 * np.pi * (700 + 900 * t) * t) * np.exp(-t * 28) * 0.5
 def thud(): t = tt(0.35); return np.sin(2 * np.pi * (90 + 120 * np.exp(-t * 25)) * t) * np.exp(-t * 12) + lpf(rng.normal(0, 1, len(t)), 3) * np.exp(-t * 40) * 0.5

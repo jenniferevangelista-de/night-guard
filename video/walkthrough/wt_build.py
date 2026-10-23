@@ -91,7 +91,7 @@ if _holds:
     # warnings already outside narration that come after a hold move with the picture
 REC_DUR = _dur(rec)
 print("recording", rec.name, round(REC_DUR, 2), "holds", [(h[0], h[1]) for h in _holds])
-DUR = round(min(REC_DUR, segs[-1]["vstart"] + narr["end"]["dur"] + 1.6), 2)
+DUR = round(segs[-1]["vstart"] + narr["end"]["dur"] + 2.0, 2)   # the last screen holds until Snoozy is done
 
 
 def load(p):
@@ -186,8 +186,12 @@ def mix():
     for s in segs:
         a = load(HERE / narr[s["id"]]["voice"]); add(voice, s["vstart"], a / (np.abs(a).max() + 1e-9))
     spoken = [(s["vstart"], s["vstart"] + narr[s["id"]]["dur"] + 0.3) for s in segs]
-    for t0, p in WARN:                                      # the real spoken warnings, never over Snoozy's voice
-        w = load(p); t1 = t0 + len(w) / SR
+    WARN.sort(key=lambda x: x[0])
+    for k, (t0, p) in enumerate(WARN):                      # the real spoken warnings, never over Snoozy's voice
+        w = load(p)
+        if k + 1 < len(WARN):                               # the app stops a clip when the next one starts
+            w = w[: max(0, int((WARN[k + 1][0] - t0) * SR))]
+        t1 = t0 + len(w) / SR
         if any(t0 < b and t1 > s0 for s0, b in spoken):
             print("skipped (would overlap):", round(t0, 1), p.name); continue
         add(fx, t0, w / (np.abs(w).max() + 1e-9), 0.85)
@@ -210,7 +214,7 @@ if __name__ == "__main__":
     ff = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-i", str(rec),
                            "-f", "rawvideo", "-pix_fmt", "rgba", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
                            "-i", str(HERE / f"_mix_{LANG}.wav"),
-                           "-filter_complex", f"[0:v]fps={FPS},scale={FW}:{FH},pad={W}:{H}:{FX}:{FY}:color=#f7f2e6[bg];[bg][1:v]overlay=0:0:shortest=1[v]",
+                           "-filter_complex", f"[0:v]fps={FPS},tpad=stop_mode=clone:stop_duration=6,scale={FW}:{FH},pad={W}:{H}:{FX}:{FY}:color=#f7f2e6[bg];[bg][1:v]overlay=0:0:shortest=1[v]",
                            "-map", "[v]", "-map", "2:a", "-t", str(DUR), "-c:v", "libx264", "-preset", "medium", "-crf", "19",
                            "-pix_fmt", "yuv420p", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "192k", str(dst)],
                           stdin=subprocess.PIPE)

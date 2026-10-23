@@ -173,13 +173,28 @@ def main():
         with seg("game"):
             click("#play", 0.2)
             page.wait_for_selector(".ng-pop", timeout=120000); sleep(0.4)
+            # keep watching until the warning that also tells the family (it then says "tell your parents")
+            try:
+                page.wait_for_selector(".ng-pop .ng-fam", timeout=90000); sleep(0.4)
+            except Exception:
+                pass
             shot("13_live_game_warning")
             collect_audio()
-            # let the spoken warning finish before the next segment
-            sarah = [a for a in events["audio"] if a["t"] > self_start(events, "game")]
-            if sarah:
-                end = sarah[-1]["t"] + 11.5
-                while now() < end: sleep(0.2)
+            mine = [a for a in events["audio"] if a["t"] > self_start(events, "game")]
+            if mine:
+                import subprocess as sp
+                last = mine[-1]
+                d = float(sp.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                                  str(ROOT / last["src"].lstrip("/"))], capture_output=True, text=True).stdout or 0)
+                end = last["t"] + d + 0.6
+                while now() < end:
+                    sleep(0.2); collect_audio()
+                    mine = [a for a in events["audio"] if a["t"] > self_start(events, "game")]
+                    if mine[-1] is not last:
+                        last = mine[-1]
+                        d = float(sp.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                                          str(ROOT / last["src"].lstrip("/"))], capture_output=True, text=True).stdout or 0)
+                        end = last["t"] + d + 0.6
 
         with seg("off"):
             page.locator(".ng-pop .ng-a").first.click() if page.locator(".ng-pop .ng-a").count() else None
