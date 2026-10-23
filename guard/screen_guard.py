@@ -46,6 +46,20 @@ TXT = {
            "title": {"high": "🛑 Pare! Isso pode ser perigoso", "medium": "⚠️ Cuidado", "low": "⚠️ Atenção"}},
 }
 
+AUDIO = __import__("pathlib").Path(__file__).resolve().parent.parent / "web" / "audio"
+winmm = ctypes.windll.winmm
+
+
+def play_voice(lang, signal_id):
+    """Read the warning aloud with the pre-generated ElevenLabs MP3 (Windows MCI, no extra packages)."""
+    mp3 = AUDIO / lang / f"{signal_id}.mp3"
+    if not mp3.exists():
+        return
+    winmm.mciSendStringW("close ngvoice", None, 0, 0)
+    winmm.mciSendStringW(f'open "{mp3}" type mpegvideo alias ngvoice', None, 0, 0)
+    winmm.mciSendStringW("play ngvoice", None, 0, 0)
+
+
 user32 = ctypes.windll.user32
 try:
     ctypes.windll.shcore.SetProcessDpiAwareness(2)  # real pixel coordinates on scaled screens
@@ -192,6 +206,10 @@ class Guard:
         win.update_idletasks()
         sw, sh = win.winfo_screenwidth(), win.winfo_screenheight()
         win.geometry(f"+{sw - win.winfo_width() - 20}+{sh - win.winfo_height() - 110}")
+        win.lift()
+        # Speak the most serious new warning (a kid may not be looking at the corner of the screen).
+        loudest = next((s for s in fresh if str(s.get("kid", "")).startswith(("PERIGO", "DANGER"))), fresh[0])
+        play_voice(self.lang, loudest["id"])
 
     def run(self):
         self.root.mainloop()

@@ -86,7 +86,12 @@ def api_analyze(req: AnalyzeReq):
         return {"severity": "none", "signals": [], "links": [], "summary": "", "messages": []}
     res = analyze(msgs, lang=req.lang)
     res["messages"] = msgs
-    contact = next((m.get("name", "") for m in msgs if m.get("from") != "me" and m.get("name")), "")
+    # The contact is whoever sent the flagged messages (not simply the first name in the chat:
+    # in a group or game chat, a friend may have spoken first).
+    flagged_names = [msgs[s["message_index"]].get("name", "") for s in res["signals"]
+                     if isinstance(s.get("message_index"), int) and 0 <= s["message_index"] < len(msgs)]
+    contact = next((n for n in flagged_names if n), "") or \
+        next((m.get("name", "") for m in msgs if m.get("from") != "me" and m.get("name")), "")
     # Public demo: rules come from the visitor's browser and nothing is saved on the server.
     event = apply_rules(res, app=req.app, contact=contact,
                         rules=req.family_rules if DEMO else None, persist=not DEMO)
