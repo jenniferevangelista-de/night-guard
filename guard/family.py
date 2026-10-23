@@ -6,7 +6,9 @@ monitoring), and the family sees the risk type and the flagged phrase, never
 the whole conversation. Same pattern as Instagram supervision and Discord
 Family Center: who/what kind of risk, not full message content.
 
-Everything is stored locally in data/ (git-ignored).
+Local app: flagged events (risk type, app, contact name, flagged phrase) are stored on
+this computer in data/ (git-ignored). Full conversations are never stored.
+Public demo: the server stores nothing; each visitor's browser keeps its own events.
 """
 
 import json
@@ -52,14 +54,17 @@ def set_rules(rules):
     return get_rules()
 
 
-def apply_rules(result, app="Other", contact=""):
-    """Log every flagged check on this computer; share with the family only what the rules say.
+def apply_rules(result, app="Other", contact="", rules=None, persist=True):
+    """Build the event for a flagged check and decide if the family is told.
 
-    Returns the shared alert, or None if this one stays with the child.
+    Local app: events are saved on this computer (persist=True).
+    Public demo: nothing is saved on the server (persist=False); the browser keeps it.
+    Returns the event (with "shared"), or None if nothing was flagged.
     """
     if not result["signals"]:
         return None
-    rules = get_rules()
+    rules = DEFAULT_RULES | {k: v for k, v in (rules or get_rules()).items()
+                             if k in SIGNAL_IDS and v in ("tell", "child")}
     triggered = [s for s in result["signals"] if rules.get(s["id"]) == "tell"]
     if result["severity"] == "high" and not triggered:
         triggered = list(result["signals"])  # serious combinations are always shared
@@ -73,10 +78,11 @@ def apply_rules(result, app="Other", contact=""):
         "signals": [{"id": s["id"], "label": s["label"], "quote": s.get("quote", "")}
                     for s in (triggered or result["signals"])],
     }
-    events = _read(ALERTS_FILE, [])
-    events.insert(0, event)
-    _write(ALERTS_FILE, events[:200])
-    return event if triggered else None
+    if persist:
+        events = _read(ALERTS_FILE, [])
+        events.insert(0, event)
+        _write(ALERTS_FILE, events[:200])
+    return event
 
 
 def get_alerts():

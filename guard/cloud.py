@@ -34,6 +34,9 @@ def _clean_key():
     print(f"[night-guard] TINKER_API_KEY set={bool(key)} len={len(key)} starts_tml={key.startswith('tml-')}", flush=True)
 
 
+from .env import load_env  # noqa: E402  (local runs read .env; on Render the dashboard sets it)
+
+load_env()
 _clean_key()
 
 _lock = threading.RLock()  # re-entrant: _client() calls _get() while holding it
@@ -73,9 +76,10 @@ def generate(messages, fine_tuned=True, max_tokens=400, temperature=0.0):
 
 
 def classify(system, user):
+    """Returns the model's JSON, or None if it can't be read (never a silent 'no risk')."""
     text = generate([{"role": "system", "content": system}, {"role": "user", "content": user}])
     s, e = text.find("{"), text.rfind("}")
     try:
         return json.loads(text[s:e + 1])
     except Exception:
-        return {"signals": [], "summary": ""}
+        return None

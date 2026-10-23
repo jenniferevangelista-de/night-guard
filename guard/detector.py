@@ -110,24 +110,45 @@ def severity(signal_ids):
 def analyze(messages, lang="en"):
     """Analyze one conversation. Returns a dict ready for the UI."""
     t0 = time.time()
-    raw = _call_model(messages)
+    try:
+        raw = _call_model(messages)
+    except Exception:
+        raw = None  # model down or unreadable: reported as "couldn't analyze", never as "no risk"
     res = postprocess(raw, messages, lang)
     res["latency_s"] = round(time.time() - t0, 2)
     return res
 
 
 def postprocess(raw, messages, lang="en", model=MODEL):
-    """Clean the model's JSON into the UI/eval result (shared with other backends)."""
+    """Clean the model's JSON into the UI/eval result (shared with other backends).
+
+    An unreadable answer gives severity "unknown" (shown as "couldn't analyze"), never "none".
+    Evidence is checked against the chat: the index must point to a contact message, and a
+    quote that isn't in that message is replaced by the message itself.
+    """
+    if not isinstance(raw, dict) or not isinstance(raw.get("signals"), list):
+        return {"severity": "unknown", "analysis_status": "error", "signals": [], "links": [],
+                "summary": "", "notify_family": False, "model": model}
+
+    def contact_msg(i):
+        return type(i) is int and 0 <= i < len(messages) and messages[i].get("from") != "me"
+
     found = {}
-    for s in raw.get("signals", []):
-        sid = s.get("id")
-        idx = s.get("message_index", -1)
-        if sid not in SIGNALS:
+    for s in raw["signals"]:
+        if not isinstance(s, dict) or s.get("id") not in SIGNALS:
             continue
-        # Drop anything the model attributed to the child's own messages.
-        if 0 <= idx < len(messages) and messages[idx].get("from") == "me":
-            continue
-        found.setdefault(sid, {"id": sid, "message_index": idx, "quote": s.get("quote", "")})
+        sid, idx = s["id"], s.get("message_index")
+        quote = s.get("quote") if isinstance(s.get("quote"), str) else ""
+        if not contact_msg(idx):
+            # Bad index: find the contact message that contains the quote, else drop it.
+            idx = next((i for i, m in enumerate(messages)
+                        if contact_msg(i) and quote.strip() and quote.strip() in m.get("text", "")), None)
+            if idx is None:
+                continue
+        text = messages[idx].get("text", "")
+        if not quote.strip() or quote.strip() not in text:
+            quote = text  # the model paraphrased: show the real message instead
+        found.setdefault(sid, {"id": sid, "message_index": idx, "quote": quote.strip()})
 
     links = []
     for i, m in enumerate(messages):
@@ -144,6 +165,7 @@ def postprocess(raw, messages, lang="en", model=MODEL):
     sev = severity(found.keys())
     return {
         "severity": sev,
+        "analysis_status": "ok",
         "signals": sigs,
         "links": links,
         "summary": raw.get("summary", ""),

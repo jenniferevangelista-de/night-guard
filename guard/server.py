@@ -4,19 +4,22 @@ import json
 import re
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from .detector import BACKEND, MODEL, analyze
-from .family import APPS, apply_rules, contacts_across_apps, get_alerts, get_rules, set_rules
+from .family import (APPS, DEFAULT_RULES, apply_rules, contacts_across_apps, get_alerts, get_rules,
+                     set_rules)
 from .helper import draft_help
 
 ROOT = Path(__file__).resolve().parent.parent
 SCENARIOS = json.loads((Path(__file__).parent / "scenarios.json").read_text(encoding="utf-8"))
 ME_PREFIX = re.compile(r"^\s*(me|eu|i|euzinho)\s*[:\-]\s*", re.I)
 NAME_PREFIX = re.compile(r"^\s*([^:]{1,30}):\s*(.*)$")
+
+DEMO = BACKEND != "ollama"
 
 app = FastAPI(title="Night Guard")
 
@@ -26,6 +29,7 @@ class AnalyzeReq(BaseModel):
     messages: list[dict] | None = Field(default=None, max_length=60)
     lang: str = "en"
     app: str = "Other"
+    family_rules: dict | None = None   # public demo only: the visitor's own rules
 
 
 class HelpReq(BaseModel):
@@ -64,22 +68,30 @@ def api_analyze(req: AnalyzeReq):
     res = analyze(msgs, lang=req.lang)
     res["messages"] = msgs
     contact = next((m.get("name", "") for m in msgs if m.get("from") != "me" and m.get("name")), "")
-    res["family_alert"] = apply_rules(res, app=req.app, contact=contact)
+    # Public demo: rules come from the visitor's browser and nothing is saved on the server.
+    event = apply_rules(res, app=req.app, contact=contact,
+                        rules=req.family_rules if DEMO else None, persist=not DEMO)
+    res["family_event"] = event
+    res["family_alert"] = event if event and event["shared"] else None
     return res
 
 
 @app.get("/api/family/rules")
 def api_get_rules():
-    return {"rules": get_rules(), "apps": APPS}
+    return {"rules": DEFAULT_RULES if DEMO else get_rules(), "apps": APPS, "demo": DEMO}
 
 
 @app.post("/api/family/rules")
 def api_set_rules(rules: dict):
+    if DEMO:
+        raise HTTPException(403, "The public demo keeps family rules in your browser only.")
     return {"rules": set_rules(rules)}
 
 
 @app.get("/api/family/alerts")
 def api_alerts():
+    if DEMO:  # never expose one visitor's alerts to another
+        return {"alerts": [], "cross_app_contacts": {}, "demo": True}
     return {"alerts": get_alerts(), "cross_app_contacts": contacts_across_apps()}
 
 

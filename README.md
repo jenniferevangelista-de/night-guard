@@ -29,9 +29,22 @@ Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox p
 
 ## Privacy model
 
-- Analysis and message drafting run **locally** (Ollama + `gemma4:e4b`).
-- No chat text is stored. Learning progress lives in the browser's localStorage.
-- Cloud services used by the project only ever touch **fictional test data** (evaluation, scenarios, hosting the demo).
+**Local app (the real Night Guard)**
+- Analysis and message drafting run **locally** (Ollama + `gemma4:e4b`). Chat text never leaves the computer.
+- Full conversations are never stored. For family alerts, only the flagged phrase, risk type, app and contact name
+  are saved on that computer (`data/`, git-ignored). Learning progress lives in the browser's localStorage.
+- The Family area is a local, single-family view with no login yet. Parent authentication is the next step.
+
+**Public demo (Render)**
+- The text you check is sent to the Tinker fine-tuned model to be analyzed. The demo server saves nothing.
+- Family rules and alerts stay in each visitor's own browser, so one visitor never sees another's.
+- Meant for fictional examples only, and says so on screen.
+
+**If the model can't be reached or answers in an unreadable format**, Night Guard shows
+"Couldn't analyze this chat", never a green "nothing found". Every flagged phrase is checked against the chat:
+the message index must point to a contact message, and a paraphrased quote is replaced by the real message.
+
+Cloud services otherwise only touch **fictional test data** (evaluation, scenarios).
 
 ## Results (fictional test set, 60 chats: 30 safe, 30 risky)
 
@@ -95,6 +108,8 @@ python -m eval.temporal_run --status    # progress, e.g. 23/60
 
 ## Limits
 
+All results come from fictional chats written for testing (30 risky, 30 safe). They show the approach works on
+these patterns, not that it catches every real-world case.
 Night Guard is a learning and support tool, not a guarantee of safety. It can miss things and can raise false alarms. It does not replace trusted adults or platform reporting tools.
 
 ## Prior art and credit

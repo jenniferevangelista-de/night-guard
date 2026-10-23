@@ -193,7 +193,10 @@ const T = {
     who:"Send to:", draft:"Draft my message", notePh:"In your own words (optional): what happened? how do you feel?",
     copy:"Copy", copied:"Copied ✓", edit:"You can edit anything before sending.",
     whoOpts:["Mom","Dad","Grandma","Teacher","Older sibling","Someone I trust"],
-    footer:"Runs on your computer with Gemma (open model). Chats never leave this device. A helper, not a replacement for trusted adults. Examples are fictional.",
+    footer:"Runs on your computer with Gemma (open model). Chats never leave this device; only flagged phrases are kept here for family alerts. A helper, not a replacement for trusted adults. Examples are fictional.",
+    footerDemo:"Online demo: the text you check is sent to a fine-tuned model on Tinker to be analyzed and is not saved by this server. Family rules and alerts stay in your browser. Use fictional examples only. A helper, not a replacement for trusted adults.",
+    unknownTitle:"Couldn't analyze this chat",
+    unknownBody:"Something went wrong with the analysis, so this is NOT an all-clear. Try again in a moment. If the chat made you uncomfortable, you can still tell someone you trust.",
     local:"local", sev:{none:"OK",low:"Notice",medium:"Careful",high:"Tell someone"}
   },
   pt:{
@@ -230,7 +233,10 @@ const T = {
     who:"Mandar para:", draft:"Escrever minha mensagem", notePh:"Com suas palavras (opcional): o que aconteceu? como você se sente?",
     copy:"Copiar", copied:"Copiado ✓", edit:"Você pode mudar o que quiser antes de mandar.",
     whoOpts:["Mãe","Pai","Avó","Professora","Irmão mais velho","Alguém de confiança"],
-    footer:"Roda no seu computador com Gemma (modelo aberto). As conversas nunca saem deste aparelho. Uma ajuda, não substitui adultos de confiança. Exemplos fictícios.",
+    footer:"Roda no seu computador com Gemma (modelo aberto). As conversas nunca saem deste aparelho; só os trechos marcados ficam guardados aqui para os alertas da família. Uma ajuda, não substitui adultos de confiança. Exemplos fictícios.",
+    footerDemo:"Demo online: o texto que você confere é enviado a um modelo ajustado no Tinker para análise e não é salvo por este servidor. Regras e alertas da família ficam no seu navegador. Use só exemplos fictícios. Uma ajuda, não substitui adultos de confiança.",
+    unknownTitle:"Não consegui analisar esta conversa",
+    unknownBody:"Algo deu errado na análise, então isto NÃO quer dizer que está tudo bem. Tente de novo daqui a pouco. Se a conversa te incomodou, você ainda pode contar para alguém de confiança.",
     local:"local", sev:{none:"OK",low:"Observe",medium:"Cuidado",high:"Conte a alguém"}
   }
 };
@@ -284,9 +290,17 @@ function show(p){
 }
 document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{$("#paste").value=EX[lang][b.dataset.ex];});
 
+let DEMO = false;
+const demoStore = {  // public demo: this visitor's family rules and events live only in this browser
+  get(k,d){try{return JSON.parse(localStorage.getItem("ng_demo_"+k))??d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("ng_demo_"+k,JSON.stringify(v))}catch(e){}}
+};
 fetch("/api/health").then(r=>r.json()).then(h=>{
+  DEMO = !!h.demo;
   $("#health").innerHTML = h.demo ? `☁️ ${esc(h.model)} · <b>${t("demoPill")}</b>` : `🔒 ${esc(h.model)} · <b>${t("local")}</b>`;
-  if(h.demo){ const d=document.createElement("div"); d.className="famnote"; d.innerHTML=`<b>☁️ ${t("demoTitle")}</b><div class="small" style="margin-top:4px">${t("demoBody")}</div>`; document.querySelector("nav").before(d); }
+  if(h.demo){ const d=document.createElement("div"); d.className="famnote"; d.innerHTML=`<b>☁️ ${t("demoTitle")}</b><div class="small" style="margin-top:4px">${t("demoBody")}</div>`; document.querySelector("nav").before(d);
+    document.querySelector("footer").dataset.t="footerDemo"; document.querySelector("footer").textContent=t("footerDemo");
+    fam.rules = {...fam.rules, ...demoStore.get("rules",{})}; renderFamily(); }
 }).catch(()=>{$("#health").textContent="⚠️ offline"});
 
 /* ---------- 1. Check ---------- */
@@ -295,10 +309,14 @@ $("#analyzeBtn").onclick = async ()=>{
   const btn=$("#analyzeBtn"); btn.disabled=true;
   $("#result").innerHTML = `<div class="card muted"><span class="spin">🌙</span> ${t("checking")}</div>`;
   try{
-    const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,lang,app:$("#app").value})});
-    last = await r.json(); last.answered=null;
+    const body = {text,lang,app:$("#app").value};
+    if(DEMO) body.family_rules = fam.rules;
+    const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    last = await r.json(); last.answered = last.severity==="unknown" ? "skip" : null;
+    if(DEMO && last.family_event){ const ev=demoStore.get("events",[]); ev.unshift(last.family_event); demoStore.set("events",ev.slice(0,100)); }
     renderResult(last);
-  }catch(e){ $("#result").innerHTML = `<div class="card">⚠️ ${esc(e)}</div>`; }
+  }catch(e){ last=null; $("#result").innerHTML = unknownCard(); }
   btn.disabled=false;
 };
 
@@ -311,7 +329,12 @@ function chatHTML(res){
   }).join("")}</div>`;
 }
 
+function unknownCard(){
+  return `<div class="card"><div class="verdict"><span class="dot" style="background:var(--muted)"></span>${esc(t("unknownTitle"))}</div><p>${esc(t("unknownBody"))}</p></div>`;
+}
+
 function renderResult(res, rerender){
+  if(res.severity==="unknown"){ $("#result").innerHTML = unknownCard(); return; }
   if(res.answered===null && res.messages.length){
     $("#result").innerHTML = `<div class="card">${chatHTML({...res,signals:[]})}
       <div class="quiz"><div style="font-weight:800">${t("before")}</div>
@@ -407,9 +430,17 @@ const SIG_LABEL = {
   en:{secrecy:"Asked to keep a secret",platform_move:"Wants to move to another app",personal_info:"Asked for personal info",age_probe:"Asked age / if alone",photo_request:"Asked for a photo or video",gift_offer:"Offered gifts or free stuff",credential_request:"Asked for a password or code",suspicious_link:"Sent a suspicious link",meet_offline:"Wants to meet in person",pressure:"Pressure, guilt or threats",isolation:"Tries to isolate from family"},
   pt:{secrecy:"Pediu segredo",platform_move:"Quer mudar de aplicativo",personal_info:"Pediu dados pessoais",age_probe:"Perguntou idade / se está sozinho",photo_request:"Pediu foto ou vídeo",gift_offer:"Ofereceu presente ou coisa grátis",credential_request:"Pediu senha ou código",suspicious_link:"Mandou link suspeito",meet_offline:"Quer encontrar pessoalmente",pressure:"Pressão, culpa ou ameaça",isolation:"Tenta afastar da família"}
 };
-fetch("/api/family/rules").then(r=>r.json()).then(d=>{fam.rules=d.rules; fam.apps=d.apps;
+fetch("/api/family/rules").then(r=>r.json()).then(d=>{
+  fam.rules = d.demo ? {...d.rules, ...demoStore.get("rules",{})} : d.rules; fam.apps=d.apps;
   $("#app").innerHTML = d.apps.map(a=>`<option>${esc(a)}</option>`).join(""); renderFamily();});
+function crossApps(events){  // same logic as the local server: oldest first, needs one shared alert
+  const apps={}, shared=new Set(), name={};
+  [...events].reverse().forEach(e=>{ const c=(e.contact||"").toLowerCase(); if(!c) return;
+    name[c]=name[c]||e.contact; apps[c]=apps[c]||[]; if(!apps[c].includes(e.app)) apps[c].push(e.app); if(e.shared) shared.add(c); });
+  return Object.fromEntries(Object.entries(apps).filter(([c,a])=>a.length>1&&shared.has(c)).map(([c,a])=>[name[c],a]));
+}
 async function loadFamily(){
+  if(DEMO){ const ev=demoStore.get("events",[]); fam.alerts=ev.filter(e=>e.shared); fam.cross=crossApps(ev); renderFamily(); return; }
   const d = await (await fetch("/api/family/alerts")).json();
   fam.alerts = d.alerts; fam.cross = d.cross_app_contacts; renderFamily();
 }
@@ -419,6 +450,7 @@ function renderFamily(){
     <div class="seg" data-r="${id}"><button data-v="tell" class="${fam.rules[id]==="tell"?"on":""}">${t("tell")}</button><button data-v="child" class="${fam.rules[id]!=="tell"?"on":""}">${t("childDecides")}</button></div></div>`).join("");
   $("#rules").querySelectorAll(".seg button").forEach(b=>b.onclick=async()=>{
     const id=b.parentElement.dataset.r;
+    if(DEMO){ fam.rules={...fam.rules,[id]:b.dataset.v}; demoStore.set("rules",fam.rules); renderFamily(); return; }
     const d=await (await fetch("/api/family/rules",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({[id]:b.dataset.v})})).json();
     fam.rules=d.rules; renderFamily();
   });
