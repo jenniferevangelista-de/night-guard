@@ -16,18 +16,42 @@ except ImportError:  # the cloud demo installs a minimal set of packages
 
 ENABLED = False
 SAFE_KEYS = {"model", "backend", "app", "severity", "signals", "n_messages", "status", "lang", "latency_s"}
+SAFE_SPAN_KEYS = SAFE_KEYS | {"http.response.status_code", "http.request.method", "thread.id", "thread.name"}
+SAFE_TOP = {"event_id", "timestamp", "start_timestamp", "level", "platform", "logger", "release", "environment",
+            "sdk", "type", "transaction", "transaction_info", "measurements", "_meta"}
+SAFE_FRAME = {"filename", "abs_path", "function", "module", "lineno", "colno", "in_app"}
+OUR_PREFIX = "night-guard:"   # only our own fixed messages are kept as text
+
+
+def _allow(event):
+    """Allowlist scrubber: keep only fields known to hold no chat text; drop everything else."""
+    out = {k: v for k, v in event.items() if k in SAFE_TOP}
+    ctx = event.get("contexts") or {}
+    out["contexts"] = {k: v for k, v in ctx.items() if k in ("trace", "runtime", "os")}
+    if isinstance(out["contexts"].get("trace"), dict):
+        tr = out["contexts"]["trace"]
+        tr["data"] = {k: v for k, v in (tr.get("data") or {}).items() if k in SAFE_SPAN_KEYS}
+    out["extra"] = {k: v for k, v in (event.get("extra") or {}).items() if k in SAFE_KEYS}
+    msg = event.get("message") or (event.get("logentry") or {}).get("message") or ""
+    if isinstance(msg, str) and msg.startswith(OUR_PREFIX):
+        out["message"] = msg
+    if event.get("exception"):
+        vals = []
+        for ex in (event["exception"].get("values") or []):
+            frames = [{k: v for k, v in fr.items() if k in SAFE_FRAME}
+                      for fr in ((ex.get("stacktrace") or {}).get("frames") or [])]
+            vals.append({"type": ex.get("type"), "value": f"{ex.get('type')} (details removed)",
+                         "stacktrace": {"frames": frames}, "mechanism": ex.get("mechanism")})
+        out["exception"] = {"values": vals}
+    if event.get("spans"):
+        out["spans"] = [{**{k: v for k, v in sp.items() if k not in ("data", "tags")},
+                         "data": {k: v for k, v in (sp.get("data") or {}).items() if k in SAFE_SPAN_KEYS}}
+                        for sp in event["spans"]]
+    return out  # request, user, breadcrumbs, server_name, tags and anything new are dropped
 
 
 def _scrub(event, _hint):
-    """Drop anything that could contain chat text before an event leaves the computer."""
-    event.pop("request", None)
-    for k in ("extra", "contexts"):
-        if isinstance(event.get(k), dict):
-            event[k] = {kk: vv for kk, vv in event[k].items() if kk in SAFE_KEYS or kk in ("trace", "runtime", "os")}
-    for ex in (event.get("exception") or {}).get("values", []):
-        for fr in (ex.get("stacktrace") or {}).get("frames", []):
-            fr.pop("vars", None)  # local variables could hold messages
-    return event
+    return _allow(event)
 
 
 NOISY = ("/api/guard/", "/api/family/notify", "/api/health", "/web/", "/api/family/rules", "/api/auth/me")
@@ -51,6 +75,9 @@ def init():
         include_local_variables=False,
         max_request_body_size="never",
         before_send=_scrub,
+        before_send_transaction=_scrub,
+        max_breadcrumbs=0,
+        server_name="night-guard",  # not the computer's name
         environment=os.environ.get("NG_BACKEND", "ollama"),
         release="night-guard@0.3",
     )

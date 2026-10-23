@@ -11,29 +11,19 @@ from temporalio import workflow
 from temporalio.common import RetryPolicy
 
 with workflow.unsafe.imports_passed_through():
+    from guard.scoring import summarize as score
     from guard.temporal_activities import check_conversation, save_report
 
 TASK_QUEUE = "night-guard"
 
 
 def summarize(results: list[dict]) -> dict:
-    tp = fp = fn = tn = stp = sfp = sfn = 0
-    for r in results:
-        flagged, risky = r["severity"] != "none", r["label"] == "risky"
-        got, exp = set(r["got"]), set(r["expected"])
-        if risky and flagged: tp += 1
-        elif risky: fn += 1
-        elif flagged: fp += 1
-        else: tn += 1
-        stp += len(got & exp); sfp += len(got - exp); sfn += len(exp - got)
-    return {
-        "n": len(results),
-        "risky_flagged": f"{tp}/{tp + fn}",
-        "false_alarms": f"{fp}/{fp + tn}",
-        "signal_precision": round(stp / max(1, stp + sfp), 3),
-        "signal_recall": round(stp / max(1, stp + sfn), 3),
-        "retried_conversations": [r["id"] for r in results if r["attempt"] > 1],
-    }
+    """Same rule as every other evaluation: unreadable analyses are errors, not detections."""
+    s = score((r["id"], r["label"], r["expected"],
+               {"severity": r["severity"], "analysis_status": r.get("analysis_status", "ok"), "signals": r["got"]})
+              for r in results)
+    s["retried_conversations"] = [r["id"] for r in results if r["attempt"] > 1]
+    return s
 
 
 @workflow.defn

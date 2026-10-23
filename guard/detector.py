@@ -126,14 +126,18 @@ def analyze(messages, lang="en"):
     # Sentry agent trace: one agent run with one model call. Only counts and labels are recorded.
     with telemetry.transaction("night-guard.check", backend=BACKEND, n_messages=len(messages), lang=lang) as tx:
         with telemetry.span("gen_ai.chat", f"chat {MODEL}", model=MODEL, backend=BACKEND):
+            unavailable = False
             try:
                 raw = _call_model(messages)
             except Exception as e:
-                raw = None  # model down or unreadable: reported as "couldn't analyze", never as "no risk"
+                raw, unavailable = None, True  # model down: "couldn't analyze", never "no risk"
                 if telemetry.ENABLED:
-                    telemetry.sentry_sdk.capture_message(f"model call failed: {type(e).__name__}", level="warning")
+                    telemetry.sentry_sdk.capture_message(f"night-guard: model call failed ({type(e).__name__})",
+                                                         level="warning")
         with telemetry.span("night_guard.postprocess", "check evidence and severity"):
             res = postprocess(raw, messages, lang)
+            if unavailable:
+                res["analysis_status"] = "unavailable"  # transient: callers like Temporal retry it
         res["latency_s"] = round(time.time() - t0, 2)
         if tx is not None:
             tx.set_data("severity", res["severity"])
@@ -142,26 +146,43 @@ def analyze(messages, lang="en"):
     return res
 
 
+def valid_item(s):
+    """One signal item exactly as the schema requires."""
+    return (isinstance(s, dict) and s.get("id") in SIGNALS and type(s.get("message_index")) is int
+            and isinstance(s.get("quote"), str))
+
+
+def valid_schema(raw):
+    """The model's whole answer follows the app's schema exactly (used by evaluations)."""
+    return (isinstance(raw, dict) and isinstance(raw.get("signals"), list) and isinstance(raw.get("summary"), str)
+            and all(valid_item(s) for s in raw["signals"]))
+
+
 def postprocess(raw, messages, lang="en", model=MODEL):
     """Clean the model's JSON into the UI/eval result (shared with other backends).
 
-    An unreadable answer gives severity "unknown" (shown as "couldn't analyze"), never "none".
+    analysis_status:
+      ok              valid answer (possibly with no signals: severity "none")
+      partial         some items were malformed, the valid ones are still shown
+      invalid_output  unreadable JSON or no valid item at all: severity "unknown", never "none"
+      unavailable     set by analyze() when the model call itself failed
     Evidence is checked against the chat: the index must point to a contact message, and a
     quote that isn't in that message is replaced by the message itself.
     """
     if not isinstance(raw, dict) or not isinstance(raw.get("signals"), list):
-        return {"severity": "unknown", "analysis_status": "error", "signals": [], "links": [],
-                "summary": "", "notify_family": False, "model": model}
+        return {"severity": "unknown", "analysis_status": "invalid_output", "signals": [], "links": [],
+                "summary": "", "notify_family": False, "model": model, "malformed_items": 0}
 
     def contact_msg(i):
         return type(i) is int and 0 <= i < len(messages) and messages[i].get("from") != "me"
 
-    found = {}
+    found, malformed = {}, 0
     for s in raw["signals"]:
-        if not isinstance(s, dict) or s.get("id") not in SIGNALS:
+        if not valid_item(s):
+            malformed += 1  # wrong shape, unknown id, missing index/quote: never silently "no risk"
             continue
-        sid, idx = s["id"], s.get("message_index")
-        quote = s.get("quote") if isinstance(s.get("quote"), str) else ""
+        sid, idx = s["id"], s["message_index"]
+        quote = s["quote"]
         if not contact_msg(idx):
             # Bad index: find the contact message that contains the quote, else drop it.
             idx = next((i for i, m in enumerate(messages)
@@ -189,12 +210,16 @@ def postprocess(raw, messages, lang="en", model=MODEL):
             s[field] = meta[field].get(lang, meta[field]["en"])
 
     sev = severity(found.keys())
+    status = "ok" if not malformed else ("partial" if sigs else "invalid_output")
+    if status == "invalid_output":
+        sev = "unknown"
     return {
         "severity": sev,
-        "analysis_status": "ok",
+        "analysis_status": status,
+        "malformed_items": malformed,
         "signals": sigs,
         "links": links,
-        "summary": raw.get("summary", ""),
+        "summary": raw.get("summary", "") if isinstance(raw.get("summary"), str) else "",
         "notify_family": sev == "high",
         "parent_steps": PARENT_STEPS.get(sev, {}).get(lang, PARENT_STEPS.get(sev, {}).get("en", [])),
         "model": model,

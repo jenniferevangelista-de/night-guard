@@ -1,59 +1,46 @@
-"""Runs the detector on the fictional test set and prints honest metrics.
+"""Runs the local detector on the fictional test set and prints honest metrics.
 
 Usage (from project root):  .venv\\Scripts\\python -m eval.run_eval
+Writes eval/last_results.json with the summary AND one line per case (fictional data only).
+Errors (unreadable/unavailable analyses) are reported separately; they never count as detections.
 """
 
 import json
 import sys
-from collections import Counter
 from pathlib import Path
 
 from guard.detector import MODEL, analyze
+from guard.scoring import outcome, summarize
 
 ROOT = Path(__file__).parent
 rows = [json.loads(l) for l in (ROOT / "conversations.jsonl").open(encoding="utf-8")]
 limit = int(sys.argv[1]) if len(sys.argv) > 1 else len(rows)
 
-tp = fp = fn = tn = 0
-sig_tp = sig_fp = sig_fn = 0
-lat = []
-mistakes = []
-per_signal = Counter()
-
+cases, per_case, lat = [], [], []
 for row in rows[:limit]:
     res = analyze(row["messages"], lang=row["lang"])
-    lat.append(res["latency_s"])
-    # Any signal shows the child a tip, so "flagged" = anything above none.
-    flagged = res["severity"] != "none"
-    risky = row["label"] == "risky"
-    got = {s["id"] for s in res["signals"]}
-    exp = set(row["signals"])
+    lat.append(res.get("latency_s", 0))
+    got = sorted(s["id"] for s in res["signals"])
+    o = outcome(row["label"], res)
+    cases.append((row["id"], row["label"], row["signals"], res))
+    per_case.append({"id": row["id"], "label": row["label"], "expected": row["signals"], "got": got,
+                     "severity": res["severity"], "analysis_status": res.get("analysis_status"),
+                     "outcome": o, "latency_s": res.get("latency_s")})
+    print(f"{row['id']:>4} {row['label']:>5} -> {res['severity']:<7} {res.get('analysis_status',''):<14} {o:<11} {got}"
+          f"  ({res.get('latency_s')}s)", flush=True)
 
-    if risky and flagged: tp += 1
-    elif risky: fn += 1; mistakes.append(("MISSED", row["id"], res["severity"], sorted(got), sorted(exp)))
-    elif flagged: fp += 1; mistakes.append(("FALSE ALARM", row["id"], res["severity"], sorted(got), sorted(exp)))
-    else: tn += 1
-
-    sig_tp += len(got & exp); sig_fp += len(got - exp); sig_fn += len(exp - got)
-    for s in exp - got: per_signal[f"missed:{s}"] += 1
-    for s in got - exp: per_signal[f"extra:{s}"] += 1
-    print(f"{row['id']:>4} {row['label']:>5} -> {res['severity']:<6} {sorted(got)}  ({res['latency_s']}s)", flush=True)
-
-n = tp + fp + fn + tn
+s = summarize(cases)
 print("\n=== Night Guard eval (fictional data) ===")
-print(f"model: {MODEL}   conversations: {n}")
-print(f"risky caught (recall):      {tp}/{tp+fn} = {tp/max(1,tp+fn):.0%}")
-print(f"false alarms on safe chats: {fp}/{fp+tn} = {fp/max(1,fp+tn):.0%}")
-print(f"signal precision: {sig_tp/max(1,sig_tp+sig_fp):.0%}   signal recall: {sig_tp/max(1,sig_tp+sig_fn):.0%}")
-print(f"avg latency: {sum(lat)/len(lat):.1f}s")
-if mistakes:
-    print("\nMistakes:")
-    for m in mistakes: print("  ", m)
-if per_signal:
-    print("\nSignal-level diffs:", dict(per_signal))
+print(f"model: {MODEL}   conversations: {s['n']}   coverage (valid analyses): {s['coverage']}")
+print(f"risky flagged: {s['risky_flagged']}")
+print(f"false alarms:  {s['false_alarms']}")
+print(f"signal precision: {s['signal_precision']:.0%}   signal recall: {s['signal_recall']:.0%}   (valid analyses only)")
+print(f"avg latency: {sum(lat) / max(1, len(lat)):.1f}s")
+if s["mistakes"]:
+    print("\nMistakes / errors:")
+    for m in s["mistakes"]:
+        print("  ", m)
 
-(ROOT / "last_results.json").write_text(json.dumps({
-    "model": MODEL, "n": n, "tp": tp, "fp": fp, "fn": fn, "tn": tn,
-    "signal_precision": sig_tp/max(1,sig_tp+sig_fp), "signal_recall": sig_tp/max(1,sig_tp+sig_fn),
-    "avg_latency_s": sum(lat)/len(lat), "mistakes": mistakes,
-}, indent=2), encoding="utf-8")
+(ROOT / "last_results.json").write_text(json.dumps(
+    {"model": MODEL, "summary": s, "avg_latency_s": sum(lat) / max(1, len(lat)), "cases": per_case},
+    indent=2), encoding="utf-8")

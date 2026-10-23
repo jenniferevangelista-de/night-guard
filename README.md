@@ -59,7 +59,7 @@ messages arrive and warns the child on the spot:
 
 Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox parental controls each protect **their own app**. The classic pressure path starts in a game and moves to a private app. Night Guard records where each check happened, so the family sees:
 
-> ⚠️ Same contact seen in more than one app: **Alex_17 (Roblox → Instagram)**
+> ⚠️ Same name seen in more than one app (possibly the same person): **Alex_17 (Roblox → Instagram)**
 
 **The lazy part:** the tutor repeats less as you learn. Lessons you already know collapse to a single ✓ line, so the guard gets lazier as the kid gets wiser.
 
@@ -88,10 +88,11 @@ Cloud services otherwise only touch **fictional test data** (evaluation, scenari
 
 | Metric | First version (60 chats, 11 signals) | Now (70 chats, 14 signals) |
 |---|---|---|
+| Valid analyses (errors are reported, never counted as catches) | not measured | **70/70** |
 | Risky chats flagged | 30/30 | **36/36** |
 | False alarms on safe chats | 4/30 (13%) | **3/34 (9%)** |
 | Signal precision / recall | 89% / 87% | 88% / 87% |
-| Avg latency (text) | 3.8 s | 4.3 s |
+| Avg latency (text) | 3.8 s | 3.9 s |
 | Reading a chat from a screenshot (vision) | n/a | ~7 s warm, ~23 s cold |
 
 Why it isn't a bad-words filter or sentiment analysis: groomers are usually **nice** ("you're so mature", "free
@@ -114,6 +115,14 @@ python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
 
 Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
 
+## Tests
+
+```bash
+.venv\Scripts\python -m pytest tests
+```
+
+24 tests cover scoring (an error is never a catch), malformed model answers, window selection by process, per-contact warnings, typed input, the Sentry allowlist, the parent allowlist, Temporal retries and the browser overlay (Node). They include the exact failure cases from the independent review.
+
 ## Fine-tuning with Tinker
 
 Gemma runs locally, but Tinker doesn't serve Gemma, so the fine-tuning experiment uses **Qwen3-8B** on
@@ -123,15 +132,20 @@ shared with the test set. Two runs: **v1** (11 tactics, 800 chats, ~740k tokens)
 
 | | Qwen3-8B base | LoRA v1 | **LoRA v2 (online demo)** |
 |---|---|---|---|
-| Answers in the app's exact JSON format | 23 / 70 | 70 / 70 | **70 / 70** |
-| Risky chats the app can act on | **0 / 36** | 36 / 36 | **36 / 36** |
-| False alarms on safe chats | 3 / 34 (lenient parsing) | 3 / 34 | **2 / 34** |
-| Signal precision / recall | 0.88 / 0.76 (lenient parsing) | 0.84 / 0.79 | **0.88 / 0.83** |
-| Avg time per check on Tinker | 2.6 s | 6.7 s | 4.2 s |
+| Answers that follow the app's full schema (tactic id, message index, quote, summary) | 11 / 70 | 70 / 70 | **70 / 70** |
+| Risky chats flagged, counting only schema-valid answers | 0 / 36 (none of the 36 was valid) | 36 / 36 | **36 / 36** |
+| False alarms on safe chats | 0 / 11 valid (23 invalid) | 3 / 34 | **2 / 34** |
+| Signal precision / recall | n/a (no valid risky answer) | 0.84 / 0.79 | **0.88 / 0.83** |
+| Avg time per check on Tinker | 3.0 s | 5.0 s | 4.5 s |
 
-The base model understands the risk but invents field names (`signal_id` instead of `id`), so the app can't use a
-single answer. "Lenient parsing" guesses the renamed fields to give the base model a fair comparison. Fine-tuning
-fixed the format every time and found more signals; v2 also learned the 3 newer tactics.
+
+An answer counts as valid only if every field matches the schema the app uses (the same `valid_schema` check
+the app applies), and an invalid answer is an error, never a catch or a correct "safe". The base model often renames
+fields (`signal_id` instead of `id`). Read leniently, accepting those renamed fields, it flagged 35 of the 35 risky
+chats it answered readably (3/27 false alarms, precision/recall 0.89/0.77, 8 answers still unreadable), so it often
+sees the pattern; what it can't do is answer in a form an app can use every time. Fine-tuning fixed the format on
+all 70 chats and found more signals; v2 also learned the 3 newer tactics. Each result file keeps every raw answer
+per case, so anyone can recount.
 Scripts: `train/make_train.py`, `train/tinker_sft.py`, `train/tinker_eval.py <model|base> <tag>`,
 `train/compare_tinker.py`; results in `train/tinker_eval_{base_70,v1_70,v2_70}.json`.
 

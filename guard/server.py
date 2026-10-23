@@ -10,6 +10,8 @@ from pathlib import Path
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 from .detector import BACKEND, MODEL, analyze
@@ -24,6 +26,26 @@ ME_PREFIX = re.compile(r"^\s*(me|eu|i|euzinho)\s*[:\-]\s*", re.I)
 NAME_PREFIX = re.compile(r"^\s*([^:]{1,30}):\s*(.*)$")
 
 DEMO = BACKEND != "ollama"
+
+
+def _deploy_info():
+    """Which code and which model are actually running (evidence for reviewers; no secrets)."""
+    import os
+    commit = os.environ.get("RENDER_GIT_COMMIT", "")
+    if not commit:
+        try:
+            commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True,
+                                    timeout=5).stdout.strip()
+        except Exception:
+            commit = ""
+    info = {"commit": commit[:12]}
+    if BACKEND == "tinker":
+        from .cloud import FT_PATH
+        info["tinker_model"] = FT_PATH.split("tinker://")[-1].split(":")[0]  # run id, e.g. 34d43b69-... (v2)
+    return info
+
+
+DEPLOY = _deploy_info()
 
 from .env import load_env  # noqa: E402
 from . import telemetry  # noqa: E402
@@ -42,9 +64,20 @@ auth.add_routes(app)
 PARENTS_ONLY = [Depends(auth.require_parent)]
 
 
+class Msg(BaseModel):
+    """One chat message, validated before it ever reaches the model."""
+    model_config = {"populate_by_name": True}
+    from_: Literal["me", "them"] = Field(alias="from")
+    text: str = Field(min_length=1, max_length=2000)
+    name: str = Field(default="", max_length=60)
+
+    def as_dict(self):
+        return {"from": self.from_, "text": self.text, "name": self.name}
+
+
 class AnalyzeReq(BaseModel):
     text: str | None = Field(default=None, max_length=4000)   # pasted chat, one message per line
-    messages: list[dict] | None = Field(default=None, max_length=60)
+    messages: list[Msg] | None = Field(default=None, max_length=60)
     lang: str = "en"
     app: str = "Other"
     family_rules: dict | None = None   # public demo only: the visitor's own rules
@@ -74,14 +107,14 @@ def parse_paste(text):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "model": MODEL, "demo": BACKEND != "ollama",
+    return {"ok": True, "model": MODEL, "demo": BACKEND != "ollama", **DEPLOY,
             "voice": (ROOT / "web" / "audio" / "en").is_dir(),
             "runs": "locally via Ollama" if BACKEND == "ollama" else "public demo on Render + Tinker"}
 
 
 @app.post("/api/analyze")
 def api_analyze(req: AnalyzeReq):
-    msgs = req.messages if req.messages else parse_paste(req.text or "")
+    msgs = [m.as_dict() for m in req.messages] if req.messages else parse_paste(req.text or "")
     if not msgs:
         return {"severity": "none", "signals": [], "links": [], "summary": "", "messages": []}
     res = analyze(msgs, lang=req.lang)

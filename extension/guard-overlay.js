@@ -5,9 +5,9 @@
   if (window.NightGuardLive) return;
 
   const TXT = {
-    en: { on: "Guard on", ok: "Got it", tell: "Tell someone", fam: "Your family will know about this. You're not in trouble.",
+    en: { on: "Guard on", paused: "Guard paused: can't analyze right now", ok: "Got it", tell: "Tell someone", fam: "Your family will know about this. You're not in trouble.",
           title: { high: "Stop! This could be dangerous", medium: "Careful", low: "Heads up" } },
-    pt: { on: "Guarda ligado", ok: "Entendi", tell: "Contar pra alguém", fam: "Sua família vai ficar sabendo. Você não está encrencado.",
+    pt: { on: "Guarda ligado", paused: "Guarda pausado: não consigo analisar agora", ok: "Entendi", tell: "Contar pra alguém", fam: "Sua família vai ficar sabendo. Você não está encrencado.",
           title: { high: "Pare! Isso pode ser perigoso", medium: "Cuidado", low: "Atenção" } },
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -16,6 +16,7 @@
   .ng-badge{position:fixed;right:14px;bottom:14px;z-index:2147483646;background:#161d3f;color:#eef1ff;border:1px solid #2d3770;
     border-radius:999px;padding:7px 12px;font:600 13px/1 system-ui,sans-serif;box-shadow:0 4px 18px #0006}
   .ng-badge b{color:#5fd49a}
+  .ng-badge.ng-paused{background:#5a2330;border-color:#ff7a8a}.ng-badge.ng-paused b{color:#ffd36e}
   .ng-pop{position:fixed;right:14px;bottom:58px;z-index:2147483647;width:min(380px,calc(100vw - 28px));background:#1d2550;color:#eef1ff;
     border:2px solid #ffb35c;border-radius:16px;padding:16px;font:15px/1.4 system-ui,sans-serif;box-shadow:0 10px 40px #000a;animation:ngin .25s ease-out}
   .ng-pop.high{border-color:#ff7a8a}
@@ -41,20 +42,29 @@
     ensureStyle();
     const t = TXT[lang] || TXT.en;
     const badge = document.createElement("div");
-    badge.className = "ng-badge"; badge.innerHTML = `🛡️ <b>${esc(t.on)}</b>`;
+    badge.className = "ng-badge";
     document.body.appendChild(badge);
+    // The badge tells the truth: if analysis fails, it says the guard is paused, and it goes back
+    // to "Guard on" after the next successful check. A failure is never shown as "all fine".
+    const setBadge = ok => {
+      badge.classList.toggle("ng-paused", !ok);
+      badge.innerHTML = ok ? `🛡️ <b>${esc(t.on)}</b>` : `⚠️ <b>${esc(t.paused)}</b>`;
+    };
+    setBadge(true);
 
-    // Remember the exact message + tactic already shown, not the tactic alone: if someone
-    // insists ("don't tell anyone" again, a second photo request), that's escalation and the
-    // kid must be warned again.
+    // Identity of a shown warning: contact + tactic + exact words. Someone insisting with a new
+    // message, or the same words from another contact, is warned again; the same message is not.
     const seen = new Set();
-    const key = s => `${s.id}|${(s.quote || "").trim().toLowerCase()}`;
+    const key = (s, msgs) => {
+      const m = Number.isInteger(s.message_index) ? (msgs || [])[s.message_index] : null;
+      return `${((m && m.name) || "").trim().toLowerCase()}|${s.id}|${(s.quote || "").trim().toLowerCase()}`;
+    };
     let timer = null, busy = false, pending = null;
 
-    function show(res) {
-      const fresh = res.signals.filter(s => !seen.has(key(s)));
+    function show(res, msgs) {
+      const fresh = res.signals.filter(s => !seen.has(key(s, msgs)));
       if (!fresh.length) return;
-      fresh.forEach(s => seen.add(key(s)));
+      fresh.forEach(s => seen.add(key(s, msgs)));
       document.querySelectorAll(".ng-pop").forEach(n => n.remove());
       const pop = document.createElement("div");
       pop.className = "ng-pop " + (res.severity === "high" ? "high" : "");
@@ -73,10 +83,13 @@
     async function run(messages) {
       if (busy) { pending = messages; return; }
       busy = true;
+      const sent = messages.slice(-12);
       try {
-        const res = await analyze({ messages: messages.slice(-12), lang, app });
-        if (res && res.signals && res.severity && res.severity !== "none" && res.severity !== "unknown") show(res);
-      } catch (e) { /* server offline: the badge stays, nothing is shown as "safe" */ }
+        const res = await analyze({ messages: sent, lang, app });
+        const ok = res && ["ok", "partial"].includes(res.analysis_status || "ok") && res.severity && res.severity !== "unknown";
+        setBadge(!!ok);
+        if (ok && res.signals && res.severity !== "none") show(res, sent);
+      } catch (e) { setBadge(false); /* server offline: say so, never "all fine" */ }
       busy = false;
       if (pending) { const p = pending; pending = null; run(p); }
     }

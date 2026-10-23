@@ -18,7 +18,15 @@ DOMAIN = os.environ.get("AUTH0_DOMAIN", "").strip()
 CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID", "").strip()
 CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET", "").strip()
 SESSION_SECRET = os.environ.get("SESSION_SECRET", "").strip()
+# Only these signed-in accounts are parents (comma-separated, verified e-mail required). Signing up
+# on the Auth0 page is not enough to read a family's alerts.
+PARENT_EMAILS = {e.strip().lower() for e in os.environ.get("PARENT_EMAILS", "").split(",") if e.strip()}
 ENABLED = all([DOMAIN, CLIENT_ID, CLIENT_SECRET, SESSION_SECRET])
+
+
+def is_parent(info):
+    email = (info.get("email") or "").strip().lower()
+    return bool(email) and info.get("email_verified") is True and email in PARENT_EMAILS
 
 oauth = None
 if ENABLED:
@@ -61,6 +69,9 @@ def add_routes(app):
     async def callback(request: Request):
         token = await oauth.auth0.authorize_access_token(request)
         info = token.get("userinfo") or {}
+        if not is_parent(info):
+            request.session.clear()
+            return RedirectResponse("/?tab=family&auth=not_parent")
         request.session["parent"] = {"name": info.get("name"), "email": info.get("email"), "sub": info.get("sub")}
         return RedirectResponse("/?tab=family")
 

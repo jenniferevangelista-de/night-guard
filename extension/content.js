@@ -45,8 +45,11 @@ const ADAPTERS = [
     chrome.runtime.sendMessage({ type: "analyze", body }, res => (res && !res.error && !res.off ? resolve(res) : reject(res))));
   const guard = NightGuardLive.create({ analyze, app: adapter.app, lang: cfg.lang || "en" });
 
-  let lastKey = "";
+  let lastKey = "", lastConvo = location.pathname + location.search;
   const scan = () => {
+    // Opening another conversation (new URL) starts a fresh warning memory for that contact.
+    const convo = location.pathname + location.search;
+    if (convo !== lastConvo) { lastConvo = convo; lastKey = ""; guard.reset(); }
     const msgs = adapter.read(cfg.myName || "").filter(m => m.text.trim()).slice(-12);
     const key = msgs.map(m => m.from + ":" + m.text).join("|");
     if (key !== lastKey) { lastKey = key; guard.update(msgs); }

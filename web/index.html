@@ -208,12 +208,13 @@ const T = {
     famNoteBody:"Your family set a rule for this kind of message, so Night Guard let them know. They see what kind of risk it was, not your whole chat. You're not in trouble.",
     famTitle:"Family alerts", famHelp:"You see the kind of risk, the app and the flagged phrase. Never the whole conversation.",
     noAlerts:"No alerts yet. Quiet week ✅",
-    crossApp:"Same contact seen in more than one app:", crossAppHint:"Moving a kid from a game to a private app is a classic pressure pattern.",
+    crossApp:"Same name seen in more than one app (possibly the same person):", crossAppHint:"Names can repeat, so check with your kid. Moving a kid from a game to a private app is a classic pressure pattern.",
     rulesTitle:"Family rules", rulesHelp:"Kids don't always recognize a bad intention. Choose what Night Guard tells you automatically. Your child is always told when it does.",
     tell:"Tell family", childDecides:"Child decides",
     liveDemo:"Live demo: game chat", listen:"Listen",
     lockTitle:"Parents area", lockHelp:"Sign in to see alerts, change family rules or turn the protection on or off. Kids never need a password to ask for help.",
     lockBtn:"Sign in", logout:"Sign out",
+    notParent:"That account isn't on this family's parent list (or its e-mail isn't verified). Ask the family to add it.",
     shTitle:"👋 Start here (2 minutes)",
     sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
     sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
@@ -267,12 +268,13 @@ const T = {
     famNoteBody:"Sua família criou uma regra para esse tipo de mensagem, então o Night Guard avisou. Eles veem o tipo de risco, não a conversa inteira. Você não está encrencado.",
     famTitle:"Alertas da família", famHelp:"Você vê o tipo de risco, o app e o trecho marcado. Nunca a conversa inteira.",
     noAlerts:"Nenhum alerta ainda. Semana tranquila ✅",
-    crossApp:"Mesmo contato visto em mais de um app:", crossAppHint:"Levar a criança de um jogo para um app privado é um padrão clássico de pressão.",
+    crossApp:"Mesmo nome visto em mais de um app (talvez a mesma pessoa):", crossAppHint:"Nomes podem se repetir, então confirme com a criança. Levar a criança de um jogo para um app privado é um padrão clássico de pressão.",
     rulesTitle:"Regras da família", rulesHelp:"A criança nem sempre percebe uma má intenção. Escolha o que o Night Guard te conta automaticamente. A criança sempre é avisada quando isso acontece.",
     tell:"Avisar família", childDecides:"Criança decide",
     liveDemo:"Demo ao vivo: chat do jogo", listen:"Ouvir",
     lockTitle:"Área dos pais", lockHelp:"Entre para ver os alertas, mudar as regras da família ou ligar e desligar a proteção. A criança nunca precisa de senha para pedir ajuda.",
     lockBtn:"Entrar", logout:"Sair",
+    notParent:"Essa conta não está na lista de pais desta família (ou o e-mail não foi verificado). Peça para a família adicionar.",
     shTitle:"👋 Comece aqui (2 minutos)",
     sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
     sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
@@ -373,6 +375,7 @@ async function gateFamily(){
   try{ me = await (await fetch("/api/auth/me")).json(); }catch(e){}
   const locked = me.enabled && !me.parent;
   $("#lockCard").style.display = locked ? "" : "none";
+  if(locked && QS.get("auth")==="not_parent") $("#lockCard [data-t=lockHelp]").textContent = t("notParent");
   [...$("#p-family").children].forEach(el=>{ if(el.id!=="lockCard" && el.id!=="parentBar") el.style.display = locked ? "none" : ""; });
   $("#parentBar").style.display = me.parent ? "" : "none";
   if(me.parent) $("#parentBar").innerHTML = `👤 ${esc(me.parent.name||me.parent.email||"")} · <a href="/auth/logout" style="color:var(--accent)">${esc(t("logout"))}</a>`;

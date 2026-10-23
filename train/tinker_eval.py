@@ -17,7 +17,8 @@ from tinker_cookbook.tokenizer_utils import get_tokenizer
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from guard.detector import SYSTEM, _format_chat, postprocess  # noqa: E402
+from guard.detector import SYSTEM, _format_chat, postprocess, valid_schema  # noqa: E402
+from guard.scoring import summarize  # noqa: E402
 from guard.env import load_env  # noqa: E402
 
 load_env()
@@ -36,10 +37,10 @@ def parse_json(text, lenient=False):
     try:
         data = json.loads(text[s:e + 1])
     except Exception:
-        return {"signals": [], "summary": "(unparseable)"}, False
+        return None, False
+    ok = valid_schema(data)  # the app's full schema: id, int message_index, str quote, str summary
     sigs = data.get("signals", []) if isinstance(data, dict) else []
-    ok = isinstance(sigs, list) and all(isinstance(x, dict) and "id" in x for x in sigs)
-    if lenient and isinstance(sigs, list):
+    if lenient and isinstance(data, dict) and isinstance(sigs, list):
         fixed = []
         for x in sigs:
             if isinstance(x, dict):
@@ -68,7 +69,7 @@ async def main(model_path=None):
         lenient_raw, _ = parse_json(content, lenient=True)
         strict = postprocess(strict_raw, row["messages"], row["lang"], model=model_path or MODEL)
         lenient = postprocess(lenient_raw, row["messages"], row["lang"], model=model_path or MODEL)
-        return row, strict, lenient, ok, time.time() - t0
+        return row, strict, lenient, ok, time.time() - t0, content
 
     results = await asyncio.gather(*[one(r) for r in rows])
     out = {
@@ -78,30 +79,19 @@ async def main(model_path=None):
         "avg_latency_s": round(sum(r[4] for r in results) / len(results), 2),
         "strict": score([(r[0], r[1]) for r in results]),
         "lenient": score([(r[0], r[2]) for r in results]),
+        "cases": [{"id": r[0]["id"], "label": r[0]["label"], "schema_ok": r[3], "raw_output": r[5],
+                   "strict": {k: r[1].get(k) for k in ("severity", "analysis_status", "malformed_items")},
+                   "strict_signals": sorted(s["id"] for s in r[1]["signals"]),
+                   "lenient_signals": sorted(s["id"] for s in r[2]["signals"])} for r in results],
     }
-    print(json.dumps({k: v for k, v in out.items()}, indent=2))
+    print(json.dumps({k: v for k, v in out.items() if k != "cases"}, indent=2))
     tag = sys.argv[2] if len(sys.argv) > 2 else ("finetuned" if model_path else "base")
     (ROOT / "train" / f"tinker_eval_{tag}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
 
 
 def score(pairs):
-    tp = fp = fn = tn = stp = sfp = sfn = 0
-    mistakes = []
-    for row, res in pairs:
-        # "unknown" = unreadable output: the app can't act on it, so it is not a flag.
-        flagged = res["severity"] in ("low", "medium", "high")
-        risky = row["label"] == "risky"
-        got, exp = {s["id"] for s in res["signals"]}, set(row["signals"])
-        if risky and flagged: tp += 1
-        elif risky: fn += 1; mistakes.append(("MISSED", row["id"], sorted(got)))
-        elif flagged: fp += 1; mistakes.append(("FALSE ALARM", row["id"], sorted(got)))
-        else: tn += 1
-        stp += len(got & exp); sfp += len(got - exp); sfn += len(exp - got)
-    return {
-        "risky_flagged": f"{tp}/{tp + fn}", "false_alarms": f"{fp}/{fp + tn}",
-        "signal_precision": round(stp / max(1, stp + sfp), 3), "signal_recall": round(stp / max(1, stp + sfn), 3),
-        "mistakes": mistakes,
-    }
+    """Same rule as every other evaluation (guard/scoring.py): unreadable output is an error, not a flag."""
+    return summarize((row["id"], row["label"], row["signals"], res) for row, res in pairs)
 
 
 if __name__ == "__main__":

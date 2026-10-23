@@ -8,7 +8,7 @@ tags: devchallenge, hf26challenge, ai, opensource
 
 ## What I Built
 
-Parents can't read every chat their kids have in Roblox, Discord or TikTok. If they could, the US National Center for Missing & Exploited Children wouldn't have received **more than 50,000 reports of financial sextortion in 2025, about 137 a day** ([NCMEC, 2026](https://us.missingkids.org/blog/2026/ncmec-releases-new-sextortion-data-2025)). And the tricks are fast: grooming inside a game can take **20 to 45 minutes** (Swansea University, 2016; a WeProtect figure cited by Brazil's Ministry of Justice).
+Parents can't read every chat their kids have in Roblox, Discord or TikTok. Meanwhile the US National Center for Missing & Exploited Children received **more than 50,000 reports of financial sextortion in 2025, about 137 a day** ([NCMEC, 2026](https://us.missingkids.org/blog/2026/ncmec-releases-new-sextortion-data-2025)). And the tricks are fast: grooming inside a game can take **20 to 45 minutes** (Swansea University, 2016; a WeProtect figure cited by Brazil's Ministry of Justice).
 
 **Night Guard** is a small open-model guard that does the boring, exhausting part for them. It reads the chat **on the family's own computer**, stays quiet when everything is fine, and only speaks up when it sees a documented pressure trick: someone asking a kid to keep a secret, to move to a private app, to send a photo, or threatening to share one.
 
@@ -41,6 +41,8 @@ The online demo runs the **Tinker fine-tuned model** in the cloud so judges can 
 
 {% github jenniferevangelista-de/night-guard %}
 
+The repo has 24 automated tests (`pytest tests`), including the exact failure cases our auditor reported, so those bugs can't quietly come back.
+
 ## How I Built It
 
 ### The detector: Gemma 4, on the kid's computer
@@ -49,7 +51,7 @@ The core is `gemma4:e4b` running locally through **Ollama** on a laptop GPU (RTX
 
 I don't trust the model blindly. Every answer goes through checks before a kid or parent sees it:
 
-- **An unreadable answer is never "all clear".** If the model is down or answers in a broken format, the kid sees *"Couldn't analyze this chat. This is NOT an all-clear"*, never a green light. (Our auditor caught that the first version turned failures into "no risk". Fixed.)
+- **An unreadable answer is never "all clear".** If the model is down or answers in a broken format, the kid sees *"Couldn't analyze this chat. This is NOT an all-clear"*, never a green light. (Our auditor caught that the first version turned failures into "no risk". Fixed, and the evaluations now count a failed analysis as an error, never as a catch or as a correct "safe".)
 - **Evidence is checked against the chat.** The quote must exist in a message from the contact; a paraphrased quote is replaced by the real message; the kid's own messages are never flagged.
 - **Two narrow tactics need their own words in the chat.** "Came back with a new account" only counts if the chat mentions being blocked or ignored, and "you're so mature" flattery only counts with maturity or age words. Before this, a classmate who lost his password and a compliment on a Minecraft build were flagged.
 
@@ -57,10 +59,11 @@ I don't trust the model blindly. Every answer goes through checks before a kid o
 
 | | First version (60 chats, 11 signals) | Now (70 chats, 14 signals) |
 |---|---|---|
+| Valid analyses (an error never counts as a catch) | not measured | **70/70** |
 | Risky chats flagged | 30/30 | **36/36** |
 | False alarms on safe chats | 4/30 (13%) | **3/34 (9%)** |
 | Signal precision / recall | 89% / 87% | 88% / 87% |
-| Avg time per check | 3.8 s | 4.3 s |
+| Avg time per check | 3.8 s | 3.9 s |
 
 The three remaining false alarms are on purpose hard cases: an in-game "secret" about a hidden chest, a classmate saying "see you at school", and "how old r u now" on a birthday. Honesty note: two newer hard cases were fixed **after** I saw them fail, so they're no longer a blind test. And 36/36 on fictional chats shows the approach works on these patterns, not that it catches everything in the real world.
 
@@ -68,9 +71,9 @@ The three remaining false alarms are on purpose hard cases: an in-game "secret" 
 
 A 20-minute grooming window means "paste your chat here" is too late. Night Guard watches as messages arrive:
 
-- **Screen guard with Gemma's vision.** Kids chat inside *installed* apps (the Roblox app, the Discord app, Minecraft). Every few seconds, if the window in front is one of those apps, Night Guard takes a screenshot **in memory**, Gemma 4 reads the chat from the image locally (~7 s warm), and the text goes to the same detector. The image is never saved and never leaves the computer. Banking, email or school windows are never captured.
+- **Screen guard with Gemma's vision.** Kids chat inside *installed* apps (the Roblox app, the Discord app, Minecraft). Every few seconds Night Guard checks which **program** owns the window in front (by its process, not its title, so a browser tab or a document called "Roblox" is ignored). Only if it is one of those apps does it take a screenshot **in memory**, Gemma 4 reads the chat from the image locally (~7 s warm), and the text goes to the same detector. The image is never saved and never leaves the computer. Banking, email or school windows are not on the list, so they are never captured. If the window changes before the capture, nothing is read.
 - **A Chrome extension** for web chats (Discord web and WhatsApp Web, experimental), which only talks to the local server and refuses any other address.
-- A **"🛡️ Guard on"** badge is always visible. Kids know it's there. Research on teens shows covert monitoring backfires: in a study of 736 teen-written reviews of safety apps, 76% gave one star ([Ghosh et al.](https://www.cs.ucf.edu/~jjl/pubs/pn1838-ghoshA.pdf)).
+- A **"🛡️ Guard on"** badge is always visible, and it turns into *"Guard paused: can't analyze right now"* when the model is down, so silence never looks like safety. Kids know it's there. Research on teens shows covert monitoring backfires: in a study of 736 teen-written reviews of safety apps, 76% gave one star ([Ghosh et al.](https://www.cs.ucf.edu/~jjl/pubs/pn1838-ghoshA.pdf)).
 
 ### Fine-tuning with Tinker: teaching a model to speak the app's language
 
@@ -78,13 +81,14 @@ Tinker doesn't serve Gemma, so for the cloud demo I fine-tuned **Qwen3-8B** with
 
 | | Qwen3-8B base | LoRA v1 | LoRA v2 (online demo) |
 |---|---|---|---|
-| Answers in the app's exact JSON format | 23 / 70 | 70 / 70 | **70 / 70** |
-| Risky chats the app can act on | **0 / 36** | 36 / 36 | **36 / 36** |
-| False alarms on safe chats | 3 / 34 (lenient parsing) | 3 / 34 | **2 / 34** |
-| Signal precision / recall | 0.88 / 0.76 (lenient parsing) | 0.84 / 0.79 | **0.88 / 0.83** |
-| Avg time per check | 2.6 s | 6.7 s | 4.2 s |
+| Answers that follow the app's full schema (tactic id, message index, quote, summary) | 11 / 70 | 70 / 70 | **70 / 70** |
+| Risky chats flagged, counting only schema-valid answers | 0 / 36 (none of the 36 was valid) | 36 / 36 | **36 / 36** |
+| False alarms on safe chats | 0 / 11 valid (23 invalid) | 3 / 34 | **2 / 34** |
+| Signal precision / recall | n/a (no valid risky answer) | 0.84 / 0.79 | **0.88 / 0.83** |
+| Avg time per check | 3.0 s | 5.0 s | 4.5 s |
 
-The base model *understood* the risk but invented field names (`signal_id` instead of `id`), so an app couldn't use a single answer. Fine-tuning fixed the format every time and found more signals, and v2 learned the three newer tactics. The online demo runs v2.
+
+An answer only counts if every field matches the schema the app uses, and an invalid answer is an error, never a catch. The base model often renames fields (`signal_id` instead of `id`). Read leniently, it flagged 35 of the 35 risky chats it answered readably, so it often *sees* the pattern; it just can't answer in a form an app can use every time. Fine-tuning fixed the format on all 70 chats and found more signals, and v2 learned the three newer tactics. The online demo runs v2. Every raw answer is saved per case in the repo, so anyone can recount.
 
 ### Temporal: an evaluation that survives a crashing laptop
 
@@ -98,7 +102,7 @@ Younger kids and kids with dyslexia may not read a warning in time. Every child 
 
 ### Sentry: tracing the agent without reading the chats
 
-Every check is traced in **Sentry** as an agent run (`night-guard.check`) with a model call inside (`gen_ai.chat`) and the evidence step after it. That's how I saw that a cold Gemma call takes up to 8 s and a warm one about 4.5 s on this laptop. The traces carry only numbers and labels: model, backend, latency, number of messages, severity and tactic ids. Never a message, a name or a quote: `send_default_pii` is off, local variables are not captured, and a `before_send` hook strips anything that could hold chat text. The UI's status polling is sampled out so the agent runs stand out.
+Every check is traced in **Sentry** as an agent run (`night-guard.check`) with a model call inside (`gen_ai.chat`) and the evidence step after it. That's how I saw that a cold Gemma call takes up to 8 s and a warm one about 4.5 s on this laptop. The traces carry only numbers and labels: model, backend, latency, number of messages, severity and tactic ids. Never a message, a name or a quote: `send_default_pii` is off, local variables are not captured, and every event goes through an **allowlist**: only fields known to hold numbers and labels are kept, everything else (request bodies, breadcrumbs, exception text, any new field) is dropped. A test pushes a fake event full of a marker string and checks the marker never survives. The UI's status polling is sampled out so the agent runs stand out.
 
 ![Sentry traces: each night-guard.check with its gen_ai.chat model call](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/sentry.jpg)
 
@@ -109,7 +113,7 @@ The public demo runs on **Render** (Blueprint `render.yaml`, free instance), wit
 ### What the family gets
 
 - **Family rules:** for each tactic, "Tell family" or "Child decides". Photo requests, meeting in person, password requests, secrecy, coming back after a block and sextortion go to the family by default. The kid is always told when that happens: *"Your family will know about this. You're not in trouble."*
-- **The gap no platform covers:** Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox parental controls each protect their own app. The classic path starts in a game and moves to a private app. Night Guard notices: *"Same contact seen in more than one app: Alex_17 (Roblox → Instagram)"*.
+- **The gap no platform covers:** Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox parental controls each protect their own app. The classic path starts in a game and moves to a private app. Night Guard points out a possible match: *"Same name seen in more than one app (possibly the same person): Alex_17 (Roblox → Instagram)"*. It's a hint to check, not proof, because names can repeat.
 - **What to do now**, by severity: talk calmly and without punishment (kids who get in trouble stop telling), keep screenshots, block and report, and for image requests, threats or money demands, report to SaferNet Brasil or the NCMEC CyberTipline and the police. Don't pay.
 - **Phone alerts** through ntfy (free, no account) with only the risk level, the app and the kind of risk.
 - **"Tell someone":** the kid picks what to share and gets a ready message for Mom, Dad or a teacher, built only from their own words and the flagged quotes, so nothing is invented.

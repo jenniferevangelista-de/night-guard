@@ -1,228 +1,1541 @@
 {
   "model": "Qwen/Qwen3-8B",
   "n": 70,
-  "format_ok": 23,
-  "avg_latency_s": 2.65,
+  "format_ok": 11,
+  "avg_latency_s": 3.0,
   "strict": {
-    "risky_flagged": "0/36",
-    "false_alarms": "0/34",
+    "n": 70,
+    "coverage": "11/70",
+    "errors": {
+      "risky": 36,
+      "safe": 23
+    },
+    "risky_flagged": "0/0 valid (36 errors)",
+    "false_alarms": "0/11 valid (23 errors)",
     "signal_precision": 0.0,
     "signal_recall": 0.0,
+    "counts": {
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 11,
+      "error_risky": 36,
+      "error_safe": 23
+    },
     "mistakes": [
       [
-        "MISSED",
+        "error_safe",
+        "s01",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s04",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s05",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s06",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s07",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s09",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s11",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s12",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s13",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s15",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s19",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s20",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s22",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s23",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s24",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s25",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s27",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s29",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s30",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_risky",
         "r01",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r02",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r03",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r04",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r05",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r06",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r07",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r08",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r09",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r10",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r11",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r12",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r13",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r14",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r15",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r16",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r17",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r18",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r19",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r20",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r21",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r22",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r23",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r24",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r25",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r26",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r27",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r28",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r29",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r30",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r31",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r32",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r33",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r34",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r35",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "MISSED",
+        "error_risky",
         "r36",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s31",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s32",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s33",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s34",
+        "unknown",
+        "invalid_output",
         []
       ]
     ]
   },
   "lenient": {
-    "risky_flagged": "35/36",
-    "false_alarms": "3/34",
+    "n": 70,
+    "coverage": "62/70",
+    "errors": {
+      "risky": 1,
+      "safe": 7
+    },
+    "risky_flagged": "35/35 valid (1 errors)",
+    "false_alarms": "3/27 valid (7 errors)",
     "signal_precision": 0.889,
-    "signal_recall": 0.755,
+    "signal_recall": 0.769,
+    "counts": {
+      "tp": 35,
+      "fn": 0,
+      "fp": 3,
+      "tn": 24,
+      "error_risky": 1,
+      "error_safe": 7
+    },
     "mistakes": [
       [
-        "FALSE ALARM",
+        "error_safe",
+        "s05",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s07",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s09",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "fp",
         "s11",
+        "medium",
+        "ok",
         [
           "secrecy"
         ]
       ],
       [
-        "FALSE ALARM",
+        "error_safe",
+        "s13",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s15",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "error_safe",
+        "s27",
+        "unknown",
+        "invalid_output",
+        []
+      ],
+      [
+        "fp",
         "s29",
+        "low",
+        "ok",
         [
           "age_probe"
         ]
       ],
       [
-        "MISSED",
+        "error_risky",
         "r35",
+        "unknown",
+        "invalid_output",
         []
       ],
       [
-        "FALSE ALARM",
+        "fp",
         "s31",
+        "low",
+        "ok",
         [
           "gift_offer"
         ]
+      ],
+      [
+        "error_safe",
+        "s33",
+        "unknown",
+        "invalid_output",
+        []
       ]
     ]
-  }
+  },
+  "cases": [
+    {
+      "id": "s01",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s02",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact and child discussed trading in-game items.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s03",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact asked the child to add them as a friend in a game to do a raid together, and the child asked for their username.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s04",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s05",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "[]",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s06",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s07",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "[]",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s08",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact complimented the child's build and asked how it was made, to which the child responded with the method used.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s09",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "[]",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s10",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact invited the child to join a clan and mentioned donating troops, but there were no risk signals detected in the conversation.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s11",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"dont tell anyone\",\n      \"signal_id\": \"secrecy\"\n    }\n  ],\n  \"summary\": \"The contact asked the child to keep a secret about an event.\"\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "secrecy"
+      ]
+    },
+    {
+      "id": "s12",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s13",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "[]",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s14",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact identified as a teacher's assistant shared a homework assignment, and the child thanked them.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s15",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "[]",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s16",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact and child exchanged a brief greeting and confirmed they will play again tomorrow.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s17",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact offered to trade a legendary sword for the child's shield, and the child set a price of 100 coins for the trade.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s18",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact asked the child to add them to a game to complete a mission together, and the child asked for their in-game nickname.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s19",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s20",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s21",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact invited the child to join their clan for weekly gaming sessions and mentioned a minimum level requirement.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s22",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s23",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s24",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s25",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s26",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact and child are talking about being in the same class and preparing for a game.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s27",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "[]",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s28",
+      "label": "safe",
+      "schema_ok": true,
+      "raw_output": "{\n  \"signals\": [],\n  \"summary\": \"The contact mentioned a secret map location, and the child expressed interest in checking it out.\"\n}",
+      "strict": {
+        "severity": "none",
+        "analysis_status": "ok",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s29",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"how old r u now\",\n      \"signal_id\": \"age_probe\",\n      \"summary\": \"The contact asked the child for their age.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "age_probe"
+      ]
+    },
+    {
+      "id": "s30",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "r01",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"you're really mature for your age\",\n      \"signal_id\": \"flattery\"\n    },\n    {\n      \"message_index\": 2,\n      \"quote\": \"let's talk on snap instead, add me there\",\n      \"signal_id\": \"platform_move\"\n    },\n    {\n      \"message_index\": 3,\n      \"quote\": \"and don't tell your parents ok? they wouldn't get it\",\n      \"signal_id\": \"secrecy\"\n    }\n  ],\n  \"summary\": \"The contact complimented the child, suggested moving to Snapchat, and asked them not to tell their parents.\"\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 3
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "flattery",
+        "platform_move",
+        "secrecy"
+      ]
+    },
+    {
+      "id": "r02",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"FREE 10000 ROBUX!! just log in here robux-gift-claim.xyz\",\n      \"signal_id\": \"suspicious_link\",\n      \"summary\": \"The contact sent a suspicious link promising free Robux.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "suspicious_link"
+      ]
+    },
+    {
+      "id": "r03",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 1,\n      \"quote\": \"just tell me your password so i can add it to your account\",\n      \"signal_id\": \"credential_request\",\n      \"summary\": \"The contact asked for the child's password to add a rare pet to their account.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "credential_request"
+      ]
+    },
+    {
+      "id": "r04",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"how old are you?\",\n      \"signal_id\": \"age_probe\",\n      \"summary\": \"The contact asked the child's age.\"\n    },\n    {\n      \"message_index\": 2,\n      \"quote\": \"are your parents home right now?\",\n      \"signal_id\": \"age_probe\",\n      \"summary\": \"The contact asked if the child's parents are home.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "age_probe"
+      ]
+    },
+    {
+      "id": "r05",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 1,\n      \"quote\": \"send me a selfie so i know you're real\",\n      \"signal_id\": \"photo_request\",\n      \"summary\": \"The contact asked for a selfie from the child.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "photo_request"
+      ]
+    },
+    {
+      "id": "r06",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"what school do you go to?\",\n      \"signal_id\": \"personal_info\",\n      \"summary\": \"The contact asked for the child's school information.\"\n    },\n    {\n      \"message_index\": 2,\n      \"quote\": \"what city do you live in?\",\n      \"signal_id\": \"personal_info\",\n      \"summary\": \"The contact asked for the child's city information.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "personal_info"
+      ]
+    },
+    {
+      "id": "r07",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 1,\n      \"quote\": \"it'll be our secret\",\n      \"signal_id\": \"secrecy\",\n      \"summary\": \"The contact asked the child to keep their meeting a secret.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "secrecy"
+      ]
+    },
+    {
+      "id": "r08",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"your friends don't really get you like i do\",\n      \"signal_id\": \"isolation\",\n      \"summary\": \"The contact tries to isolate the child by suggesting they don't have real friends and that only the contact understands them.\"\n    },\n    {\n      \"message_index\": 2,\n      \"quote\": \"your parents are too strict, only i understand you\",\n      \"signal_id\": \"isolation\",\n      \"summary\": \"The contact continues to isolate the child by criticizing their parents and reinforcing the idea that only the contact understands them.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "isolation"
+      ]
+    },
+    {
+      "id": "r09",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"send a pic\",\n      \"signal_id\": \"photo_request\",\n      \"summary\": \"The contact asked the child to send a photo.\"\n    },\n    {\n      \"message_index\": 2,\n      \"quote\": \"if you were really my friend you would. come on, everyone does it\",\n      \"signal_id\": \"pressure\",\n      \"summary\": \"The contact pressured the child to send a photo by implying they are not a real friend if they refuse.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "photo_request",
+        "pressure"
+      ]
+    },
+    {
+      "id": "r10",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"give me your phone number so we can text on whatsapp\",\n      \"signal_id\": \"personal_info\",\n      \"summary\": \"The contact asked for the child's phone number to add them on WhatsApp.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "personal_info"
+      ]
+    },
+    {
+      "id": "r11",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"your account will be banned!! send me the 6 digit code you just got to verify\",\n      \"signal_id\": \"credential_request\",\n      \"summary\": \"The contact is asking for a verification code to potentially access the child's account.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "credential_request"
+      ]
+    },
+    {
+      "id": "r12",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 1,\n      \"quote\": \"just don't tell your mom i gave it ok\",\n      \"signal_id\": \"secrecy\",\n      \"summary\": \"The contact asked the child not to tell their mom about the battle pass purchase.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "secrecy"
+      ]
+    },
+    {
+      "id": "r13",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 2,\n      \"quote\": \"if you block me i'll tell everyone your secrets\",\n      \"signal_id\": \"secrecy\",\n      \"summary\": \"The contact threatens to reveal the child's secrets if they block them.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "secrecy"
+      ]
+    },
+    {
+      "id": "r14",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"turn on your camera, let's video call on discord\",\n      \"signal_id\": \"photo_request\",\n      \"summary\": \"The contact asked the child to turn on their camera for a video call.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "photo_request"
+      ]
+    },
+    {
+      "id": "r15",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"check out this free skin generator www.freeskins-now.top/login\",\n      \"signal_id\": \"suspicious_link\",\n      \"summary\": \"The contact shared a link that appears to offer something for free, which could be a risk.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "suspicious_link"
+      ]
+    },
+    {
+      "id": "r16",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"vc \u00e9 muito maduro pra sua idade\",\n      \"signal_id\": \"flattery\",\n      \"summary\": \"The contact complimented the child in a way that seems out of place for their age.\"\n    },\n    {\n      \"message_index\": 1,\n      \"quote\": \"me chama no whatsapp e n\u00e3o conta pros seus pais t\u00e1?\",\n      \"signal_id\": \"secrecy\",\n      \"summary\": \"The contact asked the child to keep their conversation secret and not tell their parents.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "flattery",
+        "secrecy"
+      ]
+    },
+    {
+      "id": "r17",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"GEMAS GR\u00c1TIS!! entra aqui gemas-gratis-br.online e faz login\",\n      \"signal_id\": \"suspicious_link\",\n      \"summary\": \"The contact sent a link promising free gems, which is a suspicious link.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "suspicious_link"
+      ]
+    },
+    {
+      "id": "r18",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"sou do suporte do jogo, me passa sua senha pra eu recuperar sua conta\",\n      \"signal_id\": \"credential_request\",\n      \"summary\": \"The contact asked for the child's password to recover their account.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "credential_request"
+      ]
+    },
+    {
+      "id": "r19",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"quantos anos vc tem?\",\n      \"signal_id\": \"age_probe\",\n      \"summary\": \"The contact asked the child's age.\"\n    },\n    {\n      \"message_index\": 2,\n      \"quote\": \"t\u00e1 sozinho em casa agora?\",\n      \"signal_id\": \"age_probe\",\n      \"summary\": \"The contact asked if the child is alone at home.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "age_probe"
+      ]
+    },
+    {
+      "id": "r20",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"manda uma foto sua pra eu ver se vc \u00e9 de verdade\",\n      \"signal_id\": \"photo_request\",\n      \"summary\": \"The contact asked for a photo of the child to verify their identity.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "photo_request"
+      ]
+    },
+    {
+      "id": "r21",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"em qual escola vc estuda?\",\n      \"signal_id\": \"personal_info\",\n      \"summary\": \"The contact asked for the child's school.\"\n    },\n    {\n      \"message_index\": 1,\n      \"quote\": \"e mora em qual bairro?\",\n      \"signal_id\": \"personal_info\",\n      \"summary\": \"The contact asked for the child's neighborhood.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "personal_info"
+      ]
+    },
+    {
+      "id": "r22",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"bora se encontrar no shopping s\u00e1bado? s\u00f3 n\u00f3s dois\",\n      \"signal_id\": \"meet_offline\",\n      \"summary\": \"The contact suggested meeting in person at a shopping mall.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "meet_offline"
+      ]
+    },
+    {
+      "id": "r23",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"seus pais n\u00e3o entendem vc, s\u00f3 eu entendo\",\n      \"signal_id\": \"isolation\",\n      \"summary\": \"The contact is trying to isolate the child by making them feel understood only by them.\"\n    },\n    {\n      \"message_index\": 1,\n      \"quote\": \"seus amigos s\u00e3o falsos\",\n      \"signal_id\": \"isolation\",\n      \"summary\": \"The contact is trying to isolate the child by discrediting their friends.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "isolation"
+      ]
+    },
+    {
+      "id": "r24",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"manda foto\",\n      \"signal_id\": \"photo_request\",\n      \"summary\": \"The contact asked the child to send a photo.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "photo_request"
+      ]
+    },
+    {
+      "id": "r25",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"te dou 5000 robux\",\n      \"signal_id\": \"gift_offer\",\n      \"summary\": \"The contact offered the child 5000 Robux.\"\n    },\n    {\n      \"message_index\": 1,\n      \"quote\": \"mas \u00e9 segredo nosso, apaga essa conversa depois\",\n      \"signal_id\": \"secrecy\",\n      \"summary\": \"The contact asked the child to keep the conversation a secret and delete it later.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "gift_offer",
+        "secrecy"
+      ]
+    },
+    {
+      "id": "r26",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"chegou um c\u00f3digo no seu email? me fala ele rapidinho pra validar o pr\u00eamio\",\n      \"signal_id\": \"suspicious_link\",\n      \"summary\": \"The contact asked for a code from the child's email to claim a prize, which may be a suspicious link or scam.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "suspicious_link"
+      ]
+    },
+    {
+      "id": "r27",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"me passa seu n\u00famero que eu te chamo no telegram\",\n      \"signal_id\": \"platform_move\",\n      \"summary\": \"The contact asked the child to provide their phone number to communicate via Telegram.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "platform_move"
+      ]
+    },
+    {
+      "id": "r28",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"delete our chat after reading, ok? this is just between us\",\n      \"signal_id\": \"secrecy\",\n      \"summary\": \"The contact asked the child to delete the chat and keep it a secret.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "secrecy"
+      ]
+    },
+    {
+      "id": "r29",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"free gift card if you do what i say\",\n      \"signal_id\": \"gift_offer\",\n      \"summary\": \"The contact offered a free gift card in exchange for the child's actions.\"\n    },\n    {\n      \"message_index\": 2,\n      \"quote\": \"hurry, only 5 minutes or you lose it forever\",\n      \"signal_id\": \"pressure\",\n      \"summary\": \"The contact created urgency to act quickly before losing the gift card.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "gift_offer",
+        "pressure"
+      ]
+    },
+    {
+      "id": "r30",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"vc tem quantos anos? t\u00e1 em que s\u00e9rie?\",\n      \"signal_id\": \"age_probe\",\n      \"summary\": \"The contact asked the child about their age and grade.\"\n    },\n    {\n      \"message_index\": 2,\n      \"quote\": \"n\u00e3o fala de mim pra ningu\u00e9m\",\n      \"signal_id\": \"secrecy\",\n      \"summary\": \"The contact asked the child to keep their conversation a secret.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 2
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "age_probe",
+        "secrecy"
+      ]
+    },
+    {
+      "id": "r31",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"you're way more mature than other kids your age\",\n      \"signal_id\": \"flattery\",\n      \"summary\": \"The contact complimented the child in a way that seems unusual for their age.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "flattery"
+      ]
+    },
+    {
+      "id": "r32",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"vc \u00e9 muito maduro pra sua idade, nem parece crian\u00e7a\",\n      \"signal_id\": \"flattery\",\n      \"summary\": \"The contact complimented the child for being mature for their age.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "flattery"
+      ]
+    },
+    {
+      "id": "r33",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"i made a new account since you blocked me\",\n      \"signal_id\": \"returning_after_block\",\n      \"summary\": \"The contact mentioned they made a new account after being blocked.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "returning_after_block"
+      ]
+    },
+    {
+      "id": "r34",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"oi sou eu de novo, criei outra conta j\u00e1 que vc me bloqueou\",\n      \"signal_id\": \"returning_after_block\",\n      \"summary\": \"The contact says they created a new account after being blocked.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "returning_after_block"
+      ]
+    },
+    {
+      "id": "r35",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"i have your pics. send me a $50 gift card or i'll post them for all your friends\",\n      \"signal_id\": \"sextorion\",\n      \"summary\": \"The contact threatened to share the child's pictures if they didn't send a $50 gift card.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "r36",
+      "label": "risky",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"se vc n\u00e3o me mandar 100 reais no pix eu mando suas fotos pros seus amigos\",\n      \"signal_id\": \"sextortion\",\n      \"summary\": \"The contact threatened to share the child's photos with their friends if they didn't send 100 reais via PIX.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "sextortion"
+      ]
+    },
+    {
+      "id": "s31",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"pay 50 coins for my sword and it's yours\",\n      \"signal_id\": \"gift_offer\",\n      \"summary\": \"The contact offered an in-game item for payment.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": [
+        "gift_offer"
+      ]
+    },
+    {
+      "id": "s32",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s33",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "[]",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 0
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    },
+    {
+      "id": "s34",
+      "label": "safe",
+      "schema_ok": false,
+      "raw_output": "{\n  \"signals\": [\n    {\n      \"message_index\": 0,\n      \"quote\": \"sou eu, o Leo da sala, esqueci a senha e criei outra conta, me adiciona\",\n      \"signal_id\": \"returning_after_block\",\n      \"summary\": \"The contact claims to be someone the child knows and says they created a new account after forgetting their password.\"\n    }\n  ]\n}",
+      "strict": {
+        "severity": "unknown",
+        "analysis_status": "invalid_output",
+        "malformed_items": 1
+      },
+      "strict_signals": [],
+      "lenient_signals": []
+    }
+  ]
 }

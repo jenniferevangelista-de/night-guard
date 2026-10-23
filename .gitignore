@@ -7,3 +7,7 @@ eval/last_run.txt
 .temporal.db*
 train/runs/
 data/
+
+train/log_*.txt
+eval/log_*.txt
+.pytest_cache/
