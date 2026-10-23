@@ -121,6 +121,8 @@ function applyLang(){
   $("#play").textContent = S[lang].play; $("#reset").textContent = S[lang].reset;
 }
 function reset(){ timers.forEach(clearTimeout); timers=[]; msgs.length=0; render(); if(guard) guard.reset(); }
+// Turning the guard off in another tab (home page) applies here too.
+addEventListener("storage", e=>{ if(e.key==="ng_live_guard"){ startGuard(); renderToggle(); } });
 $("#gToggle").onclick = ()=>{ try{ localStorage.setItem("ng_live_guard", guardOn() ? "off" : "on"); }catch(e){} startGuard(); renderToggle(); };
 $("#play").onclick = ()=>{ reset(); S[lang].script.forEach(([who,text],i)=>timers.push(setTimeout(()=>add(who,text), 900+i*2600))); };
 $("#reset").onclick = reset;

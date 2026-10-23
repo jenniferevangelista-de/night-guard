@@ -59,9 +59,10 @@
       const m = Number.isInteger(s.message_index) ? (msgs || [])[s.message_index] : null;
       return `${((m && m.name) || "").trim().toLowerCase()}|${s.id}|${(s.quote || "").trim().toLowerCase()}`;
     };
-    let timer = null, busy = false, pending = null;
+    let timer = null, busy = false, pending = null, closed = false;   // closed: turned off, never analyze again
 
     function show(res, msgs) {
+      if (closed) return;
       const fresh = res.signals.filter(s => !seen.has(key(s, msgs)));
       if (!fresh.length) return;
       fresh.forEach(s => seen.add(key(s, msgs)));
@@ -81,27 +82,31 @@
     }
 
     async function run(messages) {
+      if (closed) return;
       if (busy) { pending = messages; return; }
       busy = true;
       const sent = messages.slice(-12);
       try {
         const res = await analyze({ messages: sent, lang, app });
+        if (closed) return;   // turned off while waiting: a request already sent can't be undone, but its answer is dropped
         const ok = res && ["ok", "partial"].includes(res.analysis_status || "ok") && res.severity && res.severity !== "unknown";
         setBadge(!!ok);
         if (ok && res.signals && res.severity !== "none") show(res, sent);
-      } catch (e) { setBadge(false); /* server offline: say so, never "all fine" */ }
-      busy = false;
+      } catch (e) { if (!closed) setBadge(false); /* server offline: say so, never "all fine" */ }
+      finally { busy = false; }
+      if (closed) { pending = null; return; }
       if (pending) { const p = pending; pending = null; run(p); }
     }
 
     return {
       // Call with the whole visible conversation whenever a new contact message appears.
       update(messages) {
-        if (!messages.length || messages[messages.length - 1].from === "me") return;
+        if (closed || !messages.length || messages[messages.length - 1].from === "me") return;
         clearTimeout(timer); timer = setTimeout(() => run(messages), 1200);
       },
       reset() { seen.clear(); document.querySelectorAll(".ng-pop").forEach(n => n.remove()); },
-      destroy() { badge.remove(); document.querySelectorAll(".ng-pop").forEach(n => n.remove()); },
+      destroy() { closed = true; clearTimeout(timer); timer = null; pending = null; badge.remove(); document.querySelectorAll(".ng-pop").forEach(n => n.remove()); },
+      get closed() { return closed; },
     };
   }
 

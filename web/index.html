@@ -237,6 +237,7 @@ const T = {
     sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
     sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
     sh3:"③ See what parents get", sh3d:"Family rules, alerts with what to do now, and phone alerts.",
+    gbChecking:"Checking Night Guard…", gbUnknown:"Can't check Night Guard right now", gbUnknownSub:"The server didn't answer. This is not an \"all clear\": trying again every few seconds.", gbRetry:"Try again",
     gbOn:"🟢 Night Guard is ON", gbOff:"⚪ Night Guard is OFF", gbTurnOn:"Turn on", gbTurnOff:"Turn off", gbLive:"▶ See it live",
     gbDemoOn:"Online demo: it watches the fictional game chat and warns the kid by itself. Press ▶ See it live.",
     gbDemoOff:"Turn it on, then press ▶ See it live to watch it warn the kid.",
@@ -301,6 +302,7 @@ const T = {
     sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
     sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
     sh3:"③ Veja o que os pais recebem", sh3d:"Regras da família, alertas com o que fazer e aviso no celular.",
+    gbChecking:"Verificando o Night Guard…", gbUnknown:"Não consegui verificar o Night Guard agora", gbUnknownSub:"O servidor não respondeu. Isso não quer dizer que está tudo bem: tentando de novo a cada poucos segundos.", gbRetry:"Tentar de novo",
     gbOn:"🟢 Night Guard LIGADO", gbOff:"⚪ Night Guard DESLIGADO", gbTurnOn:"Ligar", gbTurnOff:"Desligar", gbLive:"▶ Ver ao vivo",
     gbDemoOn:"Demo online: ele vigia o chat de jogo fictício e avisa a criança sozinho. Aperte ▶ Ver ao vivo.",
     gbDemoOff:"Ligue e depois aperte ▶ Ver ao vivo para ver ele avisando a criança.",
@@ -567,14 +569,24 @@ $("#sh2").onclick = e=>{ e.preventDefault(); show("check"); $("#paste").value=EX
 $("#sh3").onclick = e=>{ e.preventDefault(); show("family"); };
 let gState = null, nState = null, gTimer = null;
 async function loadGuard(){
-  try{ gState = await (await fetch("/api/guard/status")).json(); }catch(e){ gState = {available:false}; }
+  try{
+    const r = await fetch("/api/guard/status");
+    if(!r.ok) throw new Error("status " + r.status);
+    const j = await r.json();
+    gState = typeof j.available === "boolean" ? j : {unknown:true};   // demo only when the server says so
+  }catch(e){ gState = {unknown:true}; }
   try{ nState = await (await fetch("/api/family/notify")).json(); }catch(e){ nState = {available:false}; }
   renderGuard();
 }
 const liveGuard = { get(){ try{ return localStorage.getItem("ng_live_guard")!=="off"; }catch(e){ return true; } },
                     set(on){ try{ localStorage.setItem("ng_live_guard", on?"on":"off"); }catch(e){} } };
 function renderBar(){
-  const local = gState && gState.available, on = local ? !!gState.running : liveGuard.get();
+  if(!gState || gState.unknown){                       // status not confirmed: never show "on"
+    $("#gbar").classList.add("off"); $("#gbIcon").textContent = "⚠️";
+    $("#gbMain").textContent = t(gState ? "gbUnknown" : "gbChecking"); $("#gbSub").textContent = gState ? t("gbUnknownSub") : "";
+    $("#gbToggle").textContent = t("gbRetry"); $("#gbToggle").classList.add("gb-off"); return;
+  }
+  const local = gState.available, on = local ? !!gState.running : liveGuard.get();
   $("#gbar").classList.toggle("off", !on);
   $("#gbIcon").textContent = on ? "🛡️" : "😴";
   $("#gbMain").textContent = t(on ? "gbOn" : "gbOff");
@@ -585,7 +597,8 @@ function renderBar(){
   $("#gbLive").href = "/game?lang=" + lang; $("#liveLink").href = "/game?lang=" + lang; $("#sh1").href = "/game?lang=" + lang;
 }
 $("#gbToggle").onclick = async ()=>{
-  if(gState && gState.available){
+  if(!gState || gState.unknown){ await loadGuard(); return; }
+  if(gState.available){
     const r = await fetch(gState.running ? "/api/guard/stop" : "/api/guard/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({lang})});
     if(r.status===401){ show("family"); return; }   // parents must sign in first
     gState = await r.json();
@@ -594,7 +607,7 @@ $("#gbToggle").onclick = async ()=>{
 };
 function renderGuard(){
   renderBar();
-  if(!gState) return;
+  if(!gState || gState.unknown) return;
   if(!gState.available){ $("#gStatus").textContent = t("gDemo"); $("#gStatus").style.fontWeight="400"; $("#gBtn").style.display="none"; }
   else {
     $("#gBtn").style.display="";
@@ -661,7 +674,8 @@ function renderFamily(){
 }
 
 applyLang();
-loadGuard(); setInterval(()=>{ if(gState && gState.available) loadGuard(); }, 4000);
+loadGuard(); setInterval(()=>{ if(!gState || gState.available || gState.unknown) loadGuard(); }, 4000);
+addEventListener("storage", e=>{ if(e.key==="ng_live_guard") renderBar(); });   // toggled in another tab
 $("#liveLink").href = "/game?lang=" + lang;
 if(["check","practice","tell","family"].includes(QS.get("tab"))) show(QS.get("tab"));
 </script>

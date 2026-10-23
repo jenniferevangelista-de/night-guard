@@ -62,3 +62,34 @@ test("same words from another contact warn again; same message does not", async 
   assert.ok(!body[0].classList.has("ng-paused"));
   g.destroy();
 });
+
+// R07 (review 004): turning the guard off must stop queued and in-flight work.
+function manualTimers() {
+  const q = [];
+  global.setTimeout = f => { q.push(f); return q.length; };
+  global.clearTimeout = id => { if (id) q[id - 1] = null; };
+  return () => { const fs = q.splice(0); fs.forEach(f => f && f()); };
+}
+
+test("turn off before the debounce fires: no analysis is sent", async () => {
+  body.length = 0;
+  const flush = manualTimers(); let calls = 0;
+  const g = window.NightGuardLive.create({ analyze: async () => { calls++; return { severity: "none", analysis_status: "ok", signals: [] }; } });
+  g.update([{ from: "them", name: "Fictional contact", text: "synthetic benign text" }]);
+  g.destroy();
+  flush(); await tick();
+  assert.strictEqual(calls, 0);
+  g.update([{ from: "them", name: "Fictional contact", text: "more text" }]); flush(); await tick();
+  assert.strictEqual(calls, 0, "a destroyed guard ignores new messages");
+  global.setTimeout = f => { f(); return 0; }; global.clearTimeout = () => {};
+});
+
+test("turn off while a request is in flight: its answer is dropped", async () => {
+  body.length = 0;
+  let resolve; const g = window.NightGuardLive.create({ analyze: () => new Promise(r => { resolve = r; }) });
+  g.update([{ from: "them", name: "A", text: "keep it secret" }]); await tick();
+  g.destroy();
+  resolve({ severity: "high", analysis_status: "ok", signals: [{ id: "secrecy", message_index: 0, quote: "keep it secret", kid: "DANGER" }] });
+  await tick(); await tick();
+  assert.strictEqual(pops().length, 0);
+});
