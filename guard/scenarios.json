@@ -1,0 +1,72 @@
+[
+  {
+    "id": "free_robux",
+    "skill": "suspicious_link",
+    "title": {"en": "The free Robux link", "pt": "O link de Robux grátis"},
+    "steps": [
+      {
+        "contact": {"en": "FREE 10,000 ROBUX!! Event ends in 5 min, log in here: robux-claim-gift.xyz", "pt": "10.000 ROBUX GRÁTIS!! Acaba em 5 min, faz login aqui: robux-claim-gift.xyz"},
+        "choices": [
+          {"id": "click", "text": {"en": "Click and log in fast", "pt": "Clicar e fazer login rápido"}, "good": false,
+           "feedback": {"en": "That site is not the official game. Fake login pages steal accounts. The countdown is there to stop you from thinking.", "pt": "Esse site não é o jogo oficial. Páginas de login falsas roubam contas. A contagem regressiva existe para você não pensar."}},
+          {"id": "ask", "text": {"en": "Ask Night Guard to check the link", "pt": "Pedir para o Night Guard conferir o link"}, "good": true,
+           "feedback": {"en": "Great call. Official codes are only redeemed inside the game or on its official site, never on random links.", "pt": "Ótima escolha. Códigos oficiais só são resgatados dentro do jogo ou no site oficial, nunca em links aleatórios."}},
+          {"id": "ignore", "text": {"en": "Ignore and keep playing", "pt": "Ignorar e continuar jogando"}, "good": true,
+           "feedback": {"en": "Also safe! You don't owe a reply to anyone offering 'free' stuff.", "pt": "Também é seguro! Você não precisa responder quem oferece coisa 'grátis'."}}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "staff_password",
+    "skill": "credential_request",
+    "title": {"en": "The fake moderator", "pt": "O falso moderador"},
+    "steps": [
+      {
+        "contact": {"en": "Hi, I'm game staff. Your account was reported. Send me your password so I can verify it or you'll be banned today.", "pt": "Oi, sou da equipe do jogo. Sua conta foi denunciada. Me manda sua senha pra eu verificar ou você vai ser banido hoje."},
+        "choices": [
+          {"id": "send", "text": {"en": "Send the password, I don't want a ban", "pt": "Mandar a senha, não quero ser banido"}, "good": false,
+           "feedback": {"en": "Real staff never ask for your password. The ban threat is pressure to make you hurry.", "pt": "A equipe de verdade nunca pede sua senha. A ameaça de banimento é pressão para você ter pressa."}},
+          {"id": "refuse", "text": {"en": "Say no and block", "pt": "Dizer não e bloquear"}, "good": true,
+           "feedback": {"en": "Perfect. Nobody needs your password. Not friends, not staff, not anyone.", "pt": "Perfeito. Ninguém precisa da sua senha. Nem amigo, nem moderador, ninguém."}},
+          {"id": "tell", "text": {"en": "Show a trusted adult", "pt": "Mostrar para um adulto de confiança"}, "good": true,
+           "feedback": {"en": "Smart. An adult can help you report the account inside the game.", "pt": "Esperto. Um adulto pode te ajudar a denunciar a conta dentro do jogo."}}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "secret_friend",
+    "skill": "secrecy",
+    "title": {"en": "The friend who wants a secret", "pt": "O amigo que quer segredo"},
+    "steps": [
+      {
+        "contact": {"en": "You're way more mature than kids your age. Let's talk on Snap instead, and don't tell your parents, they wouldn't get it.", "pt": "Você é muito mais maduro que a galera da sua idade. Bora conversar no Snap, e não conta pros seus pais, eles não iam entender."},
+        "choices": [
+          {"id": "move", "text": {"en": "Add them on Snap", "pt": "Adicionar no Snap"}, "good": false,
+           "feedback": {"en": "Three red flags in one message: flattery, moving to a private app, and asking for a secret from your family.", "pt": "Três sinais de alerta em uma mensagem: elogio exagerado, mudar para um app privado e pedir segredo da família."}},
+          {"id": "no", "text": {"en": "Say 'no thanks' and stop replying", "pt": "Dizer 'não, valeu' e parar de responder"}, "good": true,
+           "feedback": {"en": "Good. You never have to explain a no.", "pt": "Boa. Você nunca precisa explicar um não."}},
+          {"id": "help", "text": {"en": "Use 'Tell someone' in Night Guard", "pt": "Usar 'Contar para alguém' no Night Guard"}, "good": true,
+           "feedback": {"en": "Best move. Asking for a secret is exactly the moment to tell someone you trust. You're not in trouble.", "pt": "Melhor escolha. Pedir segredo é exatamente o momento de contar para alguém de confiança. Você não está encrencado."}}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "school_question",
+    "skill": "personal_info",
+    "title": {"en": "Where do you live?", "pt": "Onde você mora?"},
+    "steps": [
+      {
+        "contact": {"en": "We play so well together! What school do you go to? What city?", "pt": "A gente joga muito bem junto! Em que escola você estuda? Qual cidade?"},
+        "choices": [
+          {"id": "answer", "text": {"en": "Tell them, they seem nice", "pt": "Contar, parece legal"}, "good": false,
+           "feedback": {"en": "Being nice in a game doesn't mean they need to know where to find you in real life.", "pt": "Ser legal no jogo não significa que a pessoa precisa saber onde te encontrar na vida real."}},
+          {"id": "dodge", "text": {"en": "'I keep that offline 😄 wanna play another round?'", "pt": "'Isso eu não falo online 😄 bora mais uma?'"}, "good": true,
+           "feedback": {"en": "Nice! You stayed friendly and kept your info private.", "pt": "Boa! Você foi simpático e protegeu suas informações."}}
+        ]
+      }
+    ]
+  }
+]

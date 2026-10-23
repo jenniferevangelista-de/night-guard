@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Night Guard</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<style>
+  :root{
+    --bg:#0f1530; --bg2:#161d3f; --card:#1d2550; --line:#2d3770;
+    --ink:#eef1ff; --muted:#a6aed6; --accent:#ffd36e; --accent-ink:#2a2000;
+    --good:#5fd49a; --warn:#ffb35c; --bad:#ff7a8a; --me:#3a4aa0; --them:#262f63;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Nunito","Segoe UI",system-ui,sans-serif;background:radial-gradient(1200px 600px at 80% -10%,#2a3577 0,transparent 60%),var(--bg);color:var(--ink);min-height:100vh}
+  .wrap{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+  header{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .logo{font-size:38px}
+  h1{margin:0;font-size:26px;letter-spacing:.3px}
+  .tag{color:var(--muted);font-size:14px;margin-top:2px}
+  .spacer{flex:1}
+  .pill{border:1px solid var(--line);background:var(--bg2);color:var(--muted);border-radius:999px;padding:6px 12px;font-size:12px}
+  .pill b{color:var(--good)}
+  .lang button{background:none;border:1px solid var(--line);color:var(--muted);padding:6px 10px;border-radius:10px;cursor:pointer;font:inherit}
+  .lang button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  nav{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 18px}
+  nav button{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:14px 10px;border-radius:var(--radius);cursor:pointer;font:inherit;font-weight:700;text-align:left}
+  nav button span{display:block;font-weight:400;color:var(--muted);font-size:13px;margin-top:3px}
+  nav button.on{outline:2px solid var(--accent);background:#252e63}
+  .panel{display:none}.panel.on{display:block}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+  textarea{width:100%;min-height:150px;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;resize:vertical}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:11px 16px;font:inherit;font-weight:800;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:600}
+  .btn:disabled{opacity:.5;cursor:wait}
+  .chip{background:var(--bg2);border:1px dashed var(--line);color:var(--muted);border-radius:10px;padding:7px 10px;font:inherit;font-size:13px;cursor:pointer}
+  .muted{color:var(--muted)} .small{font-size:13px}
+  .chat{display:flex;flex-direction:column;gap:8px;margin:6px 0 4px}
+  .b{max-width:78%;padding:9px 12px;border-radius:14px;line-height:1.35;position:relative}
+  .b.me{align-self:flex-end;background:var(--me)}
+  .b.them{align-self:flex-start;background:var(--them)}
+  .b.flag{outline:2px solid var(--warn)}
+  mark{background:#ffd36e33;color:var(--accent);border-radius:4px;padding:0 2px}
+  .sig{border-left:4px solid var(--warn);padding:10px 12px;background:var(--bg2);border-radius:10px;margin:8px 0}
+  .sig h4{margin:0 0 4px;font-size:15px}
+  .sig .q{color:var(--muted);font-style:italic;font-size:14px}
+  .sig.known{border-left-color:var(--good)}
+  .verdict{display:flex;gap:12px;align-items:center;font-weight:800;font-size:18px}
+  .dot{width:14px;height:14px;border-radius:50%}
+  .quiz{background:#2a2f5e;border:1px solid var(--accent);border-radius:14px;padding:14px;margin:10px 0}
+  .opt{display:block;width:100%;text-align:left;margin:8px 0;background:var(--bg2);border:1px solid var(--line);color:var(--ink);padding:12px;border-radius:12px;font:inherit;cursor:pointer}
+  .opt.good{border-color:var(--good)} .opt.bad{border-color:var(--bad)}
+  .fb{padding:12px;border-radius:12px;background:var(--bg2);margin-top:8px}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+  .scn{cursor:pointer}
+  .scn.done{border-color:var(--good)}
+  label.ck{display:flex;gap:8px;align-items:flex-start;padding:8px;border-radius:10px;background:var(--bg2);margin:6px 0}
+  input,select{background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px;font:inherit}
+  .lazy{display:flex;align-items:center;gap:10px}
+  .bar{flex:1;height:8px;border-radius:99px;background:var(--bg2);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--good);width:0;transition:width .4s}
+  .spin{display:inline-block;animation:s 1s linear infinite} @keyframes s{to{transform:rotate(360deg)}}
+  footer{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}
+  @media (max-width:560px){nav{grid-template-columns:1fr}.b{max-width:92%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">🛡️🌙</div>
+    <div>
+      <h1>Night Guard</h1>
+      <div class="tag" data-t="tagline"></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="pill" id="health">…</div>
+    <div class="lang"><button data-l="en">EN</button> <button data-l="pt">PT</button></div>
+  </header>
+
+  <nav>
+    <button data-p="check" class="on"><span data-t="tab1sub"></span></button>
+    <button data-p="practice"><span data-t="tab2sub"></span></button>
+    <button data-p="tell"><span data-t="tab3sub"></span></button>
+  </nav>
+
+  <!-- 1. Something felt off -->
+  <section class="panel on" id="p-check">
+    <div class="card">
+      <div class="small muted" data-t="pasteHelp"></div>
+      <textarea id="paste"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" id="analyzeBtn" data-t="analyze"></button>
+        <span class="small muted" data-t="examples"></span>
+        <button class="chip" data-ex="scam">🎁 Robux</button>
+        <button class="chip" data-ex="secret">🤫 Snap</button>
+        <button class="chip" data-ex="innocent">🗺️ <span data-t="innocent"></span></button>
+        <button class="chip" data-ex="normal">🎮 gg</button>
+      </div>
+    </div>
+    <div id="result"></div>
+  </section>
+
+  <!-- 2. Practice -->
+  <section class="panel" id="p-practice">
+    <div class="card">
+      <div class="lazy"><span class="small" data-t="lazyLabel"></span><div class="bar"><i id="lazyBar"></i></div><span class="small muted" id="lazyTxt"></span></div>
+    </div>
+    <div class="grid2" id="scnList"></div>
+    <div id="scnPlay"></div>
+  </section>
+
+  <!-- 3. Tell someone -->
+  <section class="panel" id="p-tell">
+    <div class="card">
+      <div style="font-weight:800;margin-bottom:6px" data-t="tellTitle"></div>
+      <div class="small muted" data-t="tellHelp"></div>
+      <div id="quotes"></div>
+      <div class="row" style="margin-top:8px">
+        <label class="small" data-t="who"></label>
+        <select id="who"></select>
+      </div>
+      <div style="margin-top:10px"><textarea id="note" style="min-height:70px"></textarea></div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="draftBtn" data-t="draft"></button></div>
+    </div>
+    <div id="draftOut"></div>
+  </section>
+
+  <footer data-t="footer"></footer>
+</div>
+
+<script>
+const T = {
+  en:{
+    tagline:"Helps you understand what happened, and choose how to ask for help.",
+    tab1:"Something felt off", tab1sub:"Paste a chat. I'll point out what to notice.",
+    tab2:"Practice", tab2sub:"Try short, safe scenarios before they happen.",
+    tab3:"Tell someone", tab3sub:"Turn it into a message you control.",
+    pasteHelp:"Paste the chat, one message per line. Start your own lines with “Me:”. Fictional examples below.",
+    analyze:"Check this chat", examples:"Try:", innocent:"innocent secret",
+    checking:"Reading locally…",
+    before:"Before I show you: did anything in this chat feel off to you?",
+    yes:"Yes", unsure:"Not sure", no:"No",
+    noneTitle:"Nothing worrying found",
+    noneBody:"I didn't spot common pressure tricks. You know the context better than me. If it still feels off, trust that feeling, and you can still tell someone.",
+    lowTitle:"Something to notice", lowBody:"This could be totally innocent (a classmate, a friend you know). You know the context. Here's what caught my eye:",
+    medTitle:"A few red flags here", highTitle:"This is a good moment to tell someone you trust",
+    youKnow:"You already know this one ✓", tellBtn:"Tell someone about this", gotIt:"Got it",
+    quizRight:"Your instinct was right.", quizMiss:"Good that you checked. Here's what I noticed.", quizCalm:"Agreed, nothing big here.",
+    lazyLabel:"Night Guard repeats less as you learn:", lessons:"lessons you know",
+    scnPick:"Pick a scenario", again:"Try another",
+    tellTitle:"Tell someone", tellHelp:"Choose what you want to share. Nothing is sent automatically. You copy it and send it yourself.",
+    noQuotes:"Check a chat first, or just write in your own words below.",
+    who:"Send to:", draft:"Draft my message", notePh:"In your own words (optional): what happened? how do you feel?",
+    copy:"Copy", copied:"Copied ✓", edit:"You can edit anything before sending.",
+    whoOpts:["Mom","Dad","Grandma","Teacher","Older sibling","Someone I trust"],
+    footer:"Runs on your computer with Gemma (open model). Chats never leave this device. A helper, not a replacement for trusted adults. Examples are fictional.",
+    local:"local", sev:{none:"OK",low:"Notice",medium:"Careful",high:"Tell someone"}
+  },
+  pt:{
+    tagline:"Te ajuda a entender o que aconteceu e escolher como pedir ajuda.",
+    tab1:"Algo me incomodou", tab1sub:"Cole uma conversa. Eu mostro o que observar.",
+    tab2:"Praticar", tab2sub:"Treine situações curtas e seguras antes de acontecerem.",
+    tab3:"Contar para alguém", tab3sub:"Transforme em uma mensagem que você controla.",
+    pasteHelp:"Cole a conversa, uma mensagem por linha. Comece suas falas com “Eu:”. Exemplos fictícios abaixo.",
+    analyze:"Conferir conversa", examples:"Teste:", innocent:"segredo inocente",
+    checking:"Lendo aqui no computador…",
+    before:"Antes de eu mostrar: alguma coisa nessa conversa te pareceu estranha?",
+    yes:"Sim", unsure:"Não sei", no:"Não",
+    noneTitle:"Não encontrei nada preocupante",
+    noneBody:"Não vi truques de pressão comuns. Você conhece o contexto melhor que eu. Se ainda parecer estranho, confie nesse sentimento: você ainda pode contar para alguém.",
+    lowTitle:"Algo para observar", lowBody:"Pode ser totalmente inocente (um colega, um amigo que você conhece). Você conhece o contexto. Isto me chamou atenção:",
+    medTitle:"Alguns sinais de alerta aqui", highTitle:"É um bom momento para contar a alguém de confiança",
+    youKnow:"Esse você já sabe ✓", tellBtn:"Contar para alguém", gotIt:"Entendi",
+    quizRight:"Seu instinto estava certo.", quizMiss:"Que bom que você conferiu. Veja o que eu notei.", quizCalm:"Concordo, nada grave aqui.",
+    lazyLabel:"O Night Guard repete menos conforme você aprende:", lessons:"lições que você sabe",
+    scnPick:"Escolha um cenário", again:"Tentar outro",
+    tellTitle:"Contar para alguém", tellHelp:"Escolha o que quer compartilhar. Nada é enviado sozinho. Você copia e manda.",
+    noQuotes:"Confira uma conversa primeiro, ou escreva com suas palavras abaixo.",
+    who:"Mandar para:", draft:"Escrever minha mensagem", notePh:"Com suas palavras (opcional): o que aconteceu? como você se sente?",
+    copy:"Copiar", copied:"Copiado ✓", edit:"Você pode mudar o que quiser antes de mandar.",
+    whoOpts:["Mãe","Pai","Avó","Professora","Irmão mais velho","Alguém de confiança"],
+    footer:"Roda no seu computador com Gemma (modelo aberto). As conversas nunca saem deste aparelho. Uma ajuda, não substitui adultos de confiança. Exemplos fictícios.",
+    local:"local", sev:{none:"OK",low:"Observe",medium:"Cuidado",high:"Conte a alguém"}
+  }
+};
+const EX = {
+  en:{
+    scam:"xX_GiftBot_Xx: FREE 10000 ROBUX!! just log in here robux-gift-claim.xyz\nMe: is it real?\nxX_GiftBot_Xx: yes hurry it ends today, dont tell anyone",
+    secret:"Alex_17: you're really mature for your age\nMe: thanks\nAlex_17: let's talk on snap instead, add me there\nAlex_17: and don't tell your parents ok? they wouldn't get it",
+    innocent:"Sam: secret of the map: there's a chest behind the waterfall, don't tell anyone lol\nMe: no way, going now",
+    normal:"Leo: gg that boss was insane\nMe: lol i died 5 times\nLeo: next time use the ice sword"
+  },
+  pt:{
+    scam:"Presentes_BR: 10000 ROBUX GRÁTIS!! faz login aqui robux-gift-claim.xyz\nEu: é verdade?\nPresentes_BR: sim corre que acaba hoje, não conta pra ninguém",
+    secret:"Alex_17: vc é muito maduro pra sua idade\nEu: valeu\nAlex_17: bora conversar no snap, me adiciona lá\nAlex_17: e não conta pros seus pais tá? eles não iam entender",
+    innocent:"Sam: segredo do mapa: tem um baú atrás da cachoeira, não conta pra ninguém kkk\nEu: sério?? vou lá agora",
+    normal:"Leo: boa partida mano\nEu: vlw, morri 5 vezes kkk\nLeo: usa a espada de gelo da próxima"
+  }
+};
+let lang = (()=>{try{return localStorage.getItem("ng_lang")||(navigator.language||"en").slice(0,2)}catch(e){return "en"}})();
+if(!T[lang]) lang="en";
+const store = {
+  get(){try{return JSON.parse(localStorage.getItem("ng_progress")||"{}")}catch(e){return {}}},
+  set(v){try{localStorage.setItem("ng_progress",JSON.stringify(v))}catch(e){}}
+};
+let progress = store.get(); progress.seen=progress.seen||{}; progress.practiced=progress.practiced||{};
+let last = null, scenarios = [];
+const $ = s=>document.querySelector(s), t = k=>T[lang][k];
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function known(sig){ return (progress.practiced[sig]||0)>=1 || (progress.seen[sig]||0)>=2; }
+
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach(el=>{ el.textContent = t(el.dataset.t); });
+  document.querySelectorAll("nav button").forEach((b,i)=>{
+    const k=["tab1","tab2","tab3"][i]; b.firstChild.nodeType===3 ? b.firstChild.textContent=t(k) : b.insertBefore(document.createTextNode(t(k)), b.firstChild);
+  });
+  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===lang));
+  $("#paste").placeholder = EX[lang].secret;
+  $("#note").placeholder = t("notePh");
+  $("#who").innerHTML = t("whoOpts").map(o=>`<option>${esc(o)}</option>`).join("");
+  renderLazy(); renderScenarios(); renderQuotes();
+  if(last) renderResult(last, true);
+}
+
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;try{localStorage.setItem("ng_lang",lang)}catch(e){} applyLang();});
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>show(b.dataset.p));
+function show(p){
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.p===p));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("on",x.id==="p-"+p));
+}
+document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{$("#paste").value=EX[lang][b.dataset.ex];});
+
+fetch("/api/health").then(r=>r.json()).then(h=>{$("#health").innerHTML=`🔒 ${esc(h.model)} · <b>${t("local")}</b>`}).catch(()=>{$("#health").textContent="⚠️ offline"});
+
+/* ---------- 1. Check ---------- */
+$("#analyzeBtn").onclick = async ()=>{
+  const text = $("#paste").value.trim(); if(!text) return;
+  const btn=$("#analyzeBtn"); btn.disabled=true;
+  $("#result").innerHTML = `<div class="card muted"><span class="spin">🌙</span> ${t("checking")}</div>`;
+  try{
+    const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,lang})});
+    last = await r.json(); last.answered=null;
+    renderResult(last);
+  }catch(e){ $("#result").innerHTML = `<div class="card">⚠️ ${esc(e)}</div>`; }
+  btn.disabled=false;
+};
+
+function chatHTML(res){
+  const flagged = new Map(); res.signals.forEach(s=>{ if(!flagged.has(s.message_index)) flagged.set(s.message_index,[]); flagged.get(s.message_index).push(s); });
+  return `<div class="chat">${res.messages.map((m,i)=>{
+    let txt = esc(m.text);
+    (flagged.get(i)||[]).forEach(s=>{ if(s.quote){ const q=esc(s.quote); if(txt.includes(q)) txt=txt.replace(q,`<mark>${q}</mark>`);} });
+    return `<div class="b ${m.from==="me"?"me":"them"} ${flagged.has(i)?"flag":""}">${txt}</div>`;
+  }).join("")}</div>`;
+}
+
+function renderResult(res, rerender){
+  if(res.answered===null && res.messages.length){
+    $("#result").innerHTML = `<div class="card">${chatHTML({...res,signals:[]})}
+      <div class="quiz"><div style="font-weight:800">${t("before")}</div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" data-a="yes">${t("yes")}</button>
+        <button class="btn ghost" data-a="unsure">${t("unsure")}</button>
+        <button class="btn ghost" data-a="no">${t("no")}</button></div></div></div>`;
+    $("#result").querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{res.answered=b.dataset.a; renderResult(res);});
+    return;
+  }
+  if(!rerender){ res.signals.forEach(s=>{progress.seen[s.id]=(progress.seen[s.id]||0)+1}); store.set(progress); renderLazy(); }
+  const color={none:"var(--good)",low:"var(--accent)",medium:"var(--warn)",high:"var(--bad)"}[res.severity];
+  const title={none:t("noneTitle"),low:t("lowTitle"),medium:t("medTitle"),high:t("highTitle")}[res.severity];
+  const risky = res.severity!=="none";
+  const fb = res.answered==="yes"&&risky ? t("quizRight") : (res.answered!=="yes"&&risky ? t("quizMiss") : (!risky&&res.answered==="no"?t("quizCalm"):""));
+  const sigs = res.signals.map(s=>{
+    const k = known(s.id);
+    return `<div class="sig ${k?"known":""}"><h4>${esc(s.label)}${k?` · <span class="small" style="color:var(--good)">${t("youKnow")}</span>`:""}</h4>
+      ${s.quote?`<div class="q">“${esc(s.quote)}”</div>`:""}
+      ${k?"":`<div style="margin-top:6px">${esc(s.lesson)}</div>`}</div>`;
+  }).join("");
+  $("#result").innerHTML = `<div class="card">
+    <div class="verdict"><span class="dot" style="background:${color}"></span>${esc(title)}</div>
+    ${fb?`<div class="small muted" style="margin-top:4px">${esc(fb)}</div>`:""}
+    ${chatHTML(res)}
+    ${res.severity==="none"?`<p>${t("noneBody")}</p>`:""}
+    ${res.severity==="low"?`<p class="muted">${t("lowBody")}</p>`:""}
+    ${sigs}
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="toTell">${t("tellBtn")}</button>
+      <span class="small muted">🔒 ${esc(res.model)} · ${res.latency_s}s · ${t("local")}</span>
+    </div></div>`;
+  $("#toTell").onclick=()=>{renderQuotes(); show("tell");};
+}
+
+/* ---------- 2. Practice ---------- */
+fetch("/api/scenarios").then(r=>r.json()).then(s=>{scenarios=s; renderScenarios();});
+function renderLazy(){
+  const all = ["secrecy","platform_move","personal_info","age_probe","photo_request","gift_offer","credential_request","suspicious_link","meet_offline","pressure","isolation"];
+  const n = all.filter(known).length;
+  $("#lazyBar").style.width = (n/all.length*100)+"%";
+  $("#lazyTxt").textContent = `${n}/${all.length} ${t("lessons")}`;
+}
+function renderScenarios(){
+  if(!scenarios.length) return;
+  $("#scnList").innerHTML = scenarios.map(s=>`<div class="card scn ${progress.practiced[s.skill]?"done":""}" data-s="${s.id}">
+    <div style="font-weight:800">${progress.practiced[s.skill]?"✅ ":"🎯 "}${esc(s.title[lang])}</div></div>`).join("");
+  $("#scnList").querySelectorAll("[data-s]").forEach(el=>el.onclick=()=>play(el.dataset.s));
+}
+function play(id){
+  const s = scenarios.find(x=>x.id===id), st = s.steps[0];
+  $("#scnPlay").innerHTML = `<div class="card"><div style="font-weight:800;margin-bottom:8px">${esc(s.title[lang])}</div>
+    <div class="chat"><div class="b them">${esc(st.contact[lang])}</div></div>
+    <div id="opts">${st.choices.map(c=>`<button class="opt" data-c="${c.id}">${esc(c.text[lang])}</button>`).join("")}</div>
+    <div id="fb"></div></div>`;
+  $("#scnPlay").scrollIntoView({behavior:"smooth"});
+  $("#scnPlay").querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{
+    const c = st.choices.find(x=>x.id===b.dataset.c);
+    $("#scnPlay").querySelectorAll(".opt").forEach(o=>{o.disabled=true; const cc=st.choices.find(x=>x.id===o.dataset.c); o.classList.add(cc.good?"good":"bad");});
+    if(c.good){ progress.practiced[s.skill]=(progress.practiced[s.skill]||0)+1; store.set(progress); renderLazy(); renderScenarios(); }
+    $("#fb").innerHTML = `<div class="fb">${c.good?"🌟":"💡"} ${esc(c.feedback[lang])}</div>`;
+  });
+}
+
+/* ---------- 3. Tell someone ---------- */
+function renderQuotes(){
+  const qs = (last&&last.signals||[]).filter(s=>s.quote);
+  $("#quotes").innerHTML = qs.length ? qs.map((s,i)=>`<label class="ck"><input type="checkbox" checked data-q="${i}"> <span>“${esc(s.quote)}”<br><span class="small muted">${esc(s.label)}</span></span></label>`).join("")
+    : `<p class="small muted">${t("noQuotes")}</p>`;
+}
+$("#draftBtn").onclick = async ()=>{
+  const qs = (last&&last.signals||[]).filter(s=>s.quote);
+  const chosen = [...document.querySelectorAll("[data-q]")].filter(c=>c.checked).map(c=>qs[+c.dataset.q].quote);
+  const note = $("#note").value.trim();
+  if(!chosen.length && !note) return;
+  const btn=$("#draftBtn"); btn.disabled=true;
+  $("#draftOut").innerHTML = `<div class="card muted"><span class="spin">🌙</span> ${t("checking")}</div>`;
+  try{
+    const r = await fetch("/api/help",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({quotes:chosen,who:$("#who").value,note,lang})});
+    const {message} = await r.json();
+    $("#draftOut").innerHTML = `<div class="card"><div class="small muted">${t("edit")}</div>
+      <textarea id="msg" style="min-height:120px;margin-top:6px">${esc(message)}</textarea>
+      <div class="row" style="margin-top:8px"><button class="btn" id="copyBtn">${t("copy")}</button></div></div>`;
+    $("#copyBtn").onclick=()=>{navigator.clipboard.writeText($("#msg").value).then(()=>{$("#copyBtn").textContent=t("copied")});};
+  }catch(e){ $("#draftOut").innerHTML = `<div class="card">⚠️ ${esc(e)}</div>`; }
+  btn.disabled=false;
+};
+
+applyLang();
+</script>
+</body>
+</html>
