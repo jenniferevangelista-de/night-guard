@@ -17,10 +17,8 @@
   .top .ghost{background:transparent;color:var(--ink);border:1px solid #fff6}
   .note{margin:10px 0;background:#0009;border-radius:12px;padding:10px 14px;font-size:13px;color:#dff}
   .game{display:grid;grid-template-columns:1fr 340px;gap:14px;margin-top:12px}
-  .world{border-radius:16px;min-height:380px;background:
-    repeating-linear-gradient(90deg,#3b7d3b 0 40px,#438943 40px 80px),#3b7d3b;position:relative;overflow:hidden;border:3px solid #0005}
-  .world .block{position:absolute;width:40px;height:40px;background:#8b5a2b;border:2px solid #5c3a1a}
-  .world .castle{position:absolute;left:40%;bottom:40px;width:160px;height:140px;background:#9aa;border:4px solid #677}
+  .world{border-radius:16px;min-height:380px;position:relative;overflow:hidden;border:3px solid #0005;background:#5fb4ff}
+  .world img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .chat{background:var(--panel);border:2px solid var(--line);border-radius:16px;display:flex;flex-direction:column;height:380px}
   .chat h2{margin:0;padding:10px 12px;font-size:14px;border-bottom:1px solid var(--line)}
   .msgs{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:6px}
@@ -47,11 +45,7 @@
   </div>
   <div class="note" id="note"></div>
   <div class="game">
-    <div class="world">
-      <div class="castle"></div>
-      <div class="block" style="left:12%;bottom:40px"></div><div class="block" style="left:12%;bottom:80px"></div>
-      <div class="block" style="left:80%;bottom:40px"></div>
-    </div>
+    <div class="world"><img src="/web/world.svg" alt="BlockQuest: a fictional blocky game world with a castle, trees and two avatars"></div>
     <div class="chat">
       <h2>💬 Server chat · Castle Raid</h2>
       <div class="msgs" id="msgs"></div>

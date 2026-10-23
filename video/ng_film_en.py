@@ -294,15 +294,17 @@ def popup(d, t, x, y, k):
 
 def game_chat(d, t, a):
     x, y = 90, 140
-    d.rounded_rectangle((x, y, x + 760, y + 760), 24, fill=(70, 150, 80))
-    for i in range(6): d.rectangle((x + 20 + i * 120, y + 20, x + 80 + i * 120, y + 740), fill=(80, 165, 90))
-    d.rounded_rectangle((x + 330, y + 300, x + 480, y + 450), 6, fill=(160, 168, 172))
-    d.rounded_rectangle((x + 60, y + 520, x + 720, y + 740), 18, fill=(28, 70, 50))
+    img = d._image
+    w = Image.open(HERE / "world.png").convert("RGB")
+    w = w.crop((180, 0, 180 + 1140, 720)).resize((760, 480), Image.LANCZOS)          # castle, both avatars and the sky
+    mask = Image.new("L", w.size, 0); ImageDraw.Draw(mask).rounded_rectangle((0, 0, 759, 479), 24, fill=255)
+    img.paste(w, (x, y), mask)
+    d.rounded_rectangle((x, y + 490, x + 760, y + 760), 24, fill=(28, 70, 50))
     msgs = [("Alex_17", "how old r u? parents home?"), ("you", "11. they're at work"),
             ("Alex_17", "don't tell your parents ok?")]
     for i, (who, s) in enumerate(msgs):
         if t > a + 0.6 + i * 1.6:
-            text(d, f"{who}: {s}", x + 85, y + 560 + i * 60, 26, WHITE if who != "you" else MOON, "lm", "segoeui.ttf")
+            text(d, f"{who}: {s}", x + 30, y + 545 + i * 66, 28, WHITE if who != "you" else MOON, "lm", "segoeui.ttf")
 
 
 def sc_alert(img, d, t):
@@ -311,7 +313,7 @@ def sc_alert(img, d, t):
     popup(d, t, 1060, 150, seg(t, SARAH_AT - 0.8, SARAH_AT - 0.3))
     if t >= SARAH_AT - 0.3:
         speaker(d, t, 930, 470, level(SARAH_FILE, SARAH_AT, t))
-        stamp(img, "DANGER", 1660, 860, 6, RED, 74)
+        stamp(img, "DANGER", 1420, 880, 6, RED, 74)
     return img
 
 

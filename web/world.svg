@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" preserveAspectRatio="xMidYMid slice">
+  <!-- BlockQuest: fictional blocky game world for the live demo (original drawing) -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5fb4ff"/><stop offset="1" stop-color="#cdeeff"/>
+    </linearGradient>
+    <pattern id="grass" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#5cbf4a"/><rect width="20" height="20" fill="#66c954"/><rect x="20" y="20" width="20" height="20" fill="#54b443"/>
+    </pattern>
+    <pattern id="dirt" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#9b6a3c"/><rect x="6" y="8" width="8" height="8" fill="#87592f"/><rect x="24" y="22" width="10" height="8" fill="#ad7a48"/>
+    </pattern>
+    <pattern id="stone" width="32" height="24" patternUnits="userSpaceOnUse">
+      <rect width="32" height="24" fill="#b9c0c8"/><rect width="32" height="2" fill="#8d96a0"/><rect x="0" y="12" width="32" height="2" fill="#8d96a0"/>
+      <rect x="15" y="0" width="2" height="12" fill="#8d96a0"/><rect x="5" y="12" width="2" height="12" fill="#8d96a0"/><rect x="25" y="12" width="2" height="12" fill="#8d96a0"/>
+    </pattern>
+  </defs>
+  <rect width="760" height="400" fill="url(#sky)"/>
+  <circle cx="660" cy="62" r="34" fill="#ffe680"/><circle cx="660" cy="62" r="46" fill="#ffe680" opacity=".25"/>
+  <g fill="#fff" opacity=".95">
+    <rect x="70" y="50" width="96" height="24" rx="4"/><rect x="94" y="34" width="48" height="20" rx="4"/>
+    <rect x="430" y="80" width="80" height="20" rx="4"/><rect x="450" y="66" width="40" height="18" rx="4"/>
+  </g>
+  <!-- far blocky hills -->
+  <path d="M0 230 h60 v-20 h60 v-30 h80 v20 h60 v30 h400 v-40 h60 v-20 h40 v60 z" fill="#8fd27a"/>
+  <!-- ground: grass on top of dirt -->
+  <rect y="260" width="760" height="140" fill="url(#dirt)"/>
+  <rect y="248" width="760" height="28" fill="url(#grass)"/>
+  <rect y="246" width="760" height="4" fill="#3f9a31"/>
+  <!-- castle -->
+  <g stroke="#59626d" stroke-width="3">
+    <rect x="290" y="150" width="180" height="100" fill="url(#stone)"/>
+    <rect x="260" y="104" width="56" height="146" fill="url(#stone)"/>
+    <rect x="444" y="104" width="56" height="146" fill="url(#stone)"/>
+  </g>
+  <g fill="#b9c0c8" stroke="#59626d" stroke-width="3">
+    <rect x="260" y="88" width="16" height="16"/><rect x="280" y="88" width="16" height="16"/><rect x="300" y="88" width="16" height="16"/>
+    <rect x="444" y="88" width="16" height="16"/><rect x="464" y="88" width="16" height="16"/><rect x="484" y="88" width="16" height="16"/>
+    <rect x="320" y="136" width="18" height="14"/><rect x="352" y="136" width="18" height="14"/><rect x="390" y="136" width="18" height="14"/><rect x="422" y="136" width="18" height="14"/>
+  </g>
+  <path d="M352 250 v-44 a28 28 0 0 1 56 0 v44 z" fill="#6b3f1f" stroke="#40240f" stroke-width="3"/>
+  <rect x="279" y="140" width="18" height="24" fill="#2e3a55"/><rect x="463" y="140" width="18" height="24" fill="#2e3a55"/>
+  <line x1="472" y1="88" x2="472" y2="40" stroke="#5b3a1e" stroke-width="4"/>
+  <path d="M474 42 l34 10 l-34 10 z" fill="#ff5a6e"/>
+  <!-- blocky trees -->
+  <g>
+    <rect x="96" y="196" width="18" height="54" fill="#7a4a24"/>
+    <rect x="70" y="150" width="70" height="56" fill="#3ea14a" stroke="#2c7a36" stroke-width="3"/>
+    <rect x="84" y="128" width="42" height="28" fill="#4cb357" stroke="#2c7a36" stroke-width="3"/>
+    <rect x="648" y="196" width="18" height="54" fill="#7a4a24"/>
+    <rect x="622" y="150" width="70" height="56" fill="#3ea14a" stroke="#2c7a36" stroke-width="3"/>
+    <rect x="636" y="128" width="42" height="28" fill="#4cb357" stroke="#2c7a36" stroke-width="3"/>
+  </g>
+  <!-- floating gem -->
+  <path d="M520 112 l14 16 l-14 16 l-14 -16 z" fill="#5ee0ff" stroke="#1e7c99" stroke-width="3"/>
+  <!-- avatars: the kid (left) and the stranger (right) -->
+  <g stroke="#1d2433" stroke-width="2.5">
+    <rect x="186" y="198" width="26" height="24" fill="#ffd36e"/>
+    <rect x="182" y="222" width="34" height="30" fill="#3b82f6"/>
+    <rect x="174" y="222" width="8" height="26" fill="#ffd36e"/><rect x="216" y="222" width="8" height="26" fill="#ffd36e"/>
+    <rect x="184" y="252" width="14" height="22" fill="#22a06b"/><rect x="200" y="252" width="14" height="22" fill="#22a06b"/>
+    <rect x="556" y="198" width="26" height="24" fill="#f2c79b"/>
+    <rect x="552" y="222" width="34" height="30" fill="#e5484d"/>
+    <rect x="544" y="222" width="8" height="26" fill="#f2c79b"/><rect x="586" y="222" width="8" height="26" fill="#f2c79b"/>
+    <rect x="554" y="252" width="14" height="22" fill="#30364a"/><rect x="570" y="252" width="14" height="22" fill="#30364a"/>
+  </g>
+  <g fill="#1d2433"><rect x="192" y="206" width="4" height="5"/><rect x="202" y="206" width="4" height="5"/><rect x="562" y="206" width="4" height="5"/><rect x="572" y="206" width="4" height="5"/></g>
+  <path d="M193 215 q6 4 12 0" stroke="#1d2433" stroke-width="2" fill="none"/><path d="M563 215 q6 4 12 0" stroke="#1d2433" stroke-width="2" fill="none"/>
+  <g font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+    <rect x="166" y="174" width="66" height="20" rx="6" fill="#0009"/><text x="199" y="188" fill="#fff">You</text>
+    <rect x="530" y="174" width="78" height="20" rx="6" fill="#0009"/><text x="569" y="188" fill="#fff">Alex_17</text>
+  </g>
+</svg>
