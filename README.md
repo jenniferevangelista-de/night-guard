@@ -2,7 +2,7 @@
 
 **Helps kids understand what happened in an online chat, and choose how to ask for help.**
 Runs on the child's own computer with **Gemma** (Google's open-weight model) through Ollama.
-Chats never leave the device.
+Chat analysis stays on the device in local mode. Optional link checks send the selected URL to external services.
 
 > Existing tools watch kids. Night Guard watches out *for* them.
 
@@ -30,9 +30,8 @@ on the child's computer with Gemma. Free instance: the first visit after a quiet
 
 ### Proactive: it doesn't wait for the child to paste anything
 
-Grooming in games can take **20 to 45 minutes** (Swansea University, 2016; WeProtect figure cited by Brazil's
-Ministry of Justice), so waiting for a child to come and paste a chat is too late. Night Guard watches the chat as
-messages arrive and warns the child on the spot:
+Pressure can escalate during a chat session. Night Guard can check messages as they arrive, without waiting for
+the child to paste a conversation. The live overlay sends the **12 most recent messages** to each check:
 
 - **Live demo:** open `/game` (also on the online demo): a fictional game chat where a stranger writes and Night Guard
   reacts on its own.
@@ -69,10 +68,16 @@ Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox p
 - Analysis and message drafting run **locally** (Ollama + `gemma4:e4b`). Chat text never leaves the computer.
 - Full conversations are never stored. For family alerts, only the flagged phrase, risk type, app and contact name
   are saved on that computer (`data/`, git-ignored). Learning progress lives in the browser's localStorage.
-- The Family area is a local, single-family view with no login yet. Parent authentication is the next step.
+- The Family area is a local, single-family view. Optional Auth0 login is implemented for the local Ollama app:
+  it requires `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET` and `SESSION_SECRET`, plus verified parent
+  email addresses in `PARENT_EMAILS`. Without configuration, this view has no login gate. The public demo does
+  not use Auth0. A verified, allowlisted parent signed in with Google and signed out successfully in a real local
+  check. Rejection of unverified or unlisted accounts is covered by automated tests; those rejection paths have
+  not yet been exercised with a real external account.
 
 **Public demo (Render)**
-- The text you check is sent to the Tinker fine-tuned model to be analyzed. The demo server saves nothing.
+- The text you check is sent to the Tinker fine-tuned model to be analyzed. The app does not persist those chats
+  on the demo server; this does not establish the retention policies of the hosting or model providers.
 - Family rules and alerts stay in each visitor's own browser, so one visitor never sees another's.
 - Meant for fictional examples only, and says so on screen.
 
@@ -80,7 +85,37 @@ Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox p
 "Couldn't analyze this chat", never a green "nothing found". Every flagged phrase is checked against the chat:
 the message index must point to a contact message, and a paraphrased quote is replaced by the real message.
 
-Cloud services otherwise only touch **fictional test data** (evaluation, scenarios).
+Optional external link checks send the selected URL to Browserbase and the domain to SerpApi, never the surrounding
+conversation. A URL can itself contain personal information, so use fictional links for demonstrations.
+
+### External integrations: live checks and setup status
+
+- **Browserbase + SerpApi:** the result view offers "Check without opening" when a provider is configured.
+  Browserbase can inspect the final destination, password fields and a screenshot in an isolated cloud browser;
+  SerpApi can search for reports about the domain. Each provider is optional and the result identifies what was
+  checked. Missing reports are not proof that a link is safe. Configure `BROWSERBASE_API_KEY` and
+  `BROWSERBASE_PROJECT_ID`, and/or `SERPAPI_KEY`; configure the same variables in Render for the public demo.
+  The fictional BlockQuest phishing page submits no credentials. **Live local checks passed on October 23, 2026:**
+  Browserbase created a session (HTTP 201), loaded that page (200), detected the password field, captured a
+  screenshot and released the session (200). The app returned **"Don't open this link"** in Portuguese in 12.68 s.
+  A separate SerpApi domain query returned HTTP 200 and six search results; none matched the report heuristic.
+  This checks provider connectivity and parsing on one fictional example, not scam-detection accuracy.
+  **The deployed Render endpoint also passed one live check:** HTTP 200, both providers reported as checked,
+  password detection and the same warning in 8.95 s. It returned six search results and a screenshot payload.
+  The public screenshot preview showed only the page background. An explicit page-viewport correction is now
+  implemented and regression-tested; deployment and a visual recheck are pending. The local screenshot includes
+  the fictional login form.
+- **Backboard:** `train/backboard_bakeoff.py` prepares a comparison using the same 70 fictional conversations,
+  detector prompt and scoring rules. `BACKBOARD_API_KEY` is required. No comparison results have been produced
+  or claimed yet; account setup is in progress. These are development cases, not a new blind test.
+- **Auth0:** a real Google login with a verified, allowlisted parent completed the callback on a separate local
+  server (port 8766), and the Family area showed the signed-in parent. Before login, the alerts endpoint returned
+  HTTP 401 and the login route redirected (302). Logout returned home and restored the locked Family view and
+  sign-in button. Unlisted-account rejection is covered by unit tests, not a live rejected-account check.
+
+Browserbase, SerpApi and Auth0 now have code and successful live checks supporting their additional category
+entries in the article. Backboard remains outside that demonstrated list until its comparison has run.
+Final eligibility is determined by the challenge judges.
 
 ## Results (fictional test set, 70 chats: 34 safe, 36 risky)
 
@@ -92,17 +127,18 @@ Cloud services otherwise only touch **fictional test data** (evaluation, scenari
 | Risky chats flagged | 30/30 | **36/36** |
 | False alarms on safe chats | 4/30 (13%) | **3/34 (9%)** |
 | Signal precision / recall | 89% / 87% | 88% / 87% |
-| Avg latency (text) | 3.8 s | 3.9 s |
+| Avg latency (text) | 3.8 s (historical run) | 3.41 s (`eval/last_results.json`) |
 | Reading a chat from a screenshot (vision) | n/a | ~7 s warm, ~23 s cold |
 
 Why it isn't a bad-words filter or sentiment analysis: groomers are usually **nice** ("you're so mature", "free
-Robux for you") and rarely swear. Night Guard reads the whole conversation and looks for documented tactics.
+Robux for you") and rarely swear. Night Guard reads the messages provided to each check and looks for documented tactics.
 
-The remaining false alarms are deliberate hard cases: an in-game "secret" about a hidden chest, a classmate saying
+The remaining false alarms are deliberate hard cases: an in-game "secret" about a leaked Halloween event, a classmate saying
 "see you at school", a birthday "how old r u now". Honesty note: two new hard cases (a fair coin trade, a classmate's
 new account) were first flagged wrongly; the prompt and two evidence rules were adjusted **after** seeing them, so
 those two cases are no longer a blind test. All conversations are **fictional**, written for testing; no real
-children's data is used.
+children's data is used. The 60-chat and 70-chat columns are different development evaluations; the 70 cases have
+already informed changes and do not establish performance on an independent holdout.
 
 ## Run it
 
@@ -113,6 +149,8 @@ python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
 # open http://localhost:8765
 ```
 
+Restart the local server after editing `.env`; an existing process does not reload those settings automatically.
+
 Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
 
 ## Tests
@@ -121,14 +159,17 @@ Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
 .venv\Scripts\python -m pytest tests
 ```
 
-28 tests cover scoring (an error is never a catch), malformed model answers, window selection by process, per-contact warnings, typed input, the Sentry allowlist, the parent allowlist, Temporal retries and the browser overlay (Node). They include the exact failure cases from the independent review.
+**59 automated tests passed** in the current full suite. They cover scoring (an error is never a catch), malformed model answers, window selection by process,
+per-contact warnings, typed input, Sentry and parent allowlists, Temporal retries, the browser overlay (Node),
+link checks and the Backboard comparison client. Automated external-provider tests use simulated responses.
+The separate live Browserbase and SerpApi checks described above establish only the observed smoke-test behavior.
 
 ## Fine-tuning with Tinker
 
 Gemma runs locally, but Tinker doesn't serve Gemma, so the fine-tuning experiment uses **Qwen3-8B** on
 [Tinker](https://thinkingmachines.ai/tinker/): LoRA rank 16, 2 epochs, fictional training chats with no sentence
 shared with the test set. Two runs: **v1** (11 tactics, 800 chats, ~740k tokens) and **v2** (14 tactics, 1,000 chats,
-~1.23M tokens). All three models evaluated on the same 70-chat held-out test set (36 risky, 34 safe):
+~1.23M tokens). All three models evaluated on the same 70-chat development set (36 risky, 34 safe):
 
 | | Qwen3-8B base | LoRA v1 | **LoRA v2 (online demo)** |
 |---|---|---|---|
@@ -143,7 +184,7 @@ An answer counts as valid only if every field matches the schema the app uses (t
 the app applies), and an invalid answer is an error, never a catch or a correct "safe". The base model often renames
 fields (`signal_id` instead of `id`). Read leniently, accepting those renamed fields, it flagged 35 of the 35 risky
 chats it answered readably (3/27 false alarms, precision/recall 0.89/0.77, 8 answers still unreadable), so it often
-sees the pattern; what it can't do is answer in a form an app can use every time. Fine-tuning fixed the format on
+sees the pattern; its strict-format failures make those answers unusable under the app's schema. Fine-tuning fixed the format on
 all 70 chats and found more signals; v2 also learned the 3 newer tactics. Each result file keeps every raw answer
 per case, so anyone can recount.
 Scripts: `train/make_train.py`, `train/tinker_sft.py`, `train/tinker_eval.py <model|base> <tag>`,
@@ -155,8 +196,9 @@ Evaluating a local model on a laptop is fragile: Ollama crashes, the GPU runs ou
 The evaluation runs as a [Temporal](https://temporal.io) workflow where **each conversation is one activity with automatic retries**
 (`guard/temporal_flow.py`, `guard/temporal_activities.py`).
 
-Crash test: Ollama was killed on purpose at conversation 11 of 60. The workflow paused, retried 6 times with backoff
-while the model was down, and resumed at conversation 12 when Ollama came back. No conversation was lost or re-run.
+Crash test: Ollama was stopped during a 60-conversation evaluation. The saved `eval/temporal_report.json` records
+`s12` completing on **attempt 5**, after failed attempts while the model was unavailable. The workflow resumed
+the failed activity when Ollama returned; already completed activities were retained in the workflow history.
 
 ```bash
 temporal server start-dev --db-filename .temporal.db

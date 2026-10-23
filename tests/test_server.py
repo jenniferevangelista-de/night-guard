@@ -36,3 +36,68 @@ def test_only_verified_allowlisted_emails_are_parents(monkeypatch):
     assert not auth.is_parent({"email": "parent@example.test", "email_verified": False})
     assert not auth.is_parent({"email": "kid@example.test", "email_verified": True})
     assert not auth.is_parent({"email_verified": True})
+
+
+def _configured_auth(monkeypatch, backend, oauth_import):
+    import builtins
+    import importlib.util
+    from guard import detector
+
+    monkeypatch.setattr(detector, "BACKEND", backend)
+    for name in ("AUTH0_DOMAIN", "AUTH0_CLIENT_ID", "AUTH0_CLIENT_SECRET", "SESSION_SECRET"):
+        monkeypatch.setenv(name, "test-only")
+    original_import = builtins.__import__
+
+    def guarded_import(name, *args, **kwargs):
+        if name == "authlib.integrations.starlette_client":
+            return oauth_import()
+        return original_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", guarded_import)
+    spec = importlib.util.spec_from_file_location("guard._configured_auth_test", auth.__file__)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_demo_ignores_auth0_credentials_without_importing_authlib(monkeypatch):
+    from fastapi import Depends, FastAPI
+
+    def forbidden_import():
+        raise AssertionError("The public demo must not import Auth0 dependencies")
+
+    demo_auth = _configured_auth(monkeypatch, "tinker", forbidden_import)
+    demo = FastAPI()
+    demo_auth.add_routes(demo)
+
+    @demo.get("/parents", dependencies=[Depends(demo_auth.require_parent)])
+    def parents():
+        return {"demo": True}
+
+    demo_client = TestClient(demo)
+    assert demo_client.get("/api/auth/me").json() == {"enabled": False, "parent": None}
+    assert demo_client.get("/parents").status_code == 200
+    assert demo_client.get("/auth/login").status_code == 404
+
+
+def test_local_auth0_still_requires_parent_session(monkeypatch):
+    from types import SimpleNamespace
+    from fastapi import Depends, FastAPI
+    from starlette.middleware.sessions import SessionMiddleware
+
+    class OAuth:
+        def register(self, *args, **kwargs):
+            pass
+
+    local_auth = _configured_auth(monkeypatch, "ollama", lambda: SimpleNamespace(OAuth=OAuth))
+    local = FastAPI()
+    local.add_middleware(SessionMiddleware, secret_key="test-only")
+    local_auth.add_routes(local)
+
+    @local.get("/parents", dependencies=[Depends(local_auth.require_parent)])
+    def parents():
+        return {"private": True}
+
+    local_client = TestClient(local)
+    assert local_client.get("/api/auth/me").json() == {"enabled": True, "parent": None}
+    assert local_client.get("/parents").status_code == 401

@@ -20,8 +20,10 @@ from . import telemetry
 
 OFFICIAL = {  # where the official sites of the apps kids use live
     "roblox.com", "discord.com", "discord.gg", "minecraft.net", "mojang.com", "epicgames.com", "fortnite.com",
-    "tiktok.com", "instagram.com", "whatsapp.com", "youtube.com", "google.com",
+    "tiktok.com", "instagram.com", "whatsapp.com", "youtube.com",
 }
+# General-purpose content hosts such as sites.google.com and docs.google.com
+# cannot establish that a page belongs to the official game or app.
 SCAM_WORDS = re.compile(r"\b(scam|phishing|fake|fraud|golpe|falso|malware|steal|stolen|hack(ed)?)\b", re.I)
 
 
@@ -50,32 +52,49 @@ def open_in_browserbase(url):
     """Open the link in a Browserbase cloud browser and look at the page (no typing, no clicking)."""
     from playwright.sync_api import sync_playwright
     key, project = os.environ["BROWSERBASE_API_KEY"], os.environ["BROWSERBASE_PROJECT_ID"]
-    r = httpx.post("https://api.browserbase.com/v1/sessions", headers={"X-BB-API-Key": key, "Content-Type": "application/json"},
-                   json={"projectId": project}, timeout=30)
+    headers = {"X-BB-API-Key": key, "Content-Type": "application/json"}
+    r = httpx.post("https://api.browserbase.com/v1/sessions", headers=headers,
+                   json={"projectId": project, "timeout": 60, "keepAlive": False,
+                         "browserSettings": {"recordSession": False, "logSession": False,
+                                             "viewport": {"width": 1024, "height": 640}}}, timeout=30)
     r.raise_for_status()
     sess = r.json()
     out = {"session": sess.get("id")}
-    with sync_playwright() as pw:
-        browser = pw.chromium.connect_over_cdp(sess["connectUrl"])
-        try:
-            ctx = browser.contexts[0] if browser.contexts else browser.new_context()
-            page = ctx.pages[0] if ctx.pages else ctx.new_page()
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.connect_over_cdp(sess["connectUrl"], timeout=20000)
             try:
-                resp = page.goto(url, wait_until="domcontentloaded", timeout=20000)
-                page.wait_for_timeout(1500)
-                out["status"] = resp.status if resp else None
-                out["final_url"] = page.url
-                out["title"] = (page.title() or "")[:120]
-                out["asks_password"] = page.locator("input[type=password]").count() > 0
-                out["asks_login"] = out["asks_password"] or bool(page.locator(
-                    "input[type=email], input[name*=user i], input[name*=login i]").count())
-                shot = page.screenshot(type="jpeg", quality=55, clip={"x": 0, "y": 0, "width": 1024, "height": 640})
-                out["screenshot"] = "data:image/jpeg;base64," + base64.b64encode(shot).decode()
-            except Exception as e:  # dead domain, timeout, TLS error...
-                out["error"] = type(e).__name__
-                out["unreachable"] = True
-        finally:
-            browser.close()
+                ctx = browser.contexts[0] if browser.contexts else browser.new_context()
+                page = ctx.pages[0] if ctx.pages else ctx.new_page()
+                try:
+                    # Existing CDP pages can retain a viewport larger than the
+                    # session setting, leaving centered content outside the clip.
+                    page.set_viewport_size({"width": 1024, "height": 640})
+                    resp = page.goto(url, wait_until="domcontentloaded", timeout=20000)
+                    page.wait_for_timeout(1500)
+                    out["status"] = resp.status if resp else None
+                    out["final_url"] = page.url
+                    out["title"] = (page.title() or "")[:120]
+                    out["asks_password"] = page.locator("input[type=password]").count() > 0
+                    out["asks_login"] = out["asks_password"] or bool(page.locator(
+                        "input[type=email], input[name*=user i], input[name*=login i]").count())
+                    shot = page.screenshot(type="jpeg", quality=55, clip={"x": 0, "y": 0, "width": 1024, "height": 640})
+                    out["screenshot"] = "data:image/jpeg;base64," + base64.b64encode(shot).decode()
+                except Exception as e:  # dead domain, timeout, TLS error...
+                    out["error"] = type(e).__name__
+                    out["unreachable"] = True
+            finally:
+                browser.close()
+    finally:
+        # Also release sessions if Playwright cannot connect or browser.close()
+        # fails. The short provider timeout remains a fallback for API outages.
+        if sess.get("id"):
+            try:
+                release = httpx.post(f'https://api.browserbase.com/v1/sessions/{sess["id"]}', headers=headers,
+                                     json={"status": "REQUEST_RELEASE"}, timeout=10)
+                release.raise_for_status()
+            except httpx.HTTPError:
+                pass  # Do not hide an inspection result or the original error.
     return out
 
 

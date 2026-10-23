@@ -10,18 +10,18 @@ tags: devchallenge, hf26challenge, ai, opensource
 
 Parents can't read every chat their kids have in Roblox, Discord or TikTok. Meanwhile the US National Center for Missing & Exploited Children received **more than 50,000 reports of financial sextortion in 2025, about 137 a day** ([NCMEC, 2026](https://us.missingkids.org/blog/2026/ncmec-releases-new-sextortion-data-2025)). And it can be fast: in a Swansea University study of chats between groomers and researchers posing as children, the time from first contact to the first sexual request ranged from **18 minutes to 82 hours** ([Irish Examiner, 2016](https://www.irishexaminer.com/breakingnews/world/paedophiles-can-groom-child-online-in-less-than-20-minutes-753583.html)).
 
-**Night Guard** is a small open-model guard that does the boring, exhausting part for them. It reads the chat **on the family's own computer**, stays quiet when everything is fine, and only speaks up when it sees a documented pressure trick: someone asking a kid to keep a secret, to move to a private app, to send a photo, or threatening to share one.
+**Night Guard** is a small open-model guard designed to reduce that review effort. It reads messages **on the family's own computer** and highlights possible pressure tactics: someone asking a kid to keep a secret, to move to a private app, to send a photo, or threatening to share one.
 
 It talks to two different people in two different ways:
 
 - **To the kid, it's a friend that turns them into a hero.** It warns in plain words and says "danger" when it is one: *"DANGER: someone asked you to hide this from your family. It's like a stranger on the street saying 'come with me, but don't tell your mom'. You don't go, and you tell an adult."* A calm voice can read it aloud. The kid levels up from Rookie to Night Hero as they learn to spot the tricks, and the guard repeats less as they learn.
 - **To the parents, it's the Night Guard 🌙.** They get the risk level, the app and the flagged phrase (never the whole chat), why it matters, and what to do right now. Optionally, a push on their phone.
 
-The lazy payoff is the whole point: **the parent doesn't have to read every chat to know when something is wrong, the guard reads them and still shows every new serious event; the kid stops getting lectures, the guard teaches them; and the guard itself gets lazier as the kid gets wiser.**
+The intended lazy payoff is **less repetitive review for parents and shorter, useful explanations for kids**. The guard highlights events for the family and repeats fewer lessons as the child practices. Time saved and real-world protection have not been measured.
 
 ### What it is not
 
-It's not a bad-words filter and not sentiment analysis. People who groom kids are usually *nice* ("you're so mature for your age", "free Robux for you") and rarely swear. Night Guard uses an open model to read the **whole conversation** and match it against 14 tactics documented by child-safety research, like Public Safety Canada's 2025 guidance on gaming platforms, NCMEC and Thorn.
+It's not a bad-words filter and not sentiment analysis. Pressure can appear in friendly wording ("you're so mature for your age", "free Robux for you"). Night Guard uses an open model to read the **messages provided to each check** and match it against 14 tactics documented by child-safety research, like Public Safety Canada's 2025 guidance on gaming platforms, NCMEC and Thorn. The live overlay supplies the **12 most recent messages**, not the full chat history.
 
 ## Demo
 
@@ -35,13 +35,13 @@ Then **③ See what parents get**:
 
 ![The parents' view: risk level, app, flagged phrase, why it matters and what to do now](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/parents-en.jpg)
 
-The online demo runs the **Tinker fine-tuned model** in the cloud so judges can try it without installing anything. The real Night Guard runs on the family's computer with **Gemma**, where chats never leave the device.
+The online demo runs the **Tinker fine-tuned model** in the cloud so judges can try it without installing anything. The real Night Guard runs on the family's computer with **Gemma**, where chat analysis stays on the device. Optional external link inspection is a separate action described below.
 
 ## Code
 
 {% github jenniferevangelista-de/night-guard %}
 
-The repo has 28 automated tests (`pytest tests`), including the exact failure cases our auditor reported, so those bugs can't quietly come back.
+The current full suite has **59 passing tests** (`pytest tests`), including regression cases our auditor reported and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
 
 ## How I Built It
 
@@ -63,9 +63,9 @@ I don't trust the model blindly. Every answer goes through checks before a kid o
 | Risky chats flagged | 30/30 | **36/36** |
 | False alarms on safe chats | 4/30 (13%) | **3/34 (9%)** |
 | Signal precision / recall | 89% / 87% | 88% / 87% |
-| Avg time per check | 3.8 s | 3.9 s |
+| Avg time per check | 3.8 s (historical run) | 3.41 s (`eval/last_results.json`) |
 
-The three remaining false alarms are on purpose hard cases: an in-game "secret" about a hidden chest, a classmate saying "see you at school", and "how old r u now" on a birthday. Honesty note: two newer hard cases were fixed **after** I saw them fail, so they're no longer a blind test. And 36/36 on fictional chats shows the approach works on these patterns, not that it catches everything in the real world.
+The three remaining false alarms are on purpose hard cases: an in-game "secret" about a leaked Halloween event, a classmate saying "see you at school", and "how old r u now" on a birthday. Honesty note: two newer hard cases were fixed **after** I saw them fail, so they're no longer a blind test. The 60-chat and 70-chat columns are different development evaluations, and the 70 cases have already informed changes. The 36/36 result applies to these fictional patterns, not an independent holdout or real-world protection.
 
 ### Proactive: it doesn't wait for a kid to paste anything
 
@@ -73,7 +73,7 @@ Pressure can escalate within a single chat session, so "paste your chat here" of
 
 - **Screen guard with Gemma's vision.** Kids chat inside *installed* apps (the Roblox app, the Discord app, Minecraft). Every few seconds Night Guard checks which **program** owns the window in front (by its process, not its title, so a browser tab or a document called "Roblox" is ignored). Only if it is one of those apps does it take a screenshot **in memory**, Gemma 4 reads the chat from the image locally (~7 s warm), and the text goes to the same detector. The image is never saved and never leaves the computer. Banking, email or school windows are not on the list, so they are never captured. If the window changes before the capture, nothing is read.
 - **A Chrome extension** for web chats (Discord web and WhatsApp Web, experimental), which only talks to the local server and refuses any other address.
-- A **"🛡️ Guard on"** badge is always visible, and it turns into *"Guard paused: can't analyze right now"* when the model is down, so silence never looks like safety. Kids know it's there. Research on teens shows covert monitoring backfires: in a study of 736 teen-written reviews of safety apps, 76% gave one star ([Ghosh et al.](https://www.cs.ucf.edu/~jjl/pubs/pn1838-ghoshA.pdf)).
+- A **"🛡️ Guard on"** badge identifies the active guard, and it turns into *"Guard paused: can't analyze right now"* when analysis fails; silence is not proof of safety. Kids know it's there. In a study of 736 reviews attributed to children aged 8–19, 76% gave safety apps one star ([Ghosh et al.](https://www.cs.ucf.edu/~jjl/pubs/pn1838-ghoshA.pdf)). That finding motivates transparent design; it does not establish that covert monitoring causes harm to family relationships.
 
 ### Fine-tuning with Tinker: teaching a model to speak the app's language
 
@@ -88,11 +88,11 @@ Tinker doesn't serve Gemma, so for the cloud demo I fine-tuned **Qwen3-8B** with
 | Avg time per check | 3.0 s | 5.0 s | 4.5 s |
 
 
-An answer only counts if every field matches the schema the app uses, and an invalid answer is an error, never a catch. The base model often renames fields (`signal_id` instead of `id`). Read leniently, it flagged 35 of the 35 risky chats it answered readably, so it often *sees* the pattern; it just can't answer in a form an app can use every time. Fine-tuning fixed the format on all 70 chats and found more signals, and v2 learned the three newer tactics. The online demo runs v2. Two honest limits: the false-alarm gap between v1 and v2 (3 vs 2 of 34) is a single chat, and the LoRA is not faster than the base model; the win is answers an app can always use. Every raw answer is saved per case in the repo, so anyone can recount.
+An answer only counts if every field matches the schema the app uses, and an invalid answer is an error, never a catch. The base model often renames fields (`signal_id` instead of `id`). Read leniently, it flagged 35 of the 35 risky chats it answered readably, so it often *sees* the pattern; its strict-format failures make those answers unusable under the app's schema. Fine-tuning produced schema-valid answers on all 70 development chats and found more signals, including the three newer tactics in v2. The online demo runs v2. Two honest limits: the false-alarm gap between v1 and v2 (3 vs 2 of 34) is a single chat, and the LoRA is not faster than the base model; this is a measured format improvement on the evaluated cases, not a guarantee for future inputs. Every raw answer is saved per case in the repo, so anyone can recount.
 
 ### Temporal: an evaluation that survives a crashing laptop
 
-Evaluating a local model on a laptop is fragile. The evaluation runs as a **Temporal** workflow where each conversation is an activity with automatic retries. I killed Ollama on purpose at conversation 11 of 60: the workflow retried 6 times while the model was down and resumed at conversation 12 when it came back. Nothing lost, nothing re-run, same final numbers.
+Evaluating a local model on a laptop is fragile. The evaluation runs as a **Temporal** workflow where each conversation is an activity with automatic retries. In a 60-conversation crash test, Ollama was stopped during the run. The saved `eval/temporal_report.json` records `s12` completing on **attempt 5**. The failed activity was retried when the model returned; completed activities remained in the workflow history.
 
 ![Temporal workflow completed after the crash test](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/temporal.jpg)
 
@@ -102,13 +102,60 @@ Younger kids and kids with dyslexia may not read a warning in time. Every child 
 
 ### Sentry: tracing the agent without reading the chats
 
-Every check is traced in **Sentry** as an agent run (`night-guard.check`) with a model call inside (`gen_ai.chat`) and the evidence step after it. That's how I saw that a cold Gemma call takes up to 8 s and a warm one about 4.5 s on this laptop. The traces carry only numbers and labels: model, backend, latency, number of messages, severity and tactic ids. Never a message, a name or a quote: `send_default_pii` is off, local variables are not captured, and every event goes through an **allowlist**: only fields known to hold numbers and labels are kept, everything else (request bodies, breadcrumbs, exception text, any new field) is dropped. A test pushes a fake event full of a marker string and checks the marker never survives. The UI's status polling is sampled out so the agent runs stand out.
+When configured, **Sentry** traces each check as an agent run (`night-guard.check`) with a model call inside (`gen_ai.chat`) and the evidence step after it. That's how I saw that a cold Gemma call takes up to 8 s and a warm one about 4.5 s on this laptop. The traces carry only numbers and labels: model, backend, latency, number of messages, severity and tactic ids. Never a message, a name or a quote: `send_default_pii` is off, local variables are not captured, and every event goes through an **allowlist**: only fields known to hold numbers and labels are kept, everything else (request bodies, breadcrumbs, exception text, any new field) is dropped. A test pushes a fake event full of a marker string and checks the marker never survives. The UI's status polling is sampled out so the agent runs stand out.
 
 ![Sentry traces: each night-guard.check with its gen_ai.chat model call](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/sentry.jpg)
 
 ### Render: one click for the judges
 
-The public demo runs on **Render** (Blueprint `render.yaml`, free instance), with the Tinker fine-tuned model as its AI backend. The demo server **stores nothing**: family rules and alerts stay in each visitor's own browser, and the screen says to use fictional examples only.
+The public demo runs on **Render** (Blueprint `render.yaml`, free instance), with the Tinker fine-tuned model as its AI backend. The app does not persist chats on the demo server: family rules and alerts stay in each visitor's own browser, and the screen says to use fictional examples only. This describes application behavior, not the retention policies of Render or the model provider.
+
+### Browserbase + SerpApi: check a link without opening it on the child's computer
+
+When a conversation contains a link, **"Check without opening"** uses Browserbase to open it in an isolated cloud
+browser. The inspector reads the final destination, checks for password fields and returns a screenshot.
+SerpApi separately searches for reports about the domain. The selected URL goes to Browserbase and the domain
+to SerpApi; the surrounding conversation is never sent. A URL can itself contain personal information.
+Each provider is optional, and the result identifies the checks that ran. Missing reports never mean "safe".
+
+**Live local evidence, October 23, 2026:** one Browserbase session opened the fictional BlockQuest "free gems"
+page (session creation HTTP 201, page HTTP 200). It detected the password field, captured a screenshot and
+returned the Portuguese warning **"Não abra esse link"** ("Don't open this link") in 12.68 seconds. Session release
+returned HTTP 200. A separate, single SerpApi query for `night-guard-demo.onrender.com` returned HTTP 200 and six
+search results, with none matching the report heuristic. The fictional page submits no credentials.
+
+![Browserbase's screenshot of the fictional BlockQuest password-request page](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/blockquest-link-check.jpg)
+
+**The deployed Render endpoint was then checked once:** `POST /api/link/check` returned HTTP 200, identified
+both Browserbase and SerpApi as checked, detected the password field and returned the same warning in 8.95 s.
+Its domain search returned six results, with none matching the report heuristic. A screenshot payload was
+returned, but its visual preview contained only the page background. An explicit page-viewport correction is
+implemented and regression-tested; deployment and a visual recheck are pending. The screenshot above is from
+the successful local run.
+
+These checks establish provider connectivity and the observed password detection on one fictional example,
+not scam-detection accuracy.
+
+### Auth0: only parents can open the local Family controls
+
+The local Ollama app uses **Auth0** to sign parents in before they can read family alerts, change rules or stop
+the guard. The email must be verified and present in the family's `PARENT_EMAILS` list. It requires Auth0
+application settings and a session secret; without configuration, the local Family view has no login gate.
+The public demo does not use Auth0.
+
+**Live local evidence:** on a separate test server at port 8766, the alerts endpoint returned HTTP 401 before
+login, and the login route redirected with HTTP 302. A real Google sign-in with a verified, allowlisted parent
+completed the callback and the Family view displayed the signed-in parent. Logout returned home and restored
+the locked Parents view and sign-in button. Rejection of unverified or unlisted accounts is unit-tested; a real
+rejected-account attempt has not been performed. Local servers need restarting after `.env` changes.
+
+### Backboard: comparison still pending
+
+`train/backboard_bakeoff.py` prepares the same detector prompt and scoring rules for several model candidates
+on the existing 70 fictional development conversations. Account setup is in progress, and it requires a
+Backboard key. There are **no comparison results yet**, and this reuses development cases rather than supplying
+a new holdout. Its client tests use simulated responses. Backboard remains outside the demonstrated category
+list until the comparison runs successfully.
 
 ### What the family gets
 
@@ -126,18 +173,18 @@ The public demo runs on **Render** (Blueprint `render.yaml`, free instance), wit
 
 ## Why Does Open Innovation Matter?
 
-Child safety is the clearest case for open models I know. A guard that reads a kid's private chats should **run on the family's own computer**, be **inspectable**, and be **free**. The best-known commercial monitor costs about US$14 a month and analyzes messages on its servers. Platforms protect only their own walls. Roblox open-sourced its Sentinel safety models in 2026, which is great for platforms; Night Guard is the other half: an open, local tool that sits with the family and works across apps.
+Child safety is the clearest case for open models I know. A guard that reads a kid's private chats should **run on the family's own computer**, be **inspectable**, and be **free**. The best-known commercial monitor costs about US$14 a month and analyzes messages on its servers. Platforms protect only their own walls. Roblox open-sourced Sentinel in 2025 and announced an update and ROOST contribution in 2026, which is useful for platforms; Night Guard is the other half: an open, local tool that sits with the family and works across apps.
 
 Open weights made every part of this possible: Gemma reading text and screenshots on a laptop GPU, a Qwen LoRA fine-tuned in an afternoon, and anyone able to audit exactly which 14 tactics trigger a warning and what words a kid will see.
 
 ## My Agent Session
 
-I built this in about three days with an AI coding agent (Claude) as the builder and a second AI (ChatGPT) as an independent auditor, plus me as the person who decided what a kid and a parent should actually see. The auditor's review is why failures never show as "all clear", why the demo server stores nothing, and why the help message can't invent things. Each round goes through a separate private review repository: the builder delivers, the reviewer tests and writes a verdict, and only the reviewer can approve.
+I built this in about three days with an AI coding agent (Claude) as the builder and a second AI (ChatGPT) as an independent auditor, plus me as the person who decided what a kid and a parent should actually see. The auditor's review is why failures never show as "all clear", why the app does not persist demo chats on the server, and why the help message can't invent things. Each round goes through a separate private review repository: the builder delivers, the reviewer tests and writes a verdict, and only the reviewer can approve.
 
 ## The Lazy Payoff
 
-- **Parents** don't have to read every chat. They get one alert when it matters, with what to do, and they stay the ones who talk and decide.
-- **Kids** stop getting lectures. They get a short, honest warning in the moment, and they level up.
+- **Parents** can review flagged events with suggested next steps, and stay the ones who talk and decide. Reduced review effort is an intended benefit, not a measured result.
+- **Kids** get short explanations and practice choices, and can ask an adult for help. Progress in the app does not establish readiness for future situations.
 - **The guard** gets lazier over time: lessons a kid already knows collapse into a single ✓ line. *"You know every trick. Night Guard can rest a little 😴."*
 
 ## Prize Categories
@@ -148,3 +195,13 @@ I built this in about three days with an AI coding agent (Claude) as the builder
 - **Best Use of Temporal:** durable evaluation workflow, crash-tested.
 - **Best Use of ElevenLabs:** spoken child warnings in two languages.
 - **Best Use of Sentry Agent Tracing:** agent runs and model calls traced with no chat content.
+- **Best Use of Browserbase:** isolated link inspection with a live local run showing password detection,
+  screenshot capture and session cleanup on the fictional BlockQuest page. The deployed API also detects the
+  password field; a viewport correction is tested locally and awaits deployment and visual recheck.
+- **Best Use of SerpApi:** live domain-report search used by the link inspector, verified with one successful
+  local query and a deployed API check. Missing search reports are never treated as proof of safety.
+- **Best Use of Auth0 for AI Agents:** parent authentication for local family controls, with a real verified,
+  allowlisted Google login and logout. Rejection of unlisted accounts is covered by unit tests.
+
+These entries describe the implemented uses and their observed evidence. Final category eligibility is for
+the judges under the [challenge criteria](https://dev.to/challenges/hf26).

@@ -14,6 +14,8 @@ import os
 from fastapi import HTTPException, Request
 from fastapi.responses import RedirectResponse
 
+from .detector import BACKEND
+
 DOMAIN = os.environ.get("AUTH0_DOMAIN", "").strip()
 CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID", "").strip()
 CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET", "").strip()
@@ -21,7 +23,9 @@ SESSION_SECRET = os.environ.get("SESSION_SECRET", "").strip()
 # Only these signed-in accounts are parents (comma-separated, verified e-mail required). Signing up
 # on the Auth0 page is not enough to read a family's alerts.
 PARENT_EMAILS = {e.strip().lower() for e in os.environ.get("PARENT_EMAILS", "").split(",") if e.strip()}
-ENABLED = all([DOMAIN, CLIENT_ID, CLIENT_SECRET, SESSION_SECRET])
+# The public demo has no family data or session middleware. Ignore Auth0 settings
+# there, including when the host happens to have the local app's credentials.
+ENABLED = BACKEND == "ollama" and all([DOMAIN, CLIENT_ID, CLIENT_SECRET, SESSION_SECRET])
 
 
 def is_parent(info):
