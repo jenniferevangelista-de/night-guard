@@ -121,7 +121,7 @@ Open weights made every part of this possible: Gemma reading text and screenshot
 
 ## My Agent Session
 
-I built this in about three days with an AI coding agent (Claude) as the builder and a second AI (ChatGPT) as an independent auditor, plus me as the person who decided what a kid and a parent should actually see. The auditor's review is why failures never show as "all clear", why the demo server stores nothing, and why the help message can't invent things. The audit trail is in the repo under `audit/`.
+I built this in about three days with an AI coding agent (Claude) as the builder and a second AI (ChatGPT) as an independent auditor, plus me as the person who decided what a kid and a parent should actually see. The auditor's review is why failures never show as "all clear", why the demo server stores nothing, and why the help message can't invent things. Each round goes through a separate private review repository: the builder delivers, the reviewer tests and writes a verdict, and only the reviewer can approve.
 
 ## The Lazy Payoff
 

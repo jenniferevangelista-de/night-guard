@@ -80,7 +80,7 @@ async def main(model_path=None):
         "lenient": score([(r[0], r[2]) for r in results]),
     }
     print(json.dumps({k: v for k, v in out.items()}, indent=2))
-    tag = "finetuned" if model_path else "base"
+    tag = sys.argv[2] if len(sys.argv) > 2 else ("finetuned" if model_path else "base")
     (ROOT / "train" / f"tinker_eval_{tag}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
 
 
@@ -105,4 +105,6 @@ def score(pairs):
 
 
 if __name__ == "__main__":
-    asyncio.run(main(sys.argv[1] if len(sys.argv) > 1 else None))
+    # usage: tinker_eval.py [model_path|base] [output_tag]
+    mp = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] != "base" else None
+    asyncio.run(main(mp))
