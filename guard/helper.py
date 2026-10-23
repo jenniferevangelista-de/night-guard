@@ -36,7 +36,10 @@ O que o contato escreveu:
 
 def template_help(quotes, who="Mom", note="", lang="en"):
     """A calm message made only from the child's chosen quotes and own words (nothing invented)."""
-    q = " ".join(f'"{x}"' for x in quotes)
+    sep = " e " if lang == "pt" else " and "
+    q = sep.join(f'"{x}"' for x in quotes)
+    note = note.strip()
+    note = note[:1].upper() + note[1:] if note else ""
     if lang == "pt":
         parts = [f"{who}, alguém do jogo me mandou isto: {q}." if q else f"{who}, aconteceu uma coisa no jogo."]
         if note:
