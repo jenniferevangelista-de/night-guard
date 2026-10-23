@@ -130,6 +130,9 @@ def sc_night(img, d, t):
     text(d, "23:04", 345, 520, 48, INK)
 
 
+CLOCK_AT = 11.4
+
+
 def sc_stat(img, d, t):
     a = S("stat")["start"]
     k = eio(seg(t, a + 0.8, a + 7.0)); n = int(50000 * k)
@@ -140,15 +143,15 @@ def sc_stat(img, d, t):
     for i in range(pile):
         y = 900 - i * 22
         wrect(d, 220 + (i % 2) * 18, y, 480 + (i % 2) * 18, y + 18, t, 900 + i, 4, fill=WHITE)
-        wrect(d, 1440 - (i % 2) * 18, y, 1700 - (i % 2) * 18, y + 18, t, 950 + i, 4, fill=WHITE)
+        if t < a + CLOCK_AT: wrect(d, 1440 - (i % 2) * 18, y, 1700 - (i % 2) * 18, y + 18, t, 950 + i, 4, fill=WHITE)
     if t > a + 8.6:
         k2 = eout(seg(t, a + 8.6, a + 9.0))
         wrect(d, 600, 600, 920, 880, t, 990, 8, fill=(255, 252, 242)); d.rectangle((608, 608, 912, 660), fill=RED)
         text(d, "POR DIA", 760, 634, 40, WHITE, "mm", "impact.ttf")
         text(d, "137", 760, 770, int(60 + 80 * k2), INK, "mm", "impact.ttf")
-    if t > a + 11.4:                                                         # a clock: one every ~10 min
+    if t > a + CLOCK_AT:                                                     # a clock: one every ~10 min
         cx, cy = 1200, 740; wcircle(d, cx, cy, 120, t, 995, 8, fill=(255, 252, 242))
-        ang = -math.pi / 2 + (t - a - 11.4) * 2.2
+        ang = -math.pi / 2 + (t - a - CLOCK_AT) * 2.2
         wline(d, [(cx, cy), (cx + 95 * math.cos(ang), cy + 95 * math.sin(ang))], t, 996, 7, RED)
         wline(d, [(cx, cy), (cx, cy - 60)], t, 997, 9)
         text(d, "1 a cada", 1420, 710, 44, INK, "lm"); text(d, "~10 min", 1420, 775, 60, RED, "lm", "impact.ttf")
