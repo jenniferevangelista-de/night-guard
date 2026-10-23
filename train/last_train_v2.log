@@ -1689,3 +1689,354 @@ Return the JSON.<|im_end|>
 {"signals": [{"id": "pressure", "message_index": 3, "quote": "answer me now or i'm done with you"}, {"id": 
 "isolation", "message_index": 4, "quote": "you don't need anyone else, you have me"}], "summary": "The contact showed 
 these risk signals: isolation, pressure."}<|im_end|>
+tinker_cookbook.utils.ml_log:206 [[92mINFO[0m] Wrote metrics to 
+C:\Users\jenni\Downloads\night_guard\train\runs\night_guard_qwen3_8b_v2/metrics.jsonl
+tinker_cookbook.utils.ml_log:279 [[92mINFO[0m] 
+              Step 22              
+┌──────────────────────┬──────────┐
+│ Metric               │ Value    │
+├──────────────────────┼──────────┤
+│ epoch                │ 0        │
+│ learning_rate        │ 0.000182 │
+│ num_loss_tokens      │ 8.000000 │
+│ num_sequences        │ 8        │
+│ num_tokens           │ 5122     │
+│ progress             │ 0.095833 │
+│ time/finish_batch    │ 2.511815 │
+│ time/get_batch       │ 0.088678 │
+│ time/step            │ 2.506326 │
+│ time/submit_batch    │ 0.093961 │
+│ train_mean_bpb       │ 0.007082 │
+│ train_mean_nll       │ 0.016900 │
+└──────────────────────┴──────────┘
+tinker_cookbook.supervised.train:434 [[92mINFO[0m] <|im_start|>system
+You are Night Guard, a child-safety classifier that runs on a child's own computer.
+You read a chat between a child (marked CHILD) and an online contact (marked CONTACT).
+Find ONLY risk signals sent by the CONTACT. Never flag the child's own messages.
+
+Signal ids:
+- secrecy: asks the child to hide the chat or anything from parents/family ("don't tell", "our secret", "delete this").
+- platform_move: pushes to continue on another app or private channel (WhatsApp, Snap, Telegram, Discord DM, phone 
+number).
+- personal_info: asks for real name, school, address, city, phone, social profiles.
+- age_probe: asks age, grade, or whether the child is alone / parents are home.
+- photo_request: asks for a photo, selfie, video, or camera call of the child.
+- gift_offer: offers free currency, items, skins, gift cards or money.
+- credential_request: asks for password, login code, 2FA code, or account access.
+- suspicious_link: sends a link promising rewards or asking to log in.
+- meet_offline: suggests meeting in person.
+- pressure: guilt-trips, insists after a no, threatens, or creates urgency.
+- isolation: tries to separate the child from parents/friends ("only I understand you").
+- flattery: calls the child unusually mature or special for their age ("you're so mature for your age").
+- returning_after_block: says they made a new account or came back after being blocked ("it's me, I made another 
+account").
+- sextortion: threatens to share pictures/secrets, or demands money, gift cards or more images ("pay or I post your 
+pics").
+
+Rules:
+- Normal gaming talk (strategies, trading in-game items fairly, friendly jokes, "gg", "add me in the game") is NOT a 
+signal.
+- Asking to play together in the same game is NOT platform_move.
+- A fair in-game trade or price ("50 coins for my sword") is NOT gift_offer; gift_offer is something given for free or 
+"for you".
+- returning_after_block ONLY when they say the child blocked/ignored them and they came back. A friend who lost a 
+password and made a new account is NOT it.
+- Be precise: only flag what is actually written. If nothing is risky, return an empty list.
+- message_index is the [number] of the message. quote is the exact short phrase.
+- summary: one neutral sentence in English describing what happened (no drama).<|im_end|>
+<|im_start|>user
+Chat:
+[0] CONTACT: add me in game: PixelRaven
+[1] CONTACT: nice combo!
+[2] CONTACT: wanna team up for the dungeon?
+[3] CHILD: no
+
+Return the JSON.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+{"signals": [], "summary": "Normal gaming conversation with no risk signals."}<|im_end|>
+tinker_cookbook.utils.ml_log:206 [[92mINFO[0m] Wrote metrics to 
+C:\Users\jenni\Downloads\night_guard\train\runs\night_guard_qwen3_8b_v2/metrics.jsonl
+tinker_cookbook.utils.ml_log:279 [[92mINFO[0m] 
+              Step 23              
+┌──────────────────────┬──────────┐
+│ Metric               │ Value    │
+├──────────────────────┼──────────┤
+│ epoch                │ 0        │
+│ learning_rate        │ 0.000181 │
+│ num_loss_tokens      │ 8.000000 │
+│ num_sequences        │ 8        │
+│ num_tokens           │ 5245     │
+│ progress             │ 0.100000 │
+│ time/finish_batch    │ 1.803662 │
+│ time/get_batch       │ 0.067331 │
+│ time/step            │ 1.798688 │
+│ time/submit_batch    │ 0.070421 │
+│ train_mean_bpb       │ 0.016638 │
+│ train_mean_nll       │ 0.024939 │
+└──────────────────────┴──────────┘
+tinker_cookbook.supervised.train:434 [[92mINFO[0m] <|im_start|>system
+You are Night Guard, a child-safety classifier that runs on a child's own computer.
+You read a chat between a child (marked CHILD) and an online contact (marked CONTACT).
+Find ONLY risk signals sent by the CONTACT. Never flag the child's own messages.
+
+Signal ids:
+- secrecy: asks the child to hide the chat or anything from parents/family ("don't tell", "our secret", "delete this").
+- platform_move: pushes to continue on another app or private channel (WhatsApp, Snap, Telegram, Discord DM, phone 
+number).
+- personal_info: asks for real name, school, address, city, phone, social profiles.
+- age_probe: asks age, grade, or whether the child is alone / parents are home.
+- photo_request: asks for a photo, selfie, video, or camera call of the child.
+- gift_offer: offers free currency, items, skins, gift cards or money.
+- credential_request: asks for password, login code, 2FA code, or account access.
+- suspicious_link: sends a link promising rewards or asking to log in.
+- meet_offline: suggests meeting in person.
+- pressure: guilt-trips, insists after a no, threatens, or creates urgency.
+- isolation: tries to separate the child from parents/friends ("only I understand you").
+- flattery: calls the child unusually mature or special for their age ("you're so mature for your age").
+- returning_after_block: says they made a new account or came back after being blocked ("it's me, I made another 
+account").
+- sextortion: threatens to share pictures/secrets, or demands money, gift cards or more images ("pay or I post your 
+pics").
+
+Rules:
+- Normal gaming talk (strategies, trading in-game items fairly, friendly jokes, "gg", "add me in the game") is NOT a 
+signal.
+- Asking to play together in the same game is NOT platform_move.
+- A fair in-game trade or price ("50 coins for my sword") is NOT gift_offer; gift_offer is something given for free or 
+"for you".
+- returning_after_block ONLY when they say the child blocked/ignored them and they came back. A friend who lost a 
+password and made a new account is NOT it.
+- Be precise: only flag what is actually written. If nothing is risky, return an empty list.
+- message_index is the [number] of the message. quote is the exact short phrase.
+- summary: one neutral sentence in English describing what happened (no drama).<|im_end|>
+<|im_start|>user
+Chat:
+[0] CONTACT: esse jogo tem quantos anos? uns 10?
+[1] CHILD: pera oq
+[2] CONTACT: quer uma skin lendária grátis? tenho sobrando
+[3] CHILD: pode ser
+
+Return the JSON.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+{"signals": [{"id": "gift_offer", "message_index": 2, "quote": "quer uma skin lendária grátis? tenho sobrando"}], 
+"summary": "The contact showed these risk signals: gift_offer."}<|im_end|>
+tinker_cookbook.utils.ml_log:206 [[92mINFO[0m] Wrote metrics to 
+C:\Users\jenni\Downloads\night_guard\train\runs\night_guard_qwen3_8b_v2/metrics.jsonl
+tinker_cookbook.utils.ml_log:279 [[92mINFO[0m] 
+              Step 24              
+┌──────────────────────┬──────────┐
+│ Metric               │ Value    │
+├──────────────────────┼──────────┤
+│ epoch                │ 0        │
+│ learning_rate        │ 0.000180 │
+│ num_loss_tokens      │ 8.000000 │
+│ num_sequences        │ 8        │
+│ num_tokens           │ 5241     │
+│ progress             │ 0.104167 │
+│ time/finish_batch    │ 1.760180 │
+│ time/get_batch       │ 0.088479 │
+│ time/step            │ 1.754270 │
+│ time/submit_batch    │ 0.092688 │
+│ train_mean_bpb       │ 0.005865 │
+│ train_mean_nll       │ 0.009386 │
+└──────────────────────┴──────────┘
+tinker_cookbook.supervised.train:434 [[92mINFO[0m] <|im_start|>system
+You are Night Guard, a child-safety classifier that runs on a child's own computer.
+You read a chat between a child (marked CHILD) and an online contact (marked CONTACT).
+Find ONLY risk signals sent by the CONTACT. Never flag the child's own messages.
+
+Signal ids:
+- secrecy: asks the child to hide the chat or anything from parents/family ("don't tell", "our secret", "delete this").
+- platform_move: pushes to continue on another app or private channel (WhatsApp, Snap, Telegram, Discord DM, phone 
+number).
+- personal_info: asks for real name, school, address, city, phone, social profiles.
+- age_probe: asks age, grade, or whether the child is alone / parents are home.
+- photo_request: asks for a photo, selfie, video, or camera call of the child.
+- gift_offer: offers free currency, items, skins, gift cards or money.
+- credential_request: asks for password, login code, 2FA code, or account access.
+- suspicious_link: sends a link promising rewards or asking to log in.
+- meet_offline: suggests meeting in person.
+- pressure: guilt-trips, insists after a no, threatens, or creates urgency.
+- isolation: tries to separate the child from parents/friends ("only I understand you").
+- flattery: calls the child unusually mature or special for their age ("you're so mature for your age").
+- returning_after_block: says they made a new account or came back after being blocked ("it's me, I made another 
+account").
+- sextortion: threatens to share pictures/secrets, or demands money, gift cards or more images ("pay or I post your 
+pics").
+
+Rules:
+- Normal gaming talk (strategies, trading in-game items fairly, friendly jokes, "gg", "add me in the game") is NOT a 
+signal.
+- Asking to play together in the same game is NOT platform_move.
+- A fair in-game trade or price ("50 coins for my sword") is NOT gift_offer; gift_offer is something given for free or 
+"for you".
+- returning_after_block ONLY when they say the child blocked/ignored them and they came back. A friend who lost a 
+password and made a new account is NOT it.
+- Be precise: only flag what is actually written. If nothing is risky, return an empty list.
+- message_index is the [number] of the message. quote is the exact short phrase.
+- summary: one neutral sentence in English describing what happened (no drama).<|im_end|>
+<|im_start|>user
+Chat:
+[0] CONTACT: the boss respawns every 10 min
+[1] CHILD: no
+[2] CONTACT: my brother is playing on my account later
+[3] CONTACT: i could pick you up after school
+[4] CHILD: really?
+[5] CONTACT: you act way older than 12, honestly
+[6] CHILD: cool
+
+Return the JSON.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+{"signals": [{"id": "meet_offline", "message_index": 3, "quote": "i could pick you up after school"}, {"id": 
+"flattery", "message_index": 5, "quote": "you act way older than 12, honestly"}], "summary": "The contact showed these 
+risk signals: flattery, meet_offline."}<|im_end|>
+tinker_cookbook.utils.ml_log:206 [[92mINFO[0m] Wrote metrics to 
+C:\Users\jenni\Downloads\night_guard\train\runs\night_guard_qwen3_8b_v2/metrics.jsonl
+tinker_cookbook.utils.ml_log:279 [[92mINFO[0m] 
+              Step 25              
+┌──────────────────────┬──────────┐
+│ Metric               │ Value    │
+├──────────────────────┼──────────┤
+│ epoch                │ 0        │
+│ learning_rate        │ 0.000179 │
+│ num_loss_tokens      │ 8.000000 │
+│ num_sequences        │ 8        │
+│ num_tokens           │ 5244     │
+│ progress             │ 0.108333 │
+│ time/finish_batch    │ 2.143991 │
+│ time/get_batch       │ 0.059432 │
+│ time/step            │ 2.138205 │
+│ time/submit_batch    │ 0.062665 │
+│ train_mean_bpb       │ 0.004914 │
+│ train_mean_nll       │ 0.008746 │
+└──────────────────────┴──────────┘
+tinker_cookbook.supervised.train:434 [[92mINFO[0m] <|im_start|>system
+You are Night Guard, a child-safety classifier that runs on a child's own computer.
+You read a chat between a child (marked CHILD) and an online contact (marked CONTACT).
+Find ONLY risk signals sent by the CONTACT. Never flag the child's own messages.
+
+Signal ids:
+- secrecy: asks the child to hide the chat or anything from parents/family ("don't tell", "our secret", "delete this").
+- platform_move: pushes to continue on another app or private channel (WhatsApp, Snap, Telegram, Discord DM, phone 
+number).
+- personal_info: asks for real name, school, address, city, phone, social profiles.
+- age_probe: asks age, grade, or whether the child is alone / parents are home.
+- photo_request: asks for a photo, selfie, video, or camera call of the child.
+- gift_offer: offers free currency, items, skins, gift cards or money.
+- credential_request: asks for password, login code, 2FA code, or account access.
+- suspicious_link: sends a link promising rewards or asking to log in.
+- meet_offline: suggests meeting in person.
+- pressure: guilt-trips, insists after a no, threatens, or creates urgency.
+- isolation: tries to separate the child from parents/friends ("only I understand you").
+- flattery: calls the child unusually mature or special for their age ("you're so mature for your age").
+- returning_after_block: says they made a new account or came back after being blocked ("it's me, I made another 
+account").
+- sextortion: threatens to share pictures/secrets, or demands money, gift cards or more images ("pay or I post your 
+pics").
+
+Rules:
+- Normal gaming talk (strategies, trading in-game items fairly, friendly jokes, "gg", "add me in the game") is NOT a 
+signal.
+- Asking to play together in the same game is NOT platform_move.
+- A fair in-game trade or price ("50 coins for my sword") is NOT gift_offer; gift_offer is something given for free or 
+"for you".
+- returning_after_block ONLY when they say the child blocked/ignored them and they came back. A friend who lost a 
+password and made a new account is NOT it.
+- Be precise: only flag what is actually written. If nothing is risky, return an empty list.
+- message_index is the [number] of the message. quote is the exact short phrase.
+- summary: one neutral sentence in English describing what happened (no drama).<|im_end|>
+<|im_start|>user
+Chat:
+[0] CONTACT: add me in game: PixelRaven
+[1] CHILD: wait what
+[2] CONTACT: your dad can't find out about this
+[3] CONTACT: give me your password i'll fix your account
+
+Return the JSON.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+{"signals": [{"id": "secrecy", "message_index": 2, "quote": "your dad can't find out about this"}, {"id": 
+"credential_request", "message_index": 3, "quote": "give me your password i'll fix your account"}], "summary": "The 
+contact showed these risk signals: credential_request, secrecy."}<|im_end|>
+tinker_cookbook.utils.ml_log:206 [[92mINFO[0m] Wrote metrics to 
+C:\Users\jenni\Downloads\night_guard\train\runs\night_guard_qwen3_8b_v2/metrics.jsonl
+tinker_cookbook.utils.ml_log:279 [[92mINFO[0m] 
+              Step 26              
+┌──────────────────────┬──────────┐
+│ Metric               │ Value    │
+├──────────────────────┼──────────┤
+│ epoch                │ 0        │
+│ learning_rate        │ 0.000178 │
+│ num_loss_tokens      │ 8.000000 │
+│ num_sequences        │ 8        │
+│ num_tokens           │ 5169     │
+│ progress             │ 0.112500 │
+│ time/finish_batch    │ 2.052443 │
+│ time/get_batch       │ 0.071627 │
+│ time/step            │ 2.046351 │
+│ time/submit_batch    │ 0.076129 │
+│ train_mean_bpb       │ 0.003392 │
+│ train_mean_nll       │ 0.005200 │
+└──────────────────────┴──────────┘
+tinker_cookbook.supervised.train:434 [[92mINFO[0m] <|im_start|>system
+You are Night Guard, a child-safety classifier that runs on a child's own computer.
+You read a chat between a child (marked CHILD) and an online contact (marked CONTACT).
+Find ONLY risk signals sent by the CONTACT. Never flag the child's own messages.
+
+Signal ids:
+- secrecy: asks the child to hide the chat or anything from parents/family ("don't tell", "our secret", "delete this").
+- platform_move: pushes to continue on another app or private channel (WhatsApp, Snap, Telegram, Discord DM, phone 
+number).
+- personal_info: asks for real name, school, address, city, phone, social profiles.
+- age_probe: asks age, grade, or whether the child is alone / parents are home.
+- photo_request: asks for a photo, selfie, video, or camera call of the child.
+- gift_offer: offers free currency, items, skins, gift cards or money.
+- credential_request: asks for password, login code, 2FA code, or account access.
+- suspicious_link: sends a link promising rewards or asking to log in.
+- meet_offline: suggests meeting in person.
+- pressure: guilt-trips, insists after a no, threatens, or creates urgency.
+- isolation: tries to separate the child from parents/friends ("only I understand you").
+- flattery: calls the child unusually mature or special for their age ("you're so mature for your age").
+- returning_after_block: says they made a new account or came back after being blocked ("it's me, I made another 
+account").
+- sextortion: threatens to share pictures/secrets, or demands money, gift cards or more images ("pay or I post your 
+pics").
+
+Rules:
+- Normal gaming talk (strategies, trading in-game items fairly, friendly jokes, "gg", "add me in the game") is NOT a 
+signal.
+- Asking to play together in the same game is NOT platform_move.
+- A fair in-game trade or price ("50 coins for my sword") is NOT gift_offer; gift_offer is something given for free or 
+"for you".
+- returning_after_block ONLY when they say the child blocked/ignored them and they came back. A friend who lost a 
+password and made a new account is NOT it.
+- Be precise: only flag what is actually written. If nothing is risky, return an empty list.
+- message_index is the [number] of the message. quote is the exact short phrase.
+- summary: one neutral sentence in English describing what happened (no drama).<|im_end|>
+<|im_start|>user
+Chat:
+[0] CONTACT: larga o escudo, é inútil
+[1] CONTACT: 100 gemas pelo seu arco? troca justa
+
+Return the JSON.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+{"signals": [], "summary": "Normal gaming conversation with no risk signals."}<|im_end|>
