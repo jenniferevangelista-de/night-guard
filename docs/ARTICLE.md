@@ -8,7 +8,7 @@ tags: devchallenge, hf26challenge, ai, opensource
 
 ## What I Built
 
-Parents can't read every chat their kids have in Roblox, Discord or TikTok. Meanwhile the US National Center for Missing & Exploited Children received **more than 50,000 reports of financial sextortion in 2025, about 137 a day** ([NCMEC, 2026](https://us.missingkids.org/blog/2026/ncmec-releases-new-sextortion-data-2025)). And the tricks are fast: grooming inside a game can take **20 to 45 minutes** (Swansea University, 2016; a WeProtect figure cited by Brazil's Ministry of Justice).
+Parents can't read every chat their kids have in Roblox, Discord or TikTok. Meanwhile the US National Center for Missing & Exploited Children received **more than 50,000 reports of financial sextortion in 2025, about 137 a day** ([NCMEC, 2026](https://us.missingkids.org/blog/2026/ncmec-releases-new-sextortion-data-2025)). And it can be fast: in a Swansea University study of chats between groomers and researchers posing as children, the time from first contact to the first sexual request ranged from **18 minutes to 82 hours** ([Irish Examiner, 2016](https://www.irishexaminer.com/breakingnews/world/paedophiles-can-groom-child-online-in-less-than-20-minutes-753583.html)).
 
 **Night Guard** is a small open-model guard that does the boring, exhausting part for them. It reads the chat **on the family's own computer**, stays quiet when everything is fine, and only speaks up when it sees a documented pressure trick: someone asking a kid to keep a secret, to move to a private app, to send a photo, or threatening to share one.
 
@@ -17,7 +17,7 @@ It talks to two different people in two different ways:
 - **To the kid, it's a friend that turns them into a hero.** It warns in plain words and says "danger" when it is one: *"DANGER: someone asked you to hide this from your family. It's like a stranger on the street saying 'come with me, but don't tell your mom'. You don't go, and you tell an adult."* A calm voice can read it aloud. The kid levels up from Rookie to Night Hero as they learn to spot the tricks, and the guard repeats less as they learn.
 - **To the parents, it's the Night Guard 🌙.** They get the risk level, the app and the flagged phrase (never the whole chat), why it matters, and what to do right now. Optionally, a push on their phone.
 
-The lazy payoff is the whole point: **the parent stops reading chats, the guard reads them; the kid stops getting lectures, the guard teaches them; and the guard itself gets lazier as the kid gets wiser.**
+The lazy payoff is the whole point: **the parent doesn't have to read every chat to know when something is wrong, the guard reads them and still shows every new serious event; the kid stops getting lectures, the guard teaches them; and the guard itself gets lazier as the kid gets wiser.**
 
 ### What it is not
 
@@ -69,7 +69,7 @@ The three remaining false alarms are on purpose hard cases: an in-game "secret" 
 
 ### Proactive: it doesn't wait for a kid to paste anything
 
-A 20-minute grooming window means "paste your chat here" is too late. Night Guard watches as messages arrive:
+Pressure can escalate within a single chat session, so "paste your chat here" often comes too late. Night Guard watches as messages arrive:
 
 - **Screen guard with Gemma's vision.** Kids chat inside *installed* apps (the Roblox app, the Discord app, Minecraft). Every few seconds Night Guard checks which **program** owns the window in front (by its process, not its title, so a browser tab or a document called "Roblox" is ignored). Only if it is one of those apps does it take a screenshot **in memory**, Gemma 4 reads the chat from the image locally (~7 s warm), and the text goes to the same detector. The image is never saved and never leaves the computer. Banking, email or school windows are not on the list, so they are never captured. If the window changes before the capture, nothing is read.
 - **A Chrome extension** for web chats (Discord web and WhatsApp Web, experimental), which only talks to the local server and refuses any other address.
@@ -136,7 +136,7 @@ I built this in about three days with an AI coding agent (Claude) as the builder
 
 ## The Lazy Payoff
 
-- **Parents** stop reading every chat. They get one alert when it matters, with what to do.
+- **Parents** don't have to read every chat. They get one alert when it matters, with what to do, and they stay the ones who talk and decide.
 - **Kids** stop getting lectures. They get a short, honest warning in the moment, and they level up.
 - **The guard** gets lazier over time: lessons a kid already knows collapse into a single ✓ line. *"You know every trick. Night Guard can rest a little 😴."*
 

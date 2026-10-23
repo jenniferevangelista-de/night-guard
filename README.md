@@ -167,7 +167,7 @@ python -m eval.temporal_run --status    # progress, e.g. 23/60
 
 ## Limits
 
-All results come from fictional chats written for testing (30 risky, 30 safe). They show the approach works on
+All results come from fictional chats written for testing (36 risky, 34 safe). They show the approach works on
 these patterns, not that it catches every real-world case.
 Night Guard is a learning and support tool, not a guarantee of safety. It can miss things and can raise false alarms. It does not replace trusted adults or platform reporting tools.
 

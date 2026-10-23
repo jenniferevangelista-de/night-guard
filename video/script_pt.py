@@ -17,7 +17,7 @@ SCENES = [
     ("night", "São onze da noite. Uma criança joga online. E alguém está sendo gentil demais com ela.", 1.4),
     ("stat", "Só em 2025, a central americana de crianças desaparecidas e exploradas recebeu mais de cinquenta mil "
              "denúncias de sextorsão. São cento e trinta e sete por dia. Quase uma a cada dez minutos.", 1.2),
-    ("fast", "E não demora. Dentro de um jogo, o aliciamento pode acontecer em vinte minutos.", 1.0),
+    ("fast", "E pode ser rápido. Num estudo da Universidade de Swansea, o primeiro pedido sexual veio em apenas dezoito minutos.", 1.0),
     ("platforms", "Roblox, Discord, Minecraft, TikTok. Cada plataforma vigia só o próprio quintal. E o golpista sabe disso: "
                   "ele puxa a criança para um aplicativo criptografado, onde ninguém mais vê.", 1.2),
     ("parents", "Os pais não conseguem ler cada conversa. E a criança nem sempre percebe a armadilha.", 1.4),

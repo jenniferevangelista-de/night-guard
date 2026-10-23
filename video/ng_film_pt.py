@@ -163,14 +163,14 @@ def sc_fast(img, d, t):
     for i in range(12):
         an = i / 12 * 2 * math.pi - math.pi / 2
         wline(d, [(cx + 220 * math.cos(an), cy + 220 * math.sin(an)), (cx + 245 * math.cos(an), cy + 245 * math.sin(an))], t, 1110 + i, 5)
-    pts = [(cx, cy)] + [(cx + 200 * math.cos(-math.pi / 2 + j / 30 * k * 2 * math.pi / 3),
-                         cy + 200 * math.sin(-math.pi / 2 + j / 30 * k * 2 * math.pi / 3)) for j in range(31)]
+    pts = [(cx, cy)] + [(cx + 200 * math.cos(-math.pi / 2 + j / 30 * k * 2 * math.pi * 0.3),
+                         cy + 200 * math.sin(-math.pi / 2 + j / 30 * k * 2 * math.pi * 0.3)) for j in range(31)]
     if k > 0.02: d.polygon(pts, fill=(255, 190, 190))
-    an = -math.pi / 2 + k * 2 * math.pi / 3
+    an = -math.pi / 2 + k * 2 * math.pi * 0.3
     wline(d, [(cx, cy), (cx + 210 * math.cos(an), cy + 210 * math.sin(an))], t, 1150, 9, RED)
-    text(d, f"{int(20 * k)} min", cx, cy + 90, 80, INK, "mm", "impact.ttf")
-    text(d, "aliciamento dentro de um jogo", W / 2, 830, 54, INK)
-    text(d, "pode levar de 20 a 45 minutos (Univ. de Swansea; WeProtect)", W / 2, 900, 34, SOFT)
+    text(d, f"{int(18 * k)} min", cx, cy + 90, 80, INK, "mm", "impact.ttf")
+    text(d, "do 1º contato ao 1º pedido sexual", W / 2, 830, 54, INK)
+    text(d, "de 18 minutos a 82 horas (Universidade de Swansea, 2016)", W / 2, 900, 34, SOFT)
 
 
 def sc_platforms(img, d, t):
