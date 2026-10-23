@@ -14,6 +14,7 @@ Tone: calm, simple words a 10-year-old would use. Say what happened using the qu
 Make clear the child did nothing wrong and is asking for help, not in trouble.
 Describe what the person ASKED for, quoting it; do not assume anything already happened.
 Call them "someone from the game". Never use placeholders like [Name] or brackets.
+Never invent how the child replied or what the child did (no "I said no", "I blocked them", "I hung up").
 Do not add details that are not in the quotes. Do not use the word 'predator'. Output only the message.
 
 What the contact wrote:
@@ -24,6 +25,7 @@ Tom: calmo, palavras simples que uma criança de 10 anos usaria. Conte o que aco
 Deixe claro que a criança não fez nada de errado e está pedindo ajuda, não está encrencada.
 Conte o que a pessoa PEDIU, citando o trecho; não suponha que algo já aconteceu.
 Chame a pessoa de "alguém do jogo". Nunca use espaços para preencher como [Nome] ou colchetes.
+Nunca invente o que a criança respondeu ou fez (nada de "eu disse não", "eu bloqueei", "eu desliguei").
 Não invente detalhes que não estão nos trechos. Não use a palavra 'predador'. Responda só com a mensagem.
 
 O que o contato escreveu:
@@ -32,15 +34,31 @@ O que o contato escreveu:
 }
 
 
+def template_help(quotes, who="Mom", note="", lang="en"):
+    """A calm message made only from the child's chosen quotes and own words (nothing invented)."""
+    q = " ".join(f'"{x}"' for x in quotes)
+    if lang == "pt":
+        parts = [f"{who}, alguém do jogo me mandou isto: {q}." if q else f"{who}, aconteceu uma coisa no jogo."]
+        if note:
+            parts.append(note.strip().rstrip(".") + ".")
+        parts.append("Eu não fiz nada de errado, mas preciso de ajuda. A gente pode conversar?")
+    else:
+        parts = [f"{who}, someone from the game sent me this: {q}." if q else f"{who}, something happened in a game."]
+        if note:
+            parts.append(note.strip().rstrip(".") + ".")
+        parts.append("I didn't do anything wrong, but I need help. Can we talk?")
+    return " ".join(parts)
+
+
 def draft_help(quotes, who="Mom", note="", lang="en"):
     lang = lang if lang in PROMPT else "en"
     q = "\n".join(f'- "{x}"' for x in quotes) or "- (no quotes chosen)"
     extra = (("Child's own words: " if lang == "en" else "Palavras da criança: ") + note) if note else ""
     content = PROMPT[lang].format(who=who, quotes=q, note=extra)
-    if BACKEND == "tinker":  # public demo: base Qwen3-8B writes the message (the LoRA is a classifier)
-        from . import cloud
-        return cloud.generate([{"role": "user", "content": content}], fine_tuned=False,
-                              max_tokens=200, temperature=0.2)
+    if BACKEND == "tinker":
+        # Public demo: the fine-tuned model is a classifier, and the base model tended to invent
+        # what the child did, so the message is built only from the quotes the child picked.
+        return template_help(quotes, who, note, lang)
     payload = {
         "model": MODEL,
         "stream": False,
