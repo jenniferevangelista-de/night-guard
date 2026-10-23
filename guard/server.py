@@ -228,6 +228,41 @@ def guard_heartbeat(body: dict):
     return {"ok": True}
 
 
+# ---- Link inspector (Browserbase + SerpApi): only the link leaves the computer, never the chat ----
+_link_calls = []
+
+
+class LinkReq(BaseModel):
+    url: str = Field(min_length=3, max_length=500)
+    lang: str = "en"
+
+
+@app.get("/api/link/status")
+def link_status():
+    from . import link_check
+    return link_check.enabled()
+
+
+@app.post("/api/link/check")
+def link_check_api(req: LinkReq):
+    from . import link_check
+    on = link_check.enabled()
+    if not any(on.values()):
+        raise HTTPException(503, "Link inspector is not configured.")
+    now = time.time()
+    _link_calls[:] = [c for c in _link_calls if now - c < 3600]
+    if len(_link_calls) >= (30 if DEMO else 200):          # protects the demo's free quota
+        raise HTTPException(429, "Too many link checks right now, try again later.")
+    _link_calls.append(now)
+    return link_check.check_link(req.url, req.lang)
+
+
+@app.get("/demo/free-gems")
+def fake_gems_page():
+    """A fictional look-alike scam page for the demo (BlockQuest is made up). It sends nothing anywhere."""
+    return FileResponse(ROOT / "web" / "demo_free_gems.html")
+
+
 @app.get("/api/scenarios")
 def api_scenarios():
     return SCENARIOS

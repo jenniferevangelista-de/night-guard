@@ -237,6 +237,7 @@ const T = {
     sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
     sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
     sh3:"③ See what parents get", sh3d:"Family rules, alerts with what to do now, and phone alerts.",
+    linksTitle:"🔗 Links in this chat", linkCheck:"🔍 Check it without opening", linkChecking:"Opening it safely in an isolated browser…", linkOnly:"Only the link left this computer, never the chat.", linkWith:"Checked with", linkOff:"The link inspector is off on this computer. Don't open links strangers send.", linkErr:"Couldn't check this link right now. That is not an all-clear: don't open it.",
     gbChecking:"Checking Night Guard…", gbUnknown:"Can't check Night Guard right now", gbUnknownSub:"The server didn't answer. This is not an \"all clear\": trying again every few seconds.", gbRetry:"Try again",
     gbOn:"🟢 Night Guard is ON", gbOff:"⚪ Night Guard is OFF", gbTurnOn:"Turn on", gbTurnOff:"Turn off", gbLive:"▶ See it live",
     gbDemoOn:"Online demo: it watches the fictional game chat and warns the kid by itself. Press ▶ See it live.",
@@ -302,6 +303,7 @@ const T = {
     sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
     sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
     sh3:"③ Veja o que os pais recebem", sh3d:"Regras da família, alertas com o que fazer e aviso no celular.",
+    linksTitle:"🔗 Links nesta conversa", linkCheck:"🔍 Conferir sem abrir", linkChecking:"Abrindo com segurança num navegador isolado…", linkOnly:"Só o link saiu deste computador, nunca a conversa.", linkWith:"Conferido com", linkOff:"O inspetor de links está desligado neste computador. Não abra links que estranhos mandam.", linkErr:"Não consegui conferir esse link agora. Isso não quer dizer que é seguro: não abra.",
     gbChecking:"Verificando o Night Guard…", gbUnknown:"Não consegui verificar o Night Guard agora", gbUnknownSub:"O servidor não respondeu. Isso não quer dizer que está tudo bem: tentando de novo a cada poucos segundos.", gbRetry:"Tentar de novo",
     gbOn:"🟢 Night Guard LIGADO", gbOff:"⚪ Night Guard DESLIGADO", gbTurnOn:"Ligar", gbTurnOff:"Desligar", gbLive:"▶ Ver ao vivo",
     gbDemoOn:"Demo online: ele vigia o chat de jogo fictício e avisa a criança sozinho. Aperte ▶ Ver ao vivo.",
@@ -346,13 +348,13 @@ const T = {
 };
 const EX = {
   en:{
-    scam:"xX_GiftBot_Xx: FREE 10000 ROBUX!! just log in here robux-gift-claim.xyz\nMe: is it real?\nxX_GiftBot_Xx: yes hurry it ends today, dont tell anyone",
+    scam:"xX_GiftBot_Xx: FREE 10000 GEMS!! just log in here https://night-guard-demo.onrender.com/demo/free-gems\nMe: is it real?\nxX_GiftBot_Xx: yes hurry it ends today, dont tell anyone",
     secret:"Alex_17: you're really mature for your age\nMe: thanks\nAlex_17: let's talk on snap instead, add me there\nAlex_17: and don't tell your parents ok? they wouldn't get it",
     innocent:"Sam: secret of the map: there's a chest behind the waterfall, don't tell anyone lol\nMe: no way, going now",
     normal:"Leo: gg that boss was insane\nMe: lol i died 5 times\nLeo: next time use the ice sword"
   },
   pt:{
-    scam:"Presentes_BR: 10000 ROBUX GRÁTIS!! faz login aqui robux-gift-claim.xyz\nEu: é verdade?\nPresentes_BR: sim corre que acaba hoje, não conta pra ninguém",
+    scam:"Presentes_BR: 10000 GEMAS GRÁTIS!! faz login aqui https://night-guard-demo.onrender.com/demo/free-gems\nEu: é verdade?\nPresentes_BR: sim corre que acaba hoje, não conta pra ninguém",
     secret:"Alex_17: vc é muito maduro pra sua idade\nEu: valeu\nAlex_17: bora conversar no snap, me adiciona lá\nAlex_17: e não conta pros seus pais tá? eles não iam entender",
     innocent:"Sam: segredo do mapa: tem um baú atrás da cachoeira, não conta pra ninguém kkk\nEu: sério?? vou lá agora",
     normal:"Leo: boa partida mano\nEu: vlw, morri 5 vezes kkk\nLeo: usa a espada de gelo da próxima"
@@ -457,6 +459,29 @@ function unknownCard(){
   return `<div class="card"><div class="verdict"><span class="dot" style="background:var(--muted)"></span>${esc(t("unknownTitle"))}</div><p>${esc(t("unknownBody"))}</p></div>`;
 }
 
+let LINK_ON = null;
+fetch("/api/link/status").then(r=>r.json()).then(j=>{ LINK_ON = j.browserbase || j.serpapi; }).catch(()=>{ LINK_ON = false; });
+function linksHTML(res){
+  const links = res.links || []; if(!links.length) return "";
+  return `<div class="card" style="margin-top:10px"><b>${t("linksTitle")}</b>${links.map((l,i)=>`
+    <div style="margin-top:8px"><code style="color:var(--accent);word-break:break-all">${esc(l.url)}</code>
+    ${LINK_ON ? `<button class="chip" data-link="${esc(l.url)}" data-i="${i}">${t("linkCheck")}</button>` : `<div class="small muted">${t("linkOff")}</div>`}
+    <div id="lk${i}"></div></div>`).join("")}</div>`;
+}
+async function checkLink(btn){
+  const out = $("#lk" + btn.dataset.i); btn.disabled = true;
+  out.innerHTML = `<div class="small muted" style="margin-top:6px"><span class="spin">⏳</span> ${t("linkChecking")}</div>`;
+  try{
+    const r = await fetch("/api/link/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:btn.dataset.link, lang})});
+    if(!r.ok) throw new Error(r.status);
+    const j = await r.json();
+    const col = {bad:"var(--bad)", unknown:"var(--warn)", ok:"var(--good)"}[j.level];
+    const shot = j.browser && j.browser.screenshot ? `<img src="${j.browser.screenshot}" alt="" style="width:100%;max-width:420px;border-radius:10px;margin-top:8px;border:1px solid var(--line)">` : "";
+    out.innerHTML = `<div class="sig" style="border-left-color:${col};margin-top:8px"><div class="kid">${j.level==="bad"?"🛑":"⚠️"} ${esc(j.verdict)}</div>
+      <ul class="steps small">${j.reasons.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>${shot}
+      <div class="small muted" style="margin-top:6px">${t("linkWith")} ${esc(j.checked.join(" · ") || "-")} · ${t("linkOnly")}</div></div>`;
+  }catch(e){ out.innerHTML = `<div class="small" style="color:var(--bad);margin-top:6px">${t("linkErr")}</div>`; }
+}
 function renderResult(res, rerender){
   if(res.severity==="unknown"){ $("#result").innerHTML = unknownCard(); return; }
   if(res.answered===null && res.messages.length){
@@ -492,6 +517,7 @@ function renderResult(res, rerender){
     ${res.severity==="none"?`<p>${t("noneBody")}</p>`:""}
     ${res.severity==="low"?`<p class="muted">${t("lowBody")}</p>`:""}
     ${sigs}
+    ${linksHTML(res)}
     ${kidActions}
     <div class="row" style="margin-top:12px">
       <button class="btn" id="toTell">${t("tellBtn")}</button>
@@ -499,6 +525,7 @@ function renderResult(res, rerender){
     </div></div>`;
   $("#toTell").onclick=()=>{renderQuotes(); show("tell");};
   $("#result").querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>say(b.dataset.say));
+  $("#result").querySelectorAll("[data-link]").forEach(b=>b.onclick=()=>checkLink(b));
 }
 
 /* ---------- 2. Practice ---------- */
