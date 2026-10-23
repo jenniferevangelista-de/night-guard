@@ -159,6 +159,13 @@
 
   <!-- 4. Family (parent area) -->
   <section class="panel" id="p-family">
+    <div class="card" id="lockCard" style="display:none;text-align:center">
+      <div style="font-size:40px">🔒🌙</div>
+      <div style="font-weight:800;font-size:17px;margin-top:6px" data-t="lockTitle"></div>
+      <div class="small muted" style="margin:6px 0 14px" data-t="lockHelp"></div>
+      <a class="btn" href="/auth/login" style="text-decoration:none;display:inline-block" data-t="lockBtn"></a>
+    </div>
+    <div class="small muted" id="parentBar" style="display:none;text-align:right;margin-bottom:8px"></div>
     <div class="card" id="guardCard">
       <div style="font-weight:800" data-t="gTitle"></div>
       <div class="small muted" style="margin:4px 0 10px" data-t="gHelp"></div>
@@ -205,6 +212,8 @@ const T = {
     rulesTitle:"Family rules", rulesHelp:"Kids don't always recognize a bad intention. Choose what Night Guard tells you automatically. Your child is always told when it does.",
     tell:"Tell family", childDecides:"Child decides",
     liveDemo:"Live demo: game chat", listen:"Listen",
+    lockTitle:"Parents area", lockHelp:"Sign in to see alerts, change family rules or turn the protection on or off. Kids never need a password to ask for help.",
+    lockBtn:"Sign in", logout:"Sign out",
     shTitle:"👋 Start here (2 minutes)",
     sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
     sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
@@ -262,6 +271,8 @@ const T = {
     rulesTitle:"Regras da família", rulesHelp:"A criança nem sempre percebe uma má intenção. Escolha o que o Night Guard te conta automaticamente. A criança sempre é avisada quando isso acontece.",
     tell:"Avisar família", childDecides:"Criança decide",
     liveDemo:"Demo ao vivo: chat do jogo", listen:"Ouvir",
+    lockTitle:"Área dos pais", lockHelp:"Entre para ver os alertas, mudar as regras da família ou ligar e desligar a proteção. A criança nunca precisa de senha para pedir ajuda.",
+    lockBtn:"Entrar", logout:"Sair",
     shTitle:"👋 Comece aqui (2 minutos)",
     sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
     sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
@@ -353,8 +364,19 @@ document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>show(b.dataset.
 function show(p){
   document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.p===p));
   document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("on",x.id==="p-"+p));
-  if(p==="family") loadFamily();
-  watchGuard(p==="family");
+  if(p==="family") gateFamily();
+  else watchGuard(false);
+}
+// Parents area behind Auth0 login (when configured): a kid can't read alerts, change rules or turn the guard off.
+async function gateFamily(){
+  let me = {enabled:false};
+  try{ me = await (await fetch("/api/auth/me")).json(); }catch(e){}
+  const locked = me.enabled && !me.parent;
+  $("#lockCard").style.display = locked ? "" : "none";
+  [...$("#p-family").children].forEach(el=>{ if(el.id!=="lockCard" && el.id!=="parentBar") el.style.display = locked ? "none" : ""; });
+  $("#parentBar").style.display = me.parent ? "" : "none";
+  if(me.parent) $("#parentBar").innerHTML = `👤 ${esc(me.parent.name||me.parent.email||"")} · <a href="/auth/logout" style="color:var(--accent)">${esc(t("logout"))}</a>`;
+  if(!locked){ loadFamily(); watchGuard(true); } else watchGuard(false);
 }
 document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{$("#paste").value=EX[lang][b.dataset.ex];});
 

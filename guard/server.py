@@ -7,7 +7,7 @@ import sys
 import time
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -31,7 +31,15 @@ from . import telemetry  # noqa: E402
 load_env()
 telemetry.init()  # Sentry agent tracing, only if SENTRY_DSN is set; no chat content is sent
 
+from . import auth  # noqa: E402  (reads Auth0 settings from .env, so it comes after load_env)
+
 app = FastAPI(title="Night Guard")
+if auth.ENABLED and not DEMO:
+    from starlette.middleware.sessions import SessionMiddleware
+
+    app.add_middleware(SessionMiddleware, secret_key=auth.SESSION_SECRET, same_site="lax", https_only=False)
+auth.add_routes(app)
+PARENTS_ONLY = [Depends(auth.require_parent)]
 
 
 class AnalyzeReq(BaseModel):
@@ -94,7 +102,7 @@ class NotifyReq(BaseModel):
     lang: str = "en"
 
 
-@app.get("/api/family/notify")
+@app.get("/api/family/notify", dependencies=PARENTS_ONLY)
 def notify_get():
     if DEMO:
         return {"available": False}
@@ -102,7 +110,7 @@ def notify_get():
     return {"available": True, "enabled": s.get("enabled", False), "topic": s["topic"]}
 
 
-@app.post("/api/family/notify")
+@app.post("/api/family/notify", dependencies=PARENTS_ONLY)
 def notify_set(req: NotifyReq):
     if DEMO:
         raise HTTPException(403, "Phone alerts are only available in the family's local app.")
@@ -118,14 +126,14 @@ def api_get_rules():
     return {"rules": DEFAULT_RULES if DEMO else get_rules(), "apps": APPS, "demo": DEMO}
 
 
-@app.post("/api/family/rules")
+@app.post("/api/family/rules", dependencies=PARENTS_ONLY)
 def api_set_rules(rules: dict):
     if DEMO:
         raise HTTPException(403, "The public demo keeps family rules in your browser only.")
     return {"rules": set_rules(rules)}
 
 
-@app.get("/api/family/alerts")
+@app.get("/api/family/alerts", dependencies=PARENTS_ONLY)
 def api_alerts():
     if DEMO:  # never expose one visitor's alerts to another
         return {"alerts": [], "cross_app_contacts": {}, "demo": True}
@@ -153,7 +161,7 @@ def guard_status():
             "watched_apps": SCREEN_APPS}
 
 
-@app.post("/api/guard/start")
+@app.post("/api/guard/start", dependencies=PARENTS_ONLY)
 def guard_start(req: GuardStart, request: Request):
     if DEMO:
         raise HTTPException(403, "The screen guard runs only on the family's computer.")
@@ -165,7 +173,7 @@ def guard_start(req: GuardStart, request: Request):
     return guard_status()
 
 
-@app.post("/api/guard/stop")
+@app.post("/api/guard/stop", dependencies=PARENTS_ONLY)
 def guard_stop():
     p = _guard["proc"]
     if p is not None and p.poll() is None:
@@ -190,7 +198,7 @@ def api_help(req: HelpReq):
     return {"message": draft_help(req.quotes, req.who, req.note, req.lang)}
 
 
-@app.get("/")
+@app.get("/", name="index")
 def index():
     return FileResponse(ROOT / "web" / "index.html")
 
