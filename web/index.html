@@ -100,6 +100,16 @@
     <button data-p="family"><span data-t="tab4sub"></span></button>
   </nav>
 
+  <!-- Start here: the judges' path -->
+  <div class="card" id="startHere" style="border-color:var(--accent)">
+    <div style="font-weight:800;font-size:17px" data-t="shTitle"></div>
+    <div class="grid2" style="margin-top:10px">
+      <a class="card" id="sh1" href="/game" target="_blank" style="margin:0;text-decoration:none;color:inherit"><b data-t="sh1"></b><div class="small muted" data-t="sh1d"></div></a>
+      <a class="card" id="sh2" href="#" style="margin:0;text-decoration:none;color:inherit"><b data-t="sh2"></b><div class="small muted" data-t="sh2d"></div></a>
+      <a class="card" id="sh3" href="#" style="margin:0;text-decoration:none;color:inherit"><b data-t="sh3"></b><div class="small muted" data-t="sh3d"></div></a>
+    </div>
+  </div>
+
   <!-- 1. Something felt off -->
   <section class="panel on" id="p-check">
     <div class="card">
@@ -149,6 +159,17 @@
 
   <!-- 4. Family (parent area) -->
   <section class="panel" id="p-family">
+    <div class="card" id="guardCard">
+      <div style="font-weight:800" data-t="gTitle"></div>
+      <div class="small muted" style="margin:4px 0 10px" data-t="gHelp"></div>
+      <div class="row"><span id="gStatus" style="font-weight:800"></span><span class="spacer" style="flex:1"></span><button class="btn" id="gBtn"></button></div>
+    </div>
+    <div class="card" id="notifyCard">
+      <div style="font-weight:800" data-t="nTitle"></div>
+      <div class="small muted" style="margin:4px 0 8px" data-t="nHelp"></div>
+      <ol class="steps small" id="nSteps"></ol>
+      <div class="row" style="margin-top:8px"><span id="nStatus" style="font-weight:800"></span><span style="flex:1"></span><button class="btn" id="nBtn"></button></div>
+    </div>
     <div class="card">
       <div style="font-weight:800" data-t="famTitle"></div>
       <div class="small muted" style="margin:4px 0 8px" data-t="famHelp"></div>
@@ -184,6 +205,18 @@ const T = {
     rulesTitle:"Family rules", rulesHelp:"Kids don't always recognize a bad intention. Choose what Night Guard tells you automatically. Your child is always told when it does.",
     tell:"Tell family", childDecides:"Child decides",
     liveDemo:"Live demo: game chat",
+    shTitle:"👋 Start here (2 minutes)",
+    sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
+    sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
+    sh3:"③ See what parents get", sh3d:"Family rules, alerts with what to do now, and phone alerts.",
+    gTitle:"🛡️ Automatic protection (this computer)",
+    gHelp:"Watches Roblox, Discord, Minecraft, Fortnite, TikTok, WhatsApp and Instagram only while they're in front. It reads the chat from a screenshot kept in memory and never saved. Other windows are never captured.",
+    gOn:"🟢 On", gWatching:"watching {app}", gWaiting:"waiting for a game or chat app", gOff:"⚪ Off",
+    gStart:"Turn on", gStop:"Turn off", gDemo:"Available in the family's computer version (runs locally with Gemma). The online demo shows it with the ① game chat.",
+    nTitle:"📱 Alerts on the parent's phone",
+    nHelp:"The phone gets only the risk level, the app and the kind of risk. Never the chat. Uses ntfy (free, no account).",
+    nStep1:"Install the ntfy app (Android or iPhone).", nStep2:"Tap + and subscribe to this private topic:", nStep3:"Turn on below: a test alert is sent right away.",
+    nOn:"🟢 On", nOff:"⚪ Off", nStart:"Turn on", nStop:"Turn off", nSent:"Test sent ✓", nDemo:"Available in the family's computer version.",
     actNoReply:"Don't reply", actBlock:"Block", actTell:"Tell an adult",
     famWhat:"What happened and why it matters", famDo:"What to do now",
     pasteHelp:"Paste the chat, one message per line. Start your own lines with “Me:”. Fictional examples below.",
@@ -229,6 +262,18 @@ const T = {
     rulesTitle:"Regras da família", rulesHelp:"A criança nem sempre percebe uma má intenção. Escolha o que o Night Guard te conta automaticamente. A criança sempre é avisada quando isso acontece.",
     tell:"Avisar família", childDecides:"Criança decide",
     liveDemo:"Demo ao vivo: chat do jogo",
+    shTitle:"👋 Comece aqui (2 minutos)",
+    sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
+    sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
+    sh3:"③ Veja o que os pais recebem", sh3d:"Regras da família, alertas com o que fazer e aviso no celular.",
+    gTitle:"🛡️ Proteção automática (este computador)",
+    gHelp:"Vigia Roblox, Discord, Minecraft, Fortnite, TikTok, WhatsApp e Instagram só quando estão na frente. Lê o chat de um print guardado só na memória, nunca salvo. Outras janelas nunca são capturadas.",
+    gOn:"🟢 Ligada", gWatching:"vigiando {app}", gWaiting:"esperando um app de jogo ou chat", gOff:"⚪ Desligada",
+    gStart:"Ligar", gStop:"Desligar", gDemo:"Disponível na versão do computador da família (roda local com Gemma). Na demo online, veja pelo ① chat do jogo.",
+    nTitle:"📱 Avisos no celular dos pais",
+    nHelp:"O celular recebe só o nível de risco, o app e o tipo de risco. Nunca a conversa. Usa o ntfy (grátis, sem cadastro).",
+    nStep1:"Instale o app ntfy (Android ou iPhone).", nStep2:"Toque em + e assine este tópico privado:", nStep3:"Ligue abaixo: um aviso de teste chega na hora.",
+    nOn:"🟢 Ligado", nOff:"⚪ Desligado", nStart:"Ligar", nStop:"Desligar", nSent:"Teste enviado ✓", nDemo:"Disponível na versão do computador da família.",
     actNoReply:"Não responda", actBlock:"Bloqueie", actTell:"Conte pra um adulto",
     famWhat:"O que aconteceu e por que importa", famDo:"O que fazer agora",
     pasteHelp:"Cole a conversa, uma mensagem por linha. Comece suas falas com “Eu:”. Exemplos fictícios abaixo.",
@@ -289,6 +334,8 @@ function known(sig){ return (progress.practiced[sig]||0)>=1 || (progress.seen[si
 function applyLang(){
   document.documentElement.lang = lang;
   if($("#liveLink")) $("#liveLink").href = "/game?lang=" + lang;
+  if($("#sh1")) $("#sh1").href = "/game?lang=" + lang;
+  if(typeof renderGuard==="function") renderGuard();
   document.querySelectorAll("[data-t]").forEach(el=>{ el.textContent = t(el.dataset.t); });
   document.querySelectorAll("nav button").forEach((b,i)=>{
     const k=["tab1","tab2","tab3","tab4"][i]; b.firstChild.nodeType===3 ? b.firstChild.textContent=t(k) : b.insertBefore(document.createTextNode(t(k)), b.firstChild);
@@ -307,6 +354,7 @@ function show(p){
   document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.p===p));
   document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("on",x.id==="p-"+p));
   if(p==="family") loadFamily();
+  watchGuard(p==="family");
 }
 document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{$("#paste").value=EX[lang][b.dataset.ex];});
 
@@ -458,6 +506,39 @@ $("#draftBtn").onclick = async ()=>{
   }catch(e){ $("#draftOut").innerHTML = `<div class="card">⚠️ ${esc(e)}</div>`; }
   btn.disabled=false;
 };
+
+/* ---------- Start here + automatic protection + phone alerts ---------- */
+$("#sh2").onclick = e=>{ e.preventDefault(); show("check"); $("#paste").value=EX[lang].secret; $("#paste").scrollIntoView({behavior:"smooth"}); };
+$("#sh3").onclick = e=>{ e.preventDefault(); show("family"); };
+let gState = null, nState = null, gTimer = null;
+async function loadGuard(){
+  try{ gState = await (await fetch("/api/guard/status")).json(); }catch(e){ gState = {available:false}; }
+  try{ nState = await (await fetch("/api/family/notify")).json(); }catch(e){ nState = {available:false}; }
+  renderGuard();
+}
+function renderGuard(){
+  if(!gState) return;
+  if(!gState.available){ $("#gStatus").textContent = t("gDemo"); $("#gStatus").style.fontWeight="400"; $("#gBtn").style.display="none"; }
+  else {
+    $("#gBtn").style.display="";
+    $("#gStatus").textContent = gState.running ? `${t("gOn")} · ${gState.watching ? t("gWatching").replace("{app}", gState.watching) : t("gWaiting")}` : t("gOff");
+    $("#gBtn").textContent = gState.running ? t("gStop") : t("gStart");
+  }
+  if(!nState) return;
+  if(!nState.available){ $("#nSteps").innerHTML=""; $("#nStatus").textContent = t("nDemo"); $("#nStatus").style.fontWeight="400"; $("#nBtn").style.display="none"; return; }
+  $("#nSteps").innerHTML = `<li>${esc(t("nStep1"))}</li><li>${esc(t("nStep2"))} <code style="color:var(--accent)">${esc(nState.topic)}</code></li><li>${esc(t("nStep3"))}</li>`;
+  $("#nStatus").textContent = (nState.enabled ? t("nOn") : t("nOff")) + (nState.test_sent ? " · " + t("nSent") : "");
+  $("#nBtn").textContent = nState.enabled ? t("nStop") : t("nStart");
+}
+$("#gBtn").onclick = async ()=>{
+  gState = await (await fetch(gState.running ? "/api/guard/stop" : "/api/guard/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({lang})})).json();
+  renderGuard();
+};
+$("#nBtn").onclick = async ()=>{
+  nState = await (await fetch("/api/family/notify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({enabled:!nState.enabled, lang})})).json();
+  renderGuard();
+};
+function watchGuard(on){ clearInterval(gTimer); if(on){ loadGuard(); gTimer=setInterval(loadGuard, 3000); } }
 
 /* ---------- 4. Family ---------- */
 let fam = {rules:{}, apps:[], alerts:[], cross:{}};

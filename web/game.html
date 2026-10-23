@@ -91,6 +91,7 @@ async function analyze(body){
 function startGuard(){
   // If the browser extension is installed it watches this page itself; otherwise the built-in guard does.
   if(document.documentElement.dataset.nightGuardExt) return;
+  if(new URLSearchParams(location.search).get("guard")==="off") return; // let the screen guard do it
   if(guard) guard.destroy();
   guard = NightGuardLive.create({analyze, app:"Roblox", lang, tellUrl:"/?tab=tell&lang="+lang});
 }

@@ -132,6 +132,10 @@ class Guard:
                 title, bbox = foreground_window()
                 app = watched_app(title)
                 self.q.put(("status", app))
+                try:  # tell the local server what we're watching (never the title or content)
+                    httpx.post(f"{self.server}/api/guard/heartbeat", json={"app": app}, timeout=3)
+                except Exception:
+                    pass
                 if app and bbox[2] - bbox[0] > 200:
                     t0 = time.time()
                     msgs = read_chat(bbox)

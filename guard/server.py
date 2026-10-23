@@ -2,9 +2,12 @@
 
 import json
 import re
+import subprocess
+import sys
+import time
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -12,6 +15,7 @@ from pydantic import BaseModel, Field
 from .detector import BACKEND, MODEL, analyze
 from .family import (APPS, DEFAULT_RULES, apply_rules, contacts_across_apps, get_alerts, get_rules,
                      set_rules)
+from . import notify
 from .helper import draft_help
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -73,7 +77,33 @@ def api_analyze(req: AnalyzeReq):
                         rules=req.family_rules if DEMO else None, persist=not DEMO)
     res["family_event"] = event
     res["family_alert"] = event if event and event["shared"] else None
+    if res["family_alert"] and not DEMO:
+        notify.push_alert(res["family_alert"], lang=req.lang)  # phone push: risk type only, no chat
     return res
+
+
+class NotifyReq(BaseModel):
+    enabled: bool
+    lang: str = "en"
+
+
+@app.get("/api/family/notify")
+def notify_get():
+    if DEMO:
+        return {"available": False}
+    s = notify.get_settings()
+    return {"available": True, "enabled": s.get("enabled", False), "topic": s["topic"]}
+
+
+@app.post("/api/family/notify")
+def notify_set(req: NotifyReq):
+    if DEMO:
+        raise HTTPException(403, "Phone alerts are only available in the family's local app.")
+    s = notify.get_settings()
+    s["enabled"] = req.enabled
+    notify.save_settings(s)
+    sent = notify.push_test(req.lang) if req.enabled else False
+    return {"available": True, "enabled": s["enabled"], "topic": s["topic"], "test_sent": sent}
 
 
 @app.get("/api/family/rules")
@@ -93,6 +123,54 @@ def api_alerts():
     if DEMO:  # never expose one visitor's alerts to another
         return {"alerts": [], "cross_app_contacts": {}, "demo": True}
     return {"alerts": get_alerts(), "cross_app_contacts": contacts_across_apps()}
+
+
+# ---- Screen guard (installed apps), local app only ----
+_guard = {"proc": None, "app": None, "seen": 0.0}
+# Same list as guard/screen_guard.py (not imported here: it needs Windows, and the demo runs on Linux).
+SCREEN_APPS = ["Roblox", "Discord", "Minecraft", "Fortnite", "TikTok", "WhatsApp", "Instagram"]
+
+
+class GuardStart(BaseModel):
+    lang: str = "en"
+
+
+@app.get("/api/guard/status")
+def guard_status():
+    if DEMO:
+        return {"available": False}
+    p = _guard["proc"]
+    running = p is not None and p.poll() is None
+    fresh = time.time() - _guard["seen"] < 15
+    return {"available": True, "running": running, "watching": _guard["app"] if running and fresh else None,
+            "watched_apps": SCREEN_APPS}
+
+
+@app.post("/api/guard/start")
+def guard_start(req: GuardStart, request: Request):
+    if DEMO:
+        raise HTTPException(403, "The screen guard runs only on the family's computer.")
+    if _guard["proc"] is None or _guard["proc"].poll() is not None:
+        server = f"http://127.0.0.1:{request.url.port or 80}"
+        _guard["proc"] = subprocess.Popen(
+            [sys.executable, "-m", "guard.screen_guard", "--server", server, "--lang", req.lang],
+            cwd=ROOT, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    return guard_status()
+
+
+@app.post("/api/guard/stop")
+def guard_stop():
+    p = _guard["proc"]
+    if p is not None and p.poll() is None:
+        p.terminate()
+    _guard["proc"], _guard["app"] = None, None
+    return guard_status()
+
+
+@app.post("/api/guard/heartbeat")
+def guard_heartbeat(body: dict):
+    _guard["app"], _guard["seen"] = body.get("app"), time.time()
+    return {"ok": True}
 
 
 @app.get("/api/scenarios")
