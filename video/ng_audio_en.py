@@ -75,7 +75,9 @@ def swish(): t = tt(0.3); return lpf(rng.normal(0, 1, len(t)), 2) * np.sin(np.pi
 def alarm(): t = tt(0.5); return np.sign(np.sin(2 * np.pi * 660 * t)) * (np.sin(2 * np.pi * 4 * t) > 0) * np.exp(-t * 3) * 0.15
 def tick(): t = tt(0.05); return np.sin(2 * np.pi * 2400 * t) * np.exp(-t * 120) * 0.4
 
-for t0 in (2.2, 3.8, 5.6, 7.4): add(sfx, t0, pop())
+n0 = S("night")["start"] - 1.2
+for t0 in (2.2, 3.8, 5.6, 7.4): add(sfx, n0 + t0, pop())
+add(sfx, S("intro")["start"] + 0.3, chime(1320), 0.8); add(sfx, S("intro")["start"] + 0.45, chime(1760), 0.8)
 a = S("stat")["start"]; add(sfx, a + 7.0, thud()); add(sfx, a + 8.6, thud(), 0.7)
 a = S("fast")["start"]
 for i in range(10): add(sfx, a + 0.5 + i * 0.5, tick())
@@ -98,13 +100,14 @@ for i in range(4): add(sfx, a + 0.4 + i * 1.3, chime(1047 + 130 * i), 0.7)
 a = S("end")["start"]; add(sfx, a, chime(880), 1.0); add(sfx, a + 0.15, chime(1320), 1.0)
 
 # music: drama until the guard arrives, 2 s crossfade into Funkorama
-dr = np.zeros(N); d = drama(MUSIC_SWITCH + 3); dr[:len(d)] = d[:N]; dr = dr / (np.abs(dr).max() + 1e-9)
+ds = T(max(0.0, S("night")["start"] - 0.6)); dr = np.zeros(N); d = drama(MUSIC_SWITCH + 3)[: N - ds]; dr[ds:ds + len(d)] = d; dr = dr / (np.abs(dr).max() + 1e-9)
 fk = load(FUNK)
 while len(fk) < N: fk = np.concatenate([fk, fk])
 fk = fk[:N] / (np.abs(fk).max() + 1e-9)
 x = np.clip((np.arange(N) / SR - MUSIC_SWITCH) / 2.0, 0, 1)
 music = dr * (1 - x) * 0.55 + fk * x * 0.30
-music[:T(1.5)] *= np.linspace(0, 1, T(1.5))
+music[ds:ds + T(1.5)] *= np.linspace(0, 1, T(1.5))
+music[:ds] += fk[:ds] * 0.12                                  # light tune under Snoozy's hello
 duck = lpf((np.abs(voice) > 0.02).astype(float), SR // 4); duck = 1 - 0.55 * np.clip(duck * 3, 0, 1)
 fade = np.ones(N); fade[T(DUR - 2.5):] = np.linspace(1, 0, N - T(DUR - 2.5))
 mix = voice + sfx * 0.7 + music * duck * fade

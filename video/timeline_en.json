@@ -1,109 +1,117 @@
 {
   "scenes": [
     {
-      "id": "night",
-      "line": "It's eleven p.m. A kid is playing online. And someone is being way too nice to her.",
+      "id": "intro",
+      "line": "Hi, I'm Snoozy, Gemmy's cousin, and the laziest night watchman you'll ever meet. Slow and steady is my thing. So let me show you how a lazy guard helps keep kids safe.",
       "voice": "n1.mp3",
       "start": 1.2,
+      "voice_dur": 11.54,
+      "end": 13.54
+    },
+    {
+      "id": "night",
+      "line": "It's eleven p.m. A kid is playing online. And someone is being way too nice to her.",
+      "voice": "n2.mp3",
+      "start": 13.54,
       "voice_dur": 5.93,
-      "end": 8.53
+      "end": 20.87
     },
     {
       "id": "stat",
       "line": "In 2025 alone, the US National Center for Missing and Exploited Children received more than fifty thousand sextortion reports. That's one hundred thirty seven a day. Almost one every ten minutes.",
-      "voice": "n2.mp3",
-      "start": 8.53,
+      "voice": "n3.mp3",
+      "start": 20.87,
       "voice_dur": 12.74,
-      "end": 22.47
+      "end": 34.82
     },
     {
       "id": "fast",
       "line": "And it can be fast. In a Swansea University study, the first sexual request came in just eighteen minutes.",
-      "voice": "n3.mp3",
-      "start": 22.47,
+      "voice": "n4.mp3",
+      "start": 34.82,
       "voice_dur": 7.06,
-      "end": 30.53
+      "end": 42.87
     },
     {
       "id": "platforms",
       "line": "Roblox, Discord, Minecraft, TikTok. Each platform only watches its own backyard. And predators know it: they pull the kid into an encrypted app, where no one else can see.",
-      "voice": "n4.mp3",
-      "start": 30.53,
+      "voice": "n5.mp3",
+      "start": 42.87,
       "voice_dur": 12.58,
-      "end": 44.3
+      "end": 56.65
     },
     {
       "id": "parents",
       "line": "Parents can't read every chat. And kids don't always spot the trap.",
-      "voice": "n5.mp3",
-      "start": 44.3,
+      "voice": "n6.mp3",
+      "start": 56.65,
       "voice_dur": 4.7,
-      "end": 50.41
+      "end": 62.75
     },
     {
       "id": "guard",
       "line": "Meet Night Guard. An open model that runs on the family's own computer. It reads what's on the screen, so it protects even inside encrypted apps. And the chat never leaves home.",
-      "voice": "n6.mp3",
-      "start": 50.41,
+      "voice": "n7.mp3",
+      "start": 62.75,
       "voice_dur": 11.64,
-      "end": 62.85
+      "end": 75.19
     },
     {
       "id": "alert",
       "line": "When a stranger asks for a secret, it warns the kid right away, in words they understand.",
-      "voice": "n7.mp3",
-      "start": 62.85,
+      "voice": "n8.mp3",
+      "start": 75.19,
       "voice_dur": 5.83,
-      "end": 79.28
+      "end": 91.62
     },
     {
       "id": "hero",
       "line": "To the kid, it's a friend. Every trick she learns becomes a medal, until she's a Night Hero.",
-      "voice": "n8.mp3",
-      "start": 79.28,
+      "voice": "n9.mp3",
+      "start": 91.62,
       "voice_dur": 6.22,
-      "end": 86.7
+      "end": 99.04
     },
     {
       "id": "family",
       "line": "To parents, it's the Night Guard. One alert, not the whole chat. What happened, and what to do now, right on their phone.",
-      "voice": "n9.mp3",
-      "start": 86.7,
+      "voice": "n10.mp3",
+      "start": 99.04,
       "voice_dur": 7.34,
-      "end": 95.44
+      "end": 107.78
     },
     {
       "id": "tech",
       "line": "Under the hood, it's all open. Gemma 4 reads text and the screen on the computer itself. On Tinker, we fine-tuned a model that got the format right in seventy out of seventy chats. Temporal survives crashes, Sentry traces every check without reading the chat, ElevenLabs gives the warnings a voice, and the demo runs on Render.",
-      "voice": "n10.mp3",
-      "start": 95.44,
+      "voice": "n11.mp3",
+      "start": 107.78,
       "voice_dur": 21.19,
-      "end": 117.63
+      "end": 129.98
     },
     {
       "id": "results",
       "line": "In testing, it caught thirty six out of thirty six risky chats, in about four seconds.",
-      "voice": "n11.mp3",
-      "start": 117.63,
+      "voice": "n12.mp3",
+      "start": 129.98,
       "voice_dur": 5.59,
-      "end": 124.62
+      "end": 136.97
     },
     {
       "id": "peace",
       "line": "Peace for the kid. Peace for the parents. And the more the kid learns, the more the guard can rest.",
-      "voice": "n12.mp3",
-      "start": 124.62,
+      "voice": "n13.mp3",
+      "start": 136.97,
       "voice_dur": 6.36,
-      "end": 132.58
+      "end": 144.93
     },
     {
       "id": "end",
-      "line": "Night Guard. A partner for parents. A friend for kids.",
-      "voice": "n13.mp3",
-      "start": 132.58,
-      "voice_dur": 4.3,
-      "end": 139.88
+      "line": "Night Guard. A partner for parents. A friend for kids. And me? Back to my nap.",
+      "voice": "n14.mp3",
+      "start": 144.93,
+      "voice_dur": 6.43,
+      "end": 154.36
     }
   ],
-  "duration": 140.18
+  "duration": 154.66
 }

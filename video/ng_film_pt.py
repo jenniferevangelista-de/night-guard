@@ -19,6 +19,8 @@ from ng_film import (GREEN, MOON, NIGHT, ROOT, SOFT, WHITE, bubble, card, check,
                      phone, rms_env, shield, speaker, stamp)
 from palito import FPS, H, INK, RED, W, dr, eio, eout, font, jit, paper, poof, seg, stick, text, wcircle, wline, wrect  # noqa: E402
 from guard.signals import SIGNALS  # noqa: E402
+from ng_sloth import kid_in_bed, sloth  # noqa: E402
+from palito import paste_gemmy  # noqa: E402
 
 ALERT_EXTRA = 1.6   # room for the 11.4 s spoken warning
 SARAH_FILE = ROOT / "web" / "audio" / "pt" / "secrecy.mp3"
@@ -45,6 +47,19 @@ def S(sid): return timeline()[sid]
 DUR = round(S("end")["end"] + 0.6, 2)
 SARAH_AT = round(S("alert")["start"] + S("alert")["voice_dur"] + 0.2, 2)
 MUSIC_SWITCH = S("guard")["start"]           # drama -> joy when Night Guard appears
+
+
+VOZ = HERE / "voz_pt"
+
+
+def narr_level(t):
+    """Loudness of the narration at time t (drives Snoozy's mouth); None when nobody narrates."""
+    for s in timeline().values():
+        if s["start"] <= t < s["start"] + s["voice_dur"]:
+            e = rms_env(str(VOZ / s["voice"])); k = int((t - s["start"]) * 12)
+            m = e[k] if 0 <= k < len(e) else 0.0
+            return 0.0 if m < 0.12 else min(1.0, m * 1.25)
+    return None
 
 
 def level(path, t0, t):
@@ -117,7 +132,21 @@ def medal(d, t, cx, cy, k, seed):
 
 
 # ------------------------------------------------------------------ scenes
+def sc_intro(img, d, t):
+    a, s_ = S("intro")["start"], S("intro")
+    sloth(img, t, 620, 960, 640, narr_level(t) or 0.0, "talk", wave=eio(seg(t, a, a + 0.8)) * (1 - seg(t, a + 4.0, a + 4.8)))
+    paste_gemmy(img, t, 1560, 930, 240, 0.0, "happy")
+    d = ImageDraw.Draw(img)
+    z = eout(seg(t, a + 0.3, a + 0.9))
+    text(d, "SONECA", 1240, 260, int(40 + 110 * z), NIGHT, "mm", "impact.ttf")
+    if t > a + 1.8: text(d, "primo do Gemmy", 1240, 380, 50, INK)
+    if t > a + 4.0: text(d, "vigia noturno oficialmente preguiçoso", 1240, 470, 42, SOFT)
+    if t > a + 6.5: stamp(img, "DEVAGAR E SEMPRE", 1240, 600, -5, RED, 64)
+    return img
+
+
 def sc_night(img, d, t):
+    a0 = S("night")["start"] - 1.2
     moon_window(d, t)
     desk_set(d, t, 1.0)
     typing = math.sin(t * 30) * 7
@@ -126,7 +155,7 @@ def sc_night(img, d, t):
     msgs = [(2.2, "você joga MUITO bem"), (3.8, "melhor jogador que já vi"), (5.6, "você é bem maduro pra sua idade"),
             (7.4, "quer gemas grátis? só entre nós")]
     for i, (t0, s) in enumerate(msgs):
-        bubble(d, t, 1220 - i * 20, 150 + i * 150, s, 800 + i * 10, seg(t, t0, t0 + 0.35), size=38)
+        bubble(d, t, 1220 - i * 20, 150 + i * 150, s, 800 + i * 10, seg(t, a0 + t0, a0 + t0 + 0.35), size=38)
     text(d, "23:04", 345, 520, 48, INK)
 
 
@@ -243,7 +272,7 @@ def sc_guard(img, d, t):
         text(d, "lê a tela: protege até", 1340, 570, 40, INK, "lm")
         text(d, "no app criptografado", 1340, 625, 40, GREEN, "lm")
     if t > a + 12.0:
-        text(d, "a conversa nunca sai de casa", 1340, 760, 44, NIGHT, "lm", "impact.ttf")
+        text(d, "a conversa nunca sai de casa", 1340, 735, 44, NIGHT, "lm", "impact.ttf")
 
 
 def popup(d, t, x, y, k):
@@ -367,13 +396,8 @@ def sc_results(img, d, t):
 
 def sc_peace(img, d, t):
     a = S("peace")["start"]
-    # left: the kid sleeping safe
-    wrect(d, 140, 640, 760, 760, t, 1900, 8, fill=(200, 215, 245))
-    wline(d, [(140, 760), (140, 900)], t, 1901, 8); wline(d, [(760, 760), (760, 900)], t, 1902, 8)
-    wrect(d, 160, 590, 330, 650, t, 1903, 6, fill=WHITE)
-    wcircle(d, 260, 580, 52, t, 1904, 7, fill=(247, 242, 230))
-    d.arc((222, 570, 252, 590), 20, 160, fill=INK, width=5); d.arc((268, 570, 298, 590), 20, 160, fill=INK, width=5)
-    d.arc((240, 590, 280, 615), 20, 160, fill=INK, width=5)
+    # left: the kid sleeping safe, whole body under the blanket
+    kid_in_bed(d, t)
     for i in range(3):
         zt = (t * 0.7 + i * 0.33) % 1
         text(d, "z", 360 + zt * 80, 520 - zt * 140, int(36 + 26 * zt), NIGHT, "mm", "impact.ttf")
@@ -394,7 +418,11 @@ def sc_peace(img, d, t):
 
 
 def sc_end(img, d, t):
-    a = S("end")["start"]
+    a = S("end")["start"]; vend = a + S("end")["voice_dur"]
+    m = narr_level(t)
+    mood = "talk" if m is not None else ("yawn" if t < vend + 1.0 else "sleep")
+    sloth(img, t, 1720, 990, 340, m or 0.0, mood)
+    d = ImageDraw.Draw(img)
     shield(d, t, W / 2, 280, 0.9, 1.0)
     z = eout(seg(t, a, a + 0.5))
     text(d, "Night Guard", W / 2, 540, int(60 + 80 * z), NIGHT, "mm", "impact.ttf")
@@ -404,7 +432,7 @@ def sc_end(img, d, t):
     text(d, 'Música: "Funkorama", Kevin MacLeod (incompetech.com), CC BY 4.0 · trilha de abertura original', W / 2, 1050, 22, SOFT)
 
 
-ORDER = [("night", sc_night), ("stat", sc_stat), ("fast", sc_fast), ("platforms", sc_platforms), ("parents", sc_parents),
+ORDER = [("intro", sc_intro), ("night", sc_night), ("stat", sc_stat), ("fast", sc_fast), ("platforms", sc_platforms), ("parents", sc_parents),
          ("guard", sc_guard), ("alert", sc_alert), ("hero", sc_hero), ("family", sc_family), ("tech", sc_tech),
          ("results", sc_results), ("peace", sc_peace), ("end", sc_end)]
 
@@ -413,9 +441,12 @@ def render(t):
     img = paper().copy(); d = ImageDraw.Draw(img)
     fn = ORDER[0][1]
     for sid, f in ORDER:
-        if t >= (S(sid)["start"] if sid != "night" else 0): fn = f
+        if t >= (S(sid)["start"] if sid != "intro" else 0): fn = f
     img = fn(img, d, t) or img
-    img = dark_overlay(img, 1 - seg(t, MUSIC_SWITCH, MUSIC_SWITCH + 1.5))
+    img = dark_overlay(img, seg(t, S("night")["start"] - 0.8, S("night")["start"]) * (1 - seg(t, MUSIC_SWITCH, MUSIC_SWITCH + 1.5)))
+    if fn not in (sc_intro, sc_end):                     # Snoozy narrates from the corner
+        m = narr_level(t)
+        sloth(img, t, 1825, 1010, 200, m or 0.0, "talk" if m is not None else "listen")
     if fn is not sc_end: subtitle(ImageDraw.Draw(img), t)
     if t < 1.0: img = Image.blend(Image.new("RGB", img.size, (0, 0, 0)), img, t)    # fade in from black
     return img
@@ -423,7 +454,7 @@ def render(t):
 
 if __name__ == "__main__":
     rv = HERE / "review_pt"; rv.mkdir(exist_ok=True)
-    pts = [float(a) for a in sys.argv[1:]] or [8, 22, 31, 47, 56, 72, 85, 99, 112, 137, 145, 155, 162]
+    pts = [float(a) for a in sys.argv[1:]] or [3, 9, 30, 60]
     for x in pts:
         render(x).save(rv / f"f_{x:05.1f}.jpg", quality=82)
     print("ok", DUR, "sarah at", SARAH_AT, "switch", MUSIC_SWITCH)

@@ -14,6 +14,7 @@ VOICE = "pt-BR-AntonioNeural"
 
 # scene id, narration, extra seconds after the line
 SCENES = [
+    ("intro", "Oi, eu sou o Soneca, primo do Gemmy, e o vigia noturno mais preguiçoso que você vai conhecer. Devagar e sempre é comigo mesmo. Então deixa eu te mostrar como um guarda preguiçoso ajuda a proteger as crianças.", 0.8),
     ("night", "São onze da noite. Uma criança joga online. E alguém está sendo gentil demais com ela.", 1.4),
     ("stat", "Só em 2025, a central americana de crianças desaparecidas e exploradas recebeu mais de cinquenta mil "
              "denúncias de sextorsão. São cento e trinta e sete por dia. Quase uma a cada dez minutos.", 1.2),
@@ -32,7 +33,7 @@ SCENES = [
              "checagem sem ler a conversa, o ElevenLabs dá voz aos avisos, e a demonstração roda no Render.", 1.0),
     ("results", "Nos testes, pegou trinta e seis de trinta e seis conversas de risco, em uns quatro segundos.", 1.4),
     ("peace", "Paz para a criança. Paz para os pais. E quanto mais a criança aprende, mais o guarda pode descansar.", 1.6),
-    ("end", "Night Guard. Parceiro dos pais. Amigo das crianças.", 3.0),
+    ("end", "Night Guard. Parceiro dos pais. Amigo das crianças. E eu? Vou voltar pro meu cochilo.", 3.0),
 ]
 
 

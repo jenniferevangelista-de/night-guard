@@ -14,6 +14,7 @@ VOICE = "en-US-BrianMultilingualNeural"
 
 # scene id, narration, extra seconds after the line
 SCENES = [
+    ("intro", "Hi, I'm Snoozy, Gemmy's cousin, and the laziest night watchman you'll ever meet. Slow and steady is my thing. So let me show you how a lazy guard helps keep kids safe.", 0.8),
     ("night", "It's eleven p.m. A kid is playing online. And someone is being way too nice to her.", 1.4),
     ("stat", "In 2025 alone, the US National Center for Missing and Exploited Children received more than fifty thousand "
              "sextortion reports. That's one hundred thirty seven a day. Almost one every ten minutes.", 1.2),
@@ -32,7 +33,7 @@ SCENES = [
              "check without reading the chat, ElevenLabs gives the warnings a voice, and the demo runs on Render.", 1.0),
     ("results", "In testing, it caught thirty six out of thirty six risky chats, in about four seconds.", 1.4),
     ("peace", "Peace for the kid. Peace for the parents. And the more the kid learns, the more the guard can rest.", 1.6),
-    ("end", "Night Guard. A partner for parents. A friend for kids.", 3.0),
+    ("end", "Night Guard. A partner for parents. A friend for kids. And me? Back to my nap.", 3.0),
 ]
 
 
