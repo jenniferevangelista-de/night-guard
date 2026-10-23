@@ -94,7 +94,13 @@ Evaluating a local model on a laptop is fragile. The evaluation runs as a **Temp
 
 ### ElevenLabs: a calm voice for kids who don't read fast yet
 
-Younger kids and kids with dyslexia may not read a warning in time. Every child warning (14 tactics × English and Portuguese) was voiced once with **ElevenLabs** (Sarah voice, `eleven_multilingual_v2`) and shipped as audio files. In the live game demo the guard reads the most serious warning aloud. Only the fixed warning texts were ever sent to ElevenLabs. No chat, ever.
+Younger kids and kids with dyslexia may not read a warning in time. Every child warning (14 tactics × English and Portuguese) was voiced once with **ElevenLabs** (Sarah voice, `eleven_multilingual_v2`) and shipped as audio files. In the live game demo and in the screen guard popup, the guard reads the most serious new warning aloud, and it speaks again if the stranger insists with a new message. Only the fixed warning texts were ever sent to ElevenLabs. No chat, ever.
+
+### Sentry: tracing the agent without reading the chats
+
+Every check is traced in **Sentry** as an agent run (`night-guard.check`) with a model call inside (`gen_ai.chat`) and the evidence step after it. That's how I saw that a cold Gemma call takes up to 8 s and a warm one about 4.5 s on this laptop. The traces carry only numbers and labels: model, backend, latency, number of messages, severity and tactic ids. Never a message, a name or a quote: `send_default_pii` is off, local variables are not captured, and a `before_send` hook strips anything that could hold chat text. The UI's status polling is sampled out so the agent runs stand out.
+
+![Sentry traces: each night-guard.check with its gen_ai.chat model call](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/sentry.jpg)
 
 ### Render: one click for the judges
 
@@ -137,3 +143,4 @@ I built this in about three days with an AI coding agent (Claude) as the builder
 - **Best Use of Render:** public demo deployed from a Blueprint, running the fine-tuned model.
 - **Best Use of Temporal:** durable evaluation workflow, crash-tested.
 - **Best Use of ElevenLabs:** spoken child warnings in two languages.
+- **Best Use of Sentry Agent Tracing:** agent runs and model calls traced with no chat content.

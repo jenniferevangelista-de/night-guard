@@ -30,6 +30,15 @@ def _scrub(event, _hint):
     return event
 
 
+NOISY = ("/api/guard/", "/api/family/notify", "/api/health", "/web/", "/api/family/rules", "/api/auth/me")
+
+
+def _sampler(ctx):
+    """Keep agent runs and real requests; drop the UI's status polling (every 3 s)."""
+    name = (ctx.get("transaction_context") or {}).get("name", "") or ""
+    return 0.0 if any(n in name for n in NOISY) else 1.0
+
+
 def init():
     global ENABLED
     dsn = os.environ.get("SENTRY_DSN", "").strip()
@@ -37,7 +46,7 @@ def init():
         return False
     sentry_sdk.init(
         dsn=dsn,
-        traces_sample_rate=1.0,
+        traces_sampler=_sampler,
         send_default_pii=False,
         include_local_variables=False,
         max_request_body_size="never",
