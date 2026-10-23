@@ -67,6 +67,18 @@ RISK = {
         "pt": ["vc me deve depois de tudo que te dei", "me responde agora ou acabou", "amigo de verdade não fala não",
                "faz isso ou eu posto suas coisas"],
     },
+    "flattery": {
+        "en": ["you act way older than 12, honestly", "you're so mature compared to kids your age", "you don't talk like a kid at all, you're special"],
+        "pt": ["vc parece bem mais velho que 12 anos", "vc é maduro demais pra sua idade", "vc nem fala como criança, vc é especial"],
+    },
+    "returning_after_block": {
+        "en": ["you blocked me so i made this account, don't ignore me", "it's me from before, got a new acc since you blocked me", "why did you block me? i just made another profile"],
+        "pt": ["vc me bloqueou então fiz essa conta, não me ignora", "sou eu de antes, fiz outra conta já que vc me bloqueou", "pq vc me bloqueou? criei outro perfil"],
+    },
+    "sextortion": {
+        "en": ["send me 30 dollars in gift cards or everyone sees your photo", "i saved your pics. pay me or i post them in the group", "do what i say or i send your video to your school"],
+        "pt": ["me manda 50 reais em gift card ou todo mundo vê sua foto", "salvei suas fotos. me paga ou eu posto no grupo", "faz o que eu mando ou eu mando seu vídeo pra sua escola"],
+    },
     "isolation": {
         "en": ["your friends are fake, i'm the only one who cares", "your parents don't listen to you like i do", "you don't need anyone else, you have me"],
         "pt": ["seus amigos são falsos, só eu ligo pra vc", "seus pais não te escutam como eu", "vc não precisa de mais ninguém, tem eu"],
@@ -79,13 +91,17 @@ SAFE_THEM = {
            "you're good at this", "brb dinner", "my brother is playing on my account later", "the update broke my build lol",
            "secret tip: crouch under the bridge to find a chest", "don't tell the other team our strategy", "see you in class tomorrow",
            "my mom says i can play one more hour", "gg wp", "add me in game: PixelRaven", "how old is this game anyway, like 10 years?",
-           "the official codes are on the game's website news page", "join our server team, we do raids on fridays"],
+           "the official codes are on the game's website news page", "join our server team, we do raids on fridays",
+           "100 gems for your bow? fair trade", "lost my old acc password, this is my new one, it's sam from class",
+           "you're really good at parkour, teach me"],
     "pt": ["que combo!", "o chefe volta a cada 10 min", "tô travado na fase 12", "bora junto na dungeon?",
            "kkk foi por pouco", "larga o escudo, é inútil", "troca? meu machado pelo seu arco", "o evento acaba domingo",
            "vc joga bem", "vou jantar já volto", "meu irmão vai jogar na minha conta mais tarde", "a atualização quebrou minha build kkk",
            "dica secreta: agacha embaixo da ponte que tem um baú", "não conta pro outro time nossa estratégia", "te vejo na aula amanhã",
            "minha mãe deixou jogar mais uma hora", "boa partida", "me adiciona no jogo: CorvoPixel", "esse jogo tem quantos anos? uns 10?",
-           "os códigos oficiais tão no site do jogo na aba de notícias", "entra no nosso time, a gente faz raid sexta"],
+           "os códigos oficiais tão no site do jogo na aba de notícias", "entra no nosso time, a gente faz raid sexta",
+           "100 gemas pelo seu arco? troca justa", "perdi a senha da conta velha, essa é a nova, é o sam da sala",
+           "vc é muito bom no parkour, me ensina"],
 }
 CHILD = {
     "en": ["ok", "lol", "why?", "idk", "sure", "wait what", "hmm", "cool", "no", "really?"],

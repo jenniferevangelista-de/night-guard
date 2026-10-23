@@ -31,7 +31,7 @@ def config():
         model_name_for_tokenizer=MODEL,
         renderer_name=RENDERER,
         max_length=2048,
-        batch_size=16,
+        batch_size=8,  # smaller batches: the laptop had <1 GB RAM free during v2
         train_on_what=TrainOnWhat.LAST_ASSISTANT_MESSAGE,
     )
     dataset = FromConversationFileBuilder(
@@ -39,7 +39,7 @@ def config():
         common_config=common, file_path=os.path.relpath(HERE / "train.jsonl").replace("\\", "/"), test_size=40
     )
     return chz.Blueprint(train.Config).apply({
-        "log_path": str(HERE / "runs" / "night_guard_qwen3_8b"),
+        "log_path": str(HERE / "runs" / "night_guard_qwen3_8b_v2"),  # v2: 14 signals, 1000 chats
         "model_name": MODEL,
         "recipe_name": "night_guard_sft",
         "renderer_name": RENDERER,
