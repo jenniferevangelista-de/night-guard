@@ -110,4 +110,10 @@ def index():
     return FileResponse(ROOT / "web" / "index.html")
 
 
+@app.get("/game")
+def game():
+    """Live demo: a fictional game chat where Night Guard reacts on its own."""
+    return FileResponse(ROOT / "web" / "game.html")
+
+
 app.mount("/web", StaticFiles(directory=ROOT / "web"), name="web")

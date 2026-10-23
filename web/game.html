@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BlockQuest chat (Night Guard live demo)</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+<style>
+  :root{--bg:#0d2b1f;--panel:#12382a;--line:#1f5a43;--ink:#eafff4;--muted:#9cc9b4;--me:#2b6b52;--them:#1a4a38;--accent:#ffd36e}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;background:linear-gradient(#6fb3ff 0,#9fd3ff 40%,#4c9a4c 40%,#3b7d3b 100%);color:var(--ink);min-height:100vh}
+  .wrap{max-width:900px;margin:0 auto;padding:16px}
+  .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#0008;border-radius:14px;padding:10px 14px}
+  .top h1{margin:0;font-size:20px}
+  .top .spacer{flex:1}
+  .top button,.top select{background:var(--accent);color:#2a2000;border:0;border-radius:10px;padding:8px 12px;font:700 14px inherit;cursor:pointer}
+  .top .ghost{background:transparent;color:var(--ink);border:1px solid #fff6}
+  .note{margin:10px 0;background:#0009;border-radius:12px;padding:10px 14px;font-size:13px;color:#dff}
+  .game{display:grid;grid-template-columns:1fr 340px;gap:14px;margin-top:12px}
+  .world{border-radius:16px;min-height:380px;background:
+    repeating-linear-gradient(90deg,#3b7d3b 0 40px,#438943 40px 80px),#3b7d3b;position:relative;overflow:hidden;border:3px solid #0005}
+  .world .block{position:absolute;width:40px;height:40px;background:#8b5a2b;border:2px solid #5c3a1a}
+  .world .castle{position:absolute;left:40%;bottom:40px;width:160px;height:140px;background:#9aa;border:4px solid #677}
+  .chat{background:var(--panel);border:2px solid var(--line);border-radius:16px;display:flex;flex-direction:column;height:380px}
+  .chat h2{margin:0;padding:10px 12px;font-size:14px;border-bottom:1px solid var(--line)}
+  .msgs{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:6px}
+  .m{padding:7px 10px;border-radius:12px;max-width:90%;font-size:14px;line-height:1.3}
+  .m.them{background:var(--them);align-self:flex-start}
+  .m.me{background:var(--me);align-self:flex-end}
+  .m .who{display:block;font-size:11px;color:var(--muted);font-weight:700}
+  form{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line)}
+  input{flex:1;background:#0b2219;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px}
+  form button{background:var(--accent);border:0;border-radius:10px;padding:8px 12px;font-weight:800;cursor:pointer}
+  @media (max-width:720px){.game{grid-template-columns:1fr}.world{min-height:160px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>🎮 BlockQuest</h1>
+    <span class="small" id="srv" style="font-size:13px;color:#cfe"></span>
+    <div class="spacer"></div>
+    <select id="lang"><option value="en">EN</option><option value="pt">PT</option></select>
+    <button id="play">▶ Play scenario</button>
+    <button id="reset" class="ghost">Reset</button>
+  </div>
+  <div class="note" id="note"></div>
+  <div class="game">
+    <div class="world">
+      <div class="castle"></div>
+      <div class="block" style="left:12%;bottom:40px"></div><div class="block" style="left:12%;bottom:80px"></div>
+      <div class="block" style="left:80%;bottom:40px"></div>
+    </div>
+    <div class="chat">
+      <h2>💬 Server chat · Castle Raid</h2>
+      <div class="msgs" id="msgs"></div>
+      <form id="f"><input id="inp" autocomplete="off"><button>Send</button></form>
+    </div>
+  </div>
+</div>
+
+<script src="/web/guard-overlay.js"></script>
+<script>
+const S = {
+  en:{note:"Fictional live demo. Nobody pastes anything: a stranger writes in the game chat and Night Guard reacts by itself, the same way the browser extension does on web chats.",
+      ph:"Type as the kid…", play:"▶ Play scenario", reset:"Reset", srv:"Night Guard server: ",
+      script:[["Leo","gg that boss was insane"],["me","lol i died 5 times"],["Alex_17","nice castle! you're way more mature than other kids your age"],
+              ["me","haha thanks"],["Alex_17","how old r u btw? are your parents home?"],["me","11. no they're at work"],
+              ["Alex_17","let's talk on snap instead, add me there"],["Alex_17","and don't tell your parents ok? they wouldn't get it"],
+              ["Alex_17","send me a selfie so i know you're real"]]},
+  pt:{note:"Demo ao vivo e fictícia. Ninguém cola nada: um estranho escreve no chat do jogo e o Night Guard reage sozinho, do mesmo jeito que a extensão faz em chats da web.",
+      ph:"Escreva como a criança…", play:"▶ Rodar cenário", reset:"Recomeçar", srv:"Servidor Night Guard: ",
+      script:[["Leo","boa partida mano"],["me","kkk morri 5 vezes"],["Alex_17","que castelo! vc é muito mais maduro que a galera da sua idade"],
+              ["me","kkk valeu"],["Alex_17","quantos anos vc tem? seus pais tão em casa?"],["me","11. não, tão trabalhando"],
+              ["Alex_17","bora conversar no snap, me adiciona lá"],["Alex_17","e não conta pros seus pais tá? eles não iam entender"],
+              ["Alex_17","manda uma selfie pra eu ver que vc é de verdade"]]}
+};
+let lang = new URLSearchParams(location.search).get("lang") || "en";
+const msgs = [], $ = s=>document.querySelector(s);
+let guard = null, timers = [], DEMO = false;
+
+async function analyze(body){
+  const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  const res = await r.json();
+  if(DEMO && res.family_event){ // public demo: the visitor's own browser keeps family events
+    try{ const k="ng_demo_events", ev=JSON.parse(localStorage.getItem(k)||"[]"); ev.unshift(res.family_event); localStorage.setItem(k,JSON.stringify(ev.slice(0,100))); }catch(e){}
+  }
+  return res;
+}
+function startGuard(){
+  // If the browser extension is installed it watches this page itself; otherwise the built-in guard does.
+  if(document.documentElement.dataset.nightGuardExt) return;
+  if(guard) guard.destroy();
+  guard = NightGuardLive.create({analyze, app:"Roblox", lang, tellUrl:"/?tab=tell&lang="+lang});
+}
+function render(){
+  $("#msgs").innerHTML = msgs.map(m=>`<div class="m ${m.from}" data-ng-from="${m.from}" data-ng-name="${m.name||""}"><span class="who">${m.from==="me"?(lang==="pt"?"Você":"You"):m.name}</span><span data-ng-text>${m.text.replace(/</g,"&lt;")}</span></div>`).join("");
+  $("#msgs").scrollTop = 1e9;
+}
+function add(name, text){
+  msgs.push(name==="me" ? {from:"me", text} : {from:"them", name, text});
+  render();
+  if(guard) guard.update(msgs.map(m=>({from:m.from, text:m.text, name:m.name})));
+}
+function applyLang(){
+  $("#lang").value = lang; $("#note").textContent = S[lang].note; $("#inp").placeholder = S[lang].ph;
+  $("#play").textContent = S[lang].play; $("#reset").textContent = S[lang].reset;
+}
+function reset(){ timers.forEach(clearTimeout); timers=[]; msgs.length=0; render(); if(guard) guard.reset(); }
+$("#play").onclick = ()=>{ reset(); S[lang].script.forEach(([who,text],i)=>timers.push(setTimeout(()=>add(who,text), 900+i*2600))); };
+$("#reset").onclick = reset;
+$("#lang").onchange = e=>{ lang=e.target.value; applyLang(); reset(); startGuard(); };
+$("#f").onsubmit = e=>{ e.preventDefault(); const v=$("#inp").value.trim(); if(v){ add("me", v); $("#inp").value=""; } };
+fetch("/api/health").then(r=>r.json()).then(h=>{ DEMO=!!h.demo; $("#srv").textContent = S[lang].srv + h.model; }).catch(()=>{ $("#srv").textContent="⚠️ server offline"; });
+applyLang();
+setTimeout(startGuard, 400);
+</script>
+</body>
+</html>

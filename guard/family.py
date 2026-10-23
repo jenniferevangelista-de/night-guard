@@ -28,6 +28,8 @@ DEFAULT_RULES = {s: "child" for s in SIGNAL_IDS} | {
     "meet_offline": "tell",
     "credential_request": "tell",
     "secrecy": "tell",
+    "returning_after_block": "tell",
+    "sextortion": "tell",
 }
 APPS = ["Roblox", "Minecraft", "Fortnite", "Discord", "TikTok", "Instagram", "WhatsApp", "Other"]
 
@@ -75,8 +77,10 @@ def apply_rules(result, app="Other", contact="", rules=None, persist=True):
         "contact": contact[:40],
         "severity": result["severity"],
         "shared": bool(triggered),
-        "signals": [{"id": s["id"], "label": s["label"], "quote": s.get("quote", "")}
+        "signals": [{"id": s["id"], "label": s["label"], "quote": s.get("quote", ""),
+                     "why": s.get("parent", "")}
                     for s in (triggered or result["signals"])],
+        "steps": result.get("parent_steps", []),
     }
     if persist:
         events = _read(ALERTS_FILE, [])

@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Night Guard",
+  "version": "0.1.0",
+  "description": "Watches web chats on this computer and warns the child about pressure tricks. Sends messages only to the Night Guard server you run locally.",
+  "permissions": ["storage"],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html", "default_title": "Night Guard" },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://discord.com/*",
+        "https://web.whatsapp.com/*",
+        "http://localhost/game*",
+        "http://127.0.0.1/game*",
+        "https://night-guard-demo.onrender.com/game*"
+      ],
+      "js": ["guard-overlay.js", "content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

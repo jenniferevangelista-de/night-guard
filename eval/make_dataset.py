@@ -51,7 +51,7 @@ DATA = [
     c("s30", "pt", "safe", [], (T, "o servidor vai cair pra manutenção às 18h"), (M, "ah não"), (T, "volta às 20h")),
 
     # ---------------- RISKY ----------------
-    c("r01", "en", "risky", ["secrecy", "platform_move"], (T, "you're really mature for your age"), (M, "thanks"), (T, "let's talk on snap instead, add me there"), (T, "and don't tell your parents ok? they wouldn't get it")),
+    c("r01", "en", "risky", ["secrecy", "platform_move", "flattery"], (T, "you're really mature for your age"), (M, "thanks"), (T, "let's talk on snap instead, add me there"), (T, "and don't tell your parents ok? they wouldn't get it")),
     c("r02", "en", "risky", ["gift_offer", "suspicious_link"], (T, "FREE 10000 ROBUX!! just log in here robux-gift-claim.xyz"), (M, "is it real?"), (T, "yes hurry it ends today")),
     c("r03", "en", "risky", ["credential_request", "gift_offer"], (T, "i'm a game moderator, i can give you the rare pet"), (T, "just tell me your password so i can add it to your account")),
     c("r04", "en", "risky", ["age_probe"], (T, "how old are you?"), (M, "10"), (T, "are your parents home right now?")),
@@ -66,7 +66,7 @@ DATA = [
     c("r13", "en", "risky", ["pressure"], (T, "answer me"), (T, "why are you ignoring me"), (T, "if you block me i'll tell everyone your secrets")),
     c("r14", "en", "risky", ["photo_request", "platform_move"], (T, "turn on your camera, let's video call on discord")),
     c("r15", "en", "risky", ["suspicious_link"], (T, "check out this free skin generator www.freeskins-now.top/login")),
-    c("r16", "pt", "risky", ["secrecy", "platform_move"], (T, "vc é muito maduro pra sua idade"), (T, "me chama no whatsapp e não conta pros seus pais tá?")),
+    c("r16", "pt", "risky", ["secrecy", "platform_move", "flattery"], (T, "vc é muito maduro pra sua idade"), (T, "me chama no whatsapp e não conta pros seus pais tá?")),
     c("r17", "pt", "risky", ["gift_offer", "suspicious_link"], (T, "GEMAS GRÁTIS!! entra aqui gemas-gratis-br.online e faz login")),
     c("r18", "pt", "risky", ["credential_request"], (T, "sou do suporte do jogo, me passa sua senha pra eu recuperar sua conta")),
     c("r19", "pt", "risky", ["age_probe"], (T, "quantos anos vc tem?"), (M, "9"), (T, "tá sozinho em casa agora?")),
@@ -81,6 +81,18 @@ DATA = [
     c("r28", "en", "risky", ["secrecy"], (T, "delete our chat after reading, ok? this is just between us")),
     c("r29", "en", "risky", ["gift_offer", "pressure"], (T, "free gift card if you do what i say"), (M, "what"), (T, "hurry, only 5 minutes or you lose it forever")),
     c("r30", "pt", "risky", ["age_probe", "secrecy"], (T, "vc tem quantos anos? tá em que série?"), (M, "5º ano"), (T, "legal, mas não fala de mim pra ninguém")),
+
+    # ---- added 23/10 from documented tactics (Public Safety Canada 2025, NCMEC 2026) ----
+    c("r31", "en", "risky", ["flattery"], (T, "you're way more mature than other kids your age"), (M, "haha thanks")),
+    c("r32", "pt", "risky", ["flattery"], (T, "vc é muito maduro pra sua idade, nem parece criança")),
+    c("r33", "en", "risky", ["returning_after_block"], (T, "hey it's me again, i made a new account since you blocked me")),
+    c("r34", "pt", "risky", ["returning_after_block"], (T, "oi sou eu de novo, criei outra conta já que vc me bloqueou")),
+    c("r35", "en", "risky", ["sextortion"], (T, "i have your pics. send me a $50 gift card or i'll post them for all your friends")),
+    c("r36", "pt", "risky", ["sextortion"], (T, "se vc não me mandar 100 reais no pix eu mando suas fotos pros seus amigos")),
+    c("s31", "en", "safe", [], (T, "pay 50 coins for my sword and it's yours"), (M, "deal")),
+    c("s32", "pt", "safe", [], (T, "esse boss voltou com outra skin kkk"), (M, "q isso")),
+    c("s33", "en", "safe", [], (T, "your castle build is so detailed, you're really good at this"), (M, "thanks!")),
+    c("s34", "pt", "safe", [], (T, "sou eu, o Leo da sala, esqueci a senha e criei outra conta, me adiciona"), (M, "blz, te vejo amanhã na escola")),
 ]
 
 out = Path(__file__).with_name("conversations.jsonl")

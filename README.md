@@ -10,6 +10,15 @@ Chats never leave the device.
 (fictional examples only; it runs the Tinker fine-tuned model in the cloud so anyone can try it. The real app runs
 on the child's computer with Gemma. Free instance: the first visit after a quiet period takes ~50 s to wake up.)
 
+> ## 🚧 Next step: mobile apps and in-game chat
+> Today, on a **Windows computer**, Night Guard reacts **on its own, as messages arrive**: a Chrome extension
+> watches web chats (Discord web, WhatsApp Web, experimental), and a **screen guard** uses Gemma's vision to read the
+> chat inside **installed apps** like the Roblox and Discord apps, all on-device.
+> **It does not yet protect phones.** On **Android**, the plan is an app that reads message notifications
+> (the same permission parental tools use there) and runs the detector on-device. On **iPhone**, Apple doesn't let
+> any app read other apps' messages, so the realistic path is working with Apple's own Communication Safety.
+> Bringing Night Guard to the phone, where most kids chat, is the project's next milestone.
+
 ## What it does
 
 | Screen | What happens |
@@ -18,6 +27,33 @@ on the child's computer with Gemma. Free instance: the first visit after a quiet
 | **Practice** | Short, pre-reviewed fictional scenarios (fake moderator, free Robux link, "don't tell your parents"). Choose a reply, then see why it works or not. |
 | **Tell someone** | Pick which quotes to share, and Gemma drafts a short, editable message to a trusted adult ("I didn't do anything wrong, but I need help"). Nothing is sent automatically. |
 | **Family** | Kids don't always recognize a bad intention, so parents set **family rules**: which signals are shared with them automatically (default: photo requests, meeting in person, password requests, secrecy, and any high-risk combination). The child is always told when that happens. Parents see the risk type, the app and the flagged phrase, never the whole chat. |
+
+### Proactive: it doesn't wait for the child to paste anything
+
+Grooming in games can take **20 to 45 minutes** (Swansea University, 2016; WeProtect figure cited by Brazil's
+Ministry of Justice), so waiting for a child to come and paste a chat is too late. Night Guard watches the chat as
+messages arrive and warns the child on the spot:
+
+- **Live demo:** open `/game` (also on the online demo): a fictional game chat where a stranger writes and Night Guard
+  reacts on its own.
+- **Chrome extension** (`extension/`): load it unpacked (`chrome://extensions` → Developer mode → Load unpacked →
+  pick the `extension` folder). It reads new messages on Discord web and WhatsApp Web (experimental) and sends them
+  **only to the local server** (`http://localhost:...`); the extension refuses any non-local address. A
+  "🛡️ Guard on" badge is always visible, so the child knows the guard is there.
+
+- **Screen guard for installed apps** (`guard/screen_guard.py`, Windows): web chats are only half of it, because
+  kids chat inside the **Roblox app, the Discord app, Minecraft, TikTok**. Every few seconds, if the window in
+  front is one of those apps, Night Guard takes a screenshot of that window **in memory**, and **Gemma's vision**
+  reads the chat locally. The text goes to the same detector; the image is never saved and never leaves the
+  computer. Any other window (bank, email, school) is never captured. Run:
+  `python -m guard.screen_guard --server http://localhost:8765 --lang en --me <child's username>`
+
+### What the child sees vs. what the family sees
+
+| | Child | Family |
+|---|---|---|
+| Tone | Plain words, says **"DANGER"** when it is, and compares it to something kids already know: *"It's like a stranger on the street saying 'come with me, but don't tell your mom'. You don't go, and you tell an adult."* Never blames the child. | What happened, why it matters (with sources), and **what to do now**: talk calmly without punishment, keep screenshots, block and report, and for image requests, threats or money demands report to SaferNet / NCMEC and the police. Don't pay. |
+| Content | The flagged phrase and three actions: don't reply, block, tell an adult | Risk level, app, contact, flagged phrase. Never the full chat |
 
 ### The gap no platform covers
 

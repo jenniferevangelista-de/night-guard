@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .env
 eval/last_results.json
+eval/last_run.txt
 .temporal.db*
 train/runs/
 data/

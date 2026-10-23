@@ -54,6 +54,24 @@
     ]
   },
   {
+    "id": "new_account",
+    "skill": "returning_after_block",
+    "title": {"en": "The one who came back", "pt": "Quem voltou com outra conta"},
+    "steps": [
+      {
+        "contact": {"en": "hey it's me again 😅 you blocked me so I made a new account. why are you ignoring me?", "pt": "oi sou eu de novo 😅 vc me bloqueou então criei outra conta. pq tá me ignorando?"},
+        "choices": [
+          {"id": "sorry", "text": {"en": "Say sorry and unblock them", "pt": "Pedir desculpa e desbloquear"}, "good": false,
+           "feedback": {"en": "You don't owe an apology for blocking someone. Coming back with a new account means they ignored your 'no'.", "pt": "Você não deve desculpa por bloquear alguém. Voltar com outra conta quer dizer que ignoraram o seu 'não'."}},
+          {"id": "block", "text": {"en": "Block the new account too", "pt": "Bloquear a conta nova também"}, "good": true,
+           "feedback": {"en": "Good. A 'no' is still a 'no' on a new account.", "pt": "Boa. Um 'não' continua 'não' numa conta nova."}},
+          {"id": "tell", "text": {"en": "Block and tell an adult", "pt": "Bloquear e contar pra um adulto"}, "good": true,
+           "feedback": {"en": "Best move. Someone who keeps coming back after a 'no' is exactly what adults need to know about.", "pt": "Melhor escolha. Alguém que insiste depois de um 'não' é exatamente o que os adultos precisam saber."}}
+        ]
+      }
+    ]
+  },
+  {
     "id": "school_question",
     "skill": "personal_info",
     "title": {"en": "Where do you live?", "pt": "Onde você mora?"},

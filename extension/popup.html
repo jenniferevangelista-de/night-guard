@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body{margin:0;width:280px;font:14px system-ui,sans-serif;background:#0f1530;color:#eef1ff;padding:14px}
+  h1{font-size:17px;margin:0 0 4px}
+  p{color:#a6aed6;font-size:12px;margin:0 0 12px}
+  label{display:block;font-size:12px;color:#a6aed6;margin:10px 0 4px}
+  input,select{width:100%;box-sizing:border-box;background:#161d3f;color:#eef1ff;border:1px solid #2d3770;border-radius:8px;padding:7px}
+  .row{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .row input{width:auto}
+  #saved{color:#5fd49a;font-size:12px;height:14px;margin-top:8px}
+</style>
+</head>
+<body>
+  <h1>🛡️ Night Guard</h1>
+  <p>Watches web chats on this computer and warns about pressure tricks. Messages go only to your local Night Guard server.</p>
+  <div class="row"><input type="checkbox" id="enabled"><span>Guard on</span></div>
+  <label>Local server</label><input id="server" placeholder="http://localhost:8765">
+  <label>Language</label><select id="lang"><option value="en">English</option><option value="pt">Português</option></select>
+  <label>Child's username (Discord, optional)</label><input id="myName">
+  <div id="saved"></div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -12,11 +12,18 @@ import time
 
 import httpx
 
-from .signals import HIGH_ALONE, SIGNAL_IDS, SIGNALS
+from .signals import HIGH_ALONE, PARENT_STEPS, SIGNAL_IDS, SIGNALS
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 BACKEND = os.environ.get("NG_BACKEND", "ollama")
 MODEL = os.environ.get("NG_MODEL", "gemma4:e4b") if BACKEND == "ollama" else "qwen3-8b + Tinker LoRA"
+
+# Two narrow tactics are easy to over-match (a classmate's new account, a compliment on a build),
+# so they only count when the chat actually contains the tactic's own words.
+EVIDENCE = {
+    "returning_after_block": re.compile(r"block|bloque|ignor|ban(ned|iu|ido)?\b|new account.*(since|because) you|me tirou|me exclu", re.I),
+    "flattery": re.compile(r"matur|madur|for your age|pra (sua|tua) idade|para (sua|a sua) idade|older than|mais velh|nem parece", re.I),
+}
 
 URL_RE = re.compile(r"(https?://\S+|www\.\S+|\b[\w-]+\.(?:com|net|org|io|gg|xyz|live|site|online|top|ru)\S*)", re.I)
 
@@ -56,10 +63,15 @@ Signal ids:
 - meet_offline: suggests meeting in person.
 - pressure: guilt-trips, insists after a no, threatens, or creates urgency.
 - isolation: tries to separate the child from parents/friends ("only I understand you").
+- flattery: calls the child unusually mature or special for their age ("you're so mature for your age").
+- returning_after_block: says they made a new account or came back after being blocked ("it's me, I made another account").
+- sextortion: threatens to share pictures/secrets, or demands money, gift cards or more images ("pay or I post your pics").
 
 Rules:
 - Normal gaming talk (strategies, trading in-game items fairly, friendly jokes, "gg", "add me in the game") is NOT a signal.
 - Asking to play together in the same game is NOT platform_move.
+- A fair in-game trade or price ("50 coins for my sword") is NOT gift_offer; gift_offer is something given for free or "for you".
+- returning_after_block ONLY when they say the child blocked/ignored them and they came back. A friend who lost a password and made a new account is NOT it.
 - Be precise: only flag what is actually written. If nothing is risky, return an empty list.
 - message_index is the [number] of the message. quote is the exact short phrase.
 - summary: one neutral sentence in English describing what happened (no drama)."""
@@ -148,6 +160,9 @@ def postprocess(raw, messages, lang="en", model=MODEL):
         text = messages[idx].get("text", "")
         if not quote.strip() or quote.strip() not in text:
             quote = text  # the model paraphrased: show the real message instead
+        need = EVIDENCE.get(sid)
+        if need and not any(need.search(m.get("text", "")) for i, m in enumerate(messages) if contact_msg(i)):
+            continue  # narrow tactics need their own evidence in the chat (see EVIDENCE)
         found.setdefault(sid, {"id": sid, "message_index": idx, "quote": quote.strip()})
 
     links = []
@@ -159,8 +174,8 @@ def postprocess(raw, messages, lang="en", model=MODEL):
     sigs = list(found.values())
     for s in sigs:
         meta = SIGNALS[s["id"]]
-        s["label"] = meta["label"].get(lang, meta["label"]["en"])
-        s["lesson"] = meta["lesson"].get(lang, meta["lesson"]["en"])
+        for field in ("label", "lesson", "kid", "parent"):
+            s[field] = meta[field].get(lang, meta[field]["en"])
 
     sev = severity(found.keys())
     return {
@@ -170,5 +185,6 @@ def postprocess(raw, messages, lang="en", model=MODEL):
         "links": links,
         "summary": raw.get("summary", ""),
         "notify_family": sev == "high",
+        "parent_steps": PARENT_STEPS.get(sev, {}).get(lang, PARENT_STEPS.get(sev, {}).get("en", [])),
         "model": model,
     }
