@@ -165,6 +165,8 @@ const T = {
     tab2:"Practice", tab2sub:"Try short, safe scenarios before they happen.",
     tab3:"Tell someone", tab3sub:"Turn it into a message you control.",
     tab4:"Family", tab4sub:"Parent area: family rules and alerts.",
+    demoPill:"online demo", demoTitle:"Online demo: use the fictional examples only",
+    demoBody:"This public demo runs a fine-tuned model in the cloud so judges can try it. The real Night Guard runs on the child's own computer, where chats never leave the device. Please don't paste real conversations here.",
     whereLabel:"Where did this happen?",
     famNoteTitle:"Your family will know about this",
     famNoteBody:"Your family set a rule for this kind of message, so Night Guard let them know. They see what kind of risk it was, not your whole chat. You're not in trouble.",
@@ -200,6 +202,8 @@ const T = {
     tab2:"Praticar", tab2sub:"Treine situações curtas e seguras antes de acontecerem.",
     tab3:"Contar para alguém", tab3sub:"Transforme em uma mensagem que você controla.",
     tab4:"Família", tab4sub:"Área dos pais: regras e alertas.",
+    demoPill:"demo online", demoTitle:"Demo online: use só os exemplos fictícios",
+    demoBody:"Esta demo pública roda um modelo ajustado na nuvem para os jurados testarem. O Night Guard de verdade roda no computador da criança, onde as conversas nunca saem do aparelho. Não cole conversas reais aqui.",
     whereLabel:"Onde aconteceu?",
     famNoteTitle:"Sua família vai ficar sabendo disso",
     famNoteBody:"Sua família criou uma regra para esse tipo de mensagem, então o Night Guard avisou. Eles veem o tipo de risco, não a conversa inteira. Você não está encrencado.",
@@ -280,7 +284,10 @@ function show(p){
 }
 document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{$("#paste").value=EX[lang][b.dataset.ex];});
 
-fetch("/api/health").then(r=>r.json()).then(h=>{$("#health").innerHTML=`🔒 ${esc(h.model)} · <b>${t("local")}</b>`}).catch(()=>{$("#health").textContent="⚠️ offline"});
+fetch("/api/health").then(r=>r.json()).then(h=>{
+  $("#health").innerHTML = h.demo ? `☁️ ${esc(h.model)} · <b>${t("demoPill")}</b>` : `🔒 ${esc(h.model)} · <b>${t("local")}</b>`;
+  if(h.demo){ const d=document.createElement("div"); d.className="famnote"; d.innerHTML=`<b>☁️ ${t("demoTitle")}</b><div class="small" style="margin-top:4px">${t("demoBody")}</div>`; document.querySelector("nav").before(d); }
+}).catch(()=>{$("#health").textContent="⚠️ offline"});
 
 /* ---------- 1. Check ---------- */
 $("#analyzeBtn").onclick = async ()=>{

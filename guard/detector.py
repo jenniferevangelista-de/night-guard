@@ -1,6 +1,8 @@
 """Night Guard detector: reads a chat with one contact and returns risk signals.
 
-Everything runs locally through Ollama. No chat text leaves the computer.
+By default everything runs locally through Ollama + Gemma: no chat text leaves
+the computer. NG_BACKEND=tinker is only for the public demo (fictional examples),
+where the Tinker fine-tuned Qwen3-8B is used instead.
 """
 
 import json
@@ -13,7 +15,8 @@ import httpx
 from .signals import HIGH_ALONE, SIGNAL_IDS, SIGNALS
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
-MODEL = os.environ.get("NG_MODEL", "gemma4:e4b")
+BACKEND = os.environ.get("NG_BACKEND", "ollama")
+MODEL = os.environ.get("NG_MODEL", "gemma4:e4b") if BACKEND == "ollama" else "qwen3-8b + Tinker LoRA"
 
 URL_RE = re.compile(r"(https?://\S+|www\.\S+|\b[\w-]+\.(?:com|net|org|io|gg|xyz|live|site|online|top|ru)\S*)", re.I)
 
@@ -71,6 +74,9 @@ def _format_chat(messages):
 
 
 def _call_model(messages, timeout=120):
+    if BACKEND == "tinker":
+        from . import cloud
+        return cloud.classify(SYSTEM, "Chat:\n" + _format_chat(messages) + "\n\nReturn the JSON.")
     payload = {
         "model": MODEL,
         "stream": False,

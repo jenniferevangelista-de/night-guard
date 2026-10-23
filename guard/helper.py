@@ -6,7 +6,7 @@ automatically.
 
 import httpx
 
-from .detector import MODEL, OLLAMA_URL
+from .detector import BACKEND, MODEL, OLLAMA_URL
 
 PROMPT = {
     "en": """Write a short message (max 4 sentences) that a child can send to a trusted adult ({who}).
@@ -36,6 +36,11 @@ def draft_help(quotes, who="Mom", note="", lang="en"):
     lang = lang if lang in PROMPT else "en"
     q = "\n".join(f'- "{x}"' for x in quotes) or "- (no quotes chosen)"
     extra = (("Child's own words: " if lang == "en" else "Palavras da criança: ") + note) if note else ""
+    content = PROMPT[lang].format(who=who, quotes=q, note=extra)
+    if BACKEND == "tinker":  # public demo: base Qwen3-8B writes the message (the LoRA is a classifier)
+        from . import cloud
+        return cloud.generate([{"role": "user", "content": content}], fine_tuned=False,
+                              max_tokens=200, temperature=0.2)
     payload = {
         "model": MODEL,
         "stream": False,
@@ -43,7 +48,7 @@ def draft_help(quotes, who="Mom", note="", lang="en"):
         "keep_alive": "30m",
         # Same num_ctx as the detector so Ollama doesn't reload the model.
         "options": {"temperature": 0.2, "num_ctx": 4096},
-        "messages": [{"role": "user", "content": PROMPT[lang].format(who=who, quotes=q, note=extra)}],
+        "messages": [{"role": "user", "content": content}],
     }
     r = httpx.post(f"{OLLAMA_URL}/api/chat", json=payload, timeout=120)
     r.raise_for_status()

@@ -7,9 +7,9 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from .detector import MODEL, analyze
+from .detector import BACKEND, MODEL, analyze
 from .family import APPS, apply_rules, contacts_across_apps, get_alerts, get_rules, set_rules
 from .helper import draft_help
 
@@ -22,8 +22,8 @@ app = FastAPI(title="Night Guard")
 
 
 class AnalyzeReq(BaseModel):
-    text: str | None = None          # pasted chat, one message per line
-    messages: list[dict] | None = None
+    text: str | None = Field(default=None, max_length=4000)   # pasted chat, one message per line
+    messages: list[dict] | None = Field(default=None, max_length=60)
     lang: str = "en"
     app: str = "Other"
 
@@ -52,7 +52,8 @@ def parse_paste(text):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "model": MODEL, "runs": "locally via Ollama"}
+    return {"ok": True, "model": MODEL, "demo": BACKEND != "ollama",
+            "runs": "locally via Ollama" if BACKEND == "ollama" else "public demo on Render + Tinker"}
 
 
 @app.post("/api/analyze")
