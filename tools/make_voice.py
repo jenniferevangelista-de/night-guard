@@ -25,10 +25,16 @@ API = "https://api.elevenlabs.io/v1"
 PREFERRED = ["Sarah", "Rachel", "Laura", "Alice", "Matilda"]  # warm, calm voices from the premade library
 
 
+SARAH = "EXAVITQu4vr4xnSDxMaL"  # premade "Sarah": soft, reassuring; works with a text-to-speech-only key
+
+
 def pick_voice():
     if os.environ.get("ELEVENLABS_VOICE_ID"):
         return os.environ["ELEVENLABS_VOICE_ID"], "custom"
-    voices = httpx.get(f"{API}/voices", headers={"xi-api-key": KEY}, timeout=30).json()["voices"]
+    r = httpx.get(f"{API}/voices", headers={"xi-api-key": KEY}, timeout=30)
+    if r.status_code != 200:  # key without voices_read permission: use the known premade voice
+        return SARAH, "Sarah (premade)"
+    voices = r.json()["voices"]
     by_name = {v["name"].split(" ")[0]: v for v in voices}
     v = next((by_name[n] for n in PREFERRED if n in by_name), voices[0])
     return v["voice_id"], v["name"]
