@@ -24,7 +24,14 @@
   .pill b{color:var(--good)}
   .lang button{background:none;border:1px solid var(--line);color:var(--muted);padding:6px 10px;border-radius:10px;cursor:pointer;font:inherit}
   .lang button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-  nav{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 18px}
+  nav{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 18px}
+  .famnote{border:1px solid var(--accent);background:#2a2f5e;border-radius:12px;padding:12px;margin:10px 0}
+  .rule{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:var(--bg2);margin:6px 0}
+  .seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg button{background:none;border:0;color:var(--muted);padding:6px 10px;font:inherit;font-size:13px;cursor:pointer}
+  .seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:800}
+  .alert{border-left:4px solid var(--bad);background:var(--bg2);border-radius:10px;padding:10px 12px;margin:8px 0}
+  .tagapp{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:1px 8px;font-size:12px;color:var(--muted);margin-left:6px}
   nav button{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:14px 10px;border-radius:var(--radius);cursor:pointer;font:inherit;font-weight:700;text-align:left}
   nav button span{display:block;font-weight:400;color:var(--muted);font-size:13px;margin-top:3px}
   nav button.on{outline:2px solid var(--accent);background:#252e63}
@@ -83,6 +90,7 @@
     <button data-p="check" class="on"><span data-t="tab1sub"></span></button>
     <button data-p="practice"><span data-t="tab2sub"></span></button>
     <button data-p="tell"><span data-t="tab3sub"></span></button>
+    <button data-p="family"><span data-t="tab4sub"></span></button>
   </nav>
 
   <!-- 1. Something felt off -->
@@ -90,6 +98,10 @@
     <div class="card">
       <div class="small muted" data-t="pasteHelp"></div>
       <textarea id="paste"></textarea>
+      <div class="row" style="margin-top:8px">
+        <label class="small muted" data-t="whereLabel"></label>
+        <select id="app"></select>
+      </div>
       <div class="row" style="margin-top:10px">
         <button class="btn" id="analyzeBtn" data-t="analyze"></button>
         <span class="small muted" data-t="examples"></span>
@@ -127,6 +139,21 @@
     <div id="draftOut"></div>
   </section>
 
+  <!-- 4. Family (parent area) -->
+  <section class="panel" id="p-family">
+    <div class="card">
+      <div style="font-weight:800" data-t="famTitle"></div>
+      <div class="small muted" style="margin:4px 0 8px" data-t="famHelp"></div>
+      <div id="crossApp"></div>
+      <div id="alerts"></div>
+    </div>
+    <div class="card">
+      <div style="font-weight:800" data-t="rulesTitle"></div>
+      <div class="small muted" style="margin:4px 0 8px" data-t="rulesHelp"></div>
+      <div id="rules"></div>
+    </div>
+  </section>
+
   <footer data-t="footer"></footer>
 </div>
 
@@ -137,6 +164,15 @@ const T = {
     tab1:"Something felt off", tab1sub:"Paste a chat. I'll point out what to notice.",
     tab2:"Practice", tab2sub:"Try short, safe scenarios before they happen.",
     tab3:"Tell someone", tab3sub:"Turn it into a message you control.",
+    tab4:"Family", tab4sub:"Parent area: family rules and alerts.",
+    whereLabel:"Where did this happen?",
+    famNoteTitle:"Your family will know about this",
+    famNoteBody:"Your family set a rule for this kind of message, so Night Guard let them know. They see what kind of risk it was, not your whole chat. You're not in trouble.",
+    famTitle:"Family alerts", famHelp:"You see the kind of risk, the app and the flagged phrase. Never the whole conversation.",
+    noAlerts:"No alerts yet. Quiet week ✅",
+    crossApp:"Same contact seen in more than one app:", crossAppHint:"Moving a kid from a game to a private app is a classic pressure pattern.",
+    rulesTitle:"Family rules", rulesHelp:"Kids don't always recognize a bad intention. Choose what Night Guard tells you automatically. Your child is always told when it does.",
+    tell:"Tell family", childDecides:"Child decides",
     pasteHelp:"Paste the chat, one message per line. Start your own lines with “Me:”. Fictional examples below.",
     analyze:"Check this chat", examples:"Try:", innocent:"innocent secret",
     checking:"Reading locally…",
@@ -163,6 +199,15 @@ const T = {
     tab1:"Algo me incomodou", tab1sub:"Cole uma conversa. Eu mostro o que observar.",
     tab2:"Praticar", tab2sub:"Treine situações curtas e seguras antes de acontecerem.",
     tab3:"Contar para alguém", tab3sub:"Transforme em uma mensagem que você controla.",
+    tab4:"Família", tab4sub:"Área dos pais: regras e alertas.",
+    whereLabel:"Onde aconteceu?",
+    famNoteTitle:"Sua família vai ficar sabendo disso",
+    famNoteBody:"Sua família criou uma regra para esse tipo de mensagem, então o Night Guard avisou. Eles veem o tipo de risco, não a conversa inteira. Você não está encrencado.",
+    famTitle:"Alertas da família", famHelp:"Você vê o tipo de risco, o app e o trecho marcado. Nunca a conversa inteira.",
+    noAlerts:"Nenhum alerta ainda. Semana tranquila ✅",
+    crossApp:"Mesmo contato visto em mais de um app:", crossAppHint:"Levar a criança de um jogo para um app privado é um padrão clássico de pressão.",
+    rulesTitle:"Regras da família", rulesHelp:"A criança nem sempre percebe uma má intenção. Escolha o que o Night Guard te conta automaticamente. A criança sempre é avisada quando isso acontece.",
+    tell:"Avisar família", childDecides:"Criança decide",
     pasteHelp:"Cole a conversa, uma mensagem por linha. Comece suas falas com “Eu:”. Exemplos fictícios abaixo.",
     analyze:"Conferir conversa", examples:"Teste:", innocent:"segredo inocente",
     checking:"Lendo aqui no computador…",
@@ -216,13 +261,13 @@ function applyLang(){
   document.documentElement.lang = lang;
   document.querySelectorAll("[data-t]").forEach(el=>{ el.textContent = t(el.dataset.t); });
   document.querySelectorAll("nav button").forEach((b,i)=>{
-    const k=["tab1","tab2","tab3"][i]; b.firstChild.nodeType===3 ? b.firstChild.textContent=t(k) : b.insertBefore(document.createTextNode(t(k)), b.firstChild);
+    const k=["tab1","tab2","tab3","tab4"][i]; b.firstChild.nodeType===3 ? b.firstChild.textContent=t(k) : b.insertBefore(document.createTextNode(t(k)), b.firstChild);
   });
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===lang));
   $("#paste").placeholder = EX[lang].secret;
   $("#note").placeholder = t("notePh");
   $("#who").innerHTML = t("whoOpts").map(o=>`<option>${esc(o)}</option>`).join("");
-  renderLazy(); renderScenarios(); renderQuotes();
+  renderLazy(); renderScenarios(); renderQuotes(); renderFamily();
   if(last) renderResult(last, true);
 }
 
@@ -231,6 +276,7 @@ document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>show(b.dataset.
 function show(p){
   document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.p===p));
   document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("on",x.id==="p-"+p));
+  if(p==="family") loadFamily();
 }
 document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{$("#paste").value=EX[lang][b.dataset.ex];});
 
@@ -242,7 +288,7 @@ $("#analyzeBtn").onclick = async ()=>{
   const btn=$("#analyzeBtn"); btn.disabled=true;
   $("#result").innerHTML = `<div class="card muted"><span class="spin">🌙</span> ${t("checking")}</div>`;
   try{
-    const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,lang})});
+    const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,lang,app:$("#app").value})});
     last = await r.json(); last.answered=null;
     renderResult(last);
   }catch(e){ $("#result").innerHTML = `<div class="card">⚠️ ${esc(e)}</div>`; }
@@ -284,6 +330,7 @@ function renderResult(res, rerender){
     <div class="verdict"><span class="dot" style="background:${color}"></span>${esc(title)}</div>
     ${fb?`<div class="small muted" style="margin-top:4px">${esc(fb)}</div>`:""}
     ${chatHTML(res)}
+    ${res.family_alert?`<div class="famnote"><b>👨‍👩‍👧 ${t("famNoteTitle")}</b><div class="small" style="margin-top:4px">${t("famNoteBody")}</div></div>`:""}
     ${res.severity==="none"?`<p>${t("noneBody")}</p>`:""}
     ${res.severity==="low"?`<p class="muted">${t("lowBody")}</p>`:""}
     ${sigs}
@@ -346,6 +393,36 @@ $("#draftBtn").onclick = async ()=>{
   }catch(e){ $("#draftOut").innerHTML = `<div class="card">⚠️ ${esc(e)}</div>`; }
   btn.disabled=false;
 };
+
+/* ---------- 4. Family ---------- */
+let fam = {rules:{}, apps:[], alerts:[], cross:{}};
+const SIG_LABEL = {
+  en:{secrecy:"Asked to keep a secret",platform_move:"Wants to move to another app",personal_info:"Asked for personal info",age_probe:"Asked age / if alone",photo_request:"Asked for a photo or video",gift_offer:"Offered gifts or free stuff",credential_request:"Asked for a password or code",suspicious_link:"Sent a suspicious link",meet_offline:"Wants to meet in person",pressure:"Pressure, guilt or threats",isolation:"Tries to isolate from family"},
+  pt:{secrecy:"Pediu segredo",platform_move:"Quer mudar de aplicativo",personal_info:"Pediu dados pessoais",age_probe:"Perguntou idade / se está sozinho",photo_request:"Pediu foto ou vídeo",gift_offer:"Ofereceu presente ou coisa grátis",credential_request:"Pediu senha ou código",suspicious_link:"Mandou link suspeito",meet_offline:"Quer encontrar pessoalmente",pressure:"Pressão, culpa ou ameaça",isolation:"Tenta afastar da família"}
+};
+fetch("/api/family/rules").then(r=>r.json()).then(d=>{fam.rules=d.rules; fam.apps=d.apps;
+  $("#app").innerHTML = d.apps.map(a=>`<option>${esc(a)}</option>`).join(""); renderFamily();});
+async function loadFamily(){
+  const d = await (await fetch("/api/family/alerts")).json();
+  fam.alerts = d.alerts; fam.cross = d.cross_app_contacts; renderFamily();
+}
+function renderFamily(){
+  if(!$("#rules")) return;
+  $("#rules").innerHTML = Object.keys(SIG_LABEL.en).map(id=>`<div class="rule"><span>${esc(SIG_LABEL[lang][id])}</span>
+    <div class="seg" data-r="${id}"><button data-v="tell" class="${fam.rules[id]==="tell"?"on":""}">${t("tell")}</button><button data-v="child" class="${fam.rules[id]!=="tell"?"on":""}">${t("childDecides")}</button></div></div>`).join("");
+  $("#rules").querySelectorAll(".seg button").forEach(b=>b.onclick=async()=>{
+    const id=b.parentElement.dataset.r;
+    const d=await (await fetch("/api/family/rules",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({[id]:b.dataset.v})})).json();
+    fam.rules=d.rules; renderFamily();
+  });
+  const cross = Object.entries(fam.cross||{});
+  $("#crossApp").innerHTML = cross.length ? `<div class="famnote"><b>⚠️ ${t("crossApp")}</b> ${cross.map(([c,a])=>`<b>${esc(c)}</b> (${a.map(esc).join(" → ")})`).join(", ")}<div class="small muted">${t("crossAppHint")}</div></div>` : "";
+  $("#alerts").innerHTML = (fam.alerts||[]).length ? fam.alerts.map(a=>`<div class="alert">
+    <div><b>${a.signals.map(s=>esc(SIG_LABEL[lang][s.id]||s.label)).join(" · ")}</b><span class="tagapp">${esc(a.app)}</span>${a.contact?`<span class="tagapp">${esc(a.contact)}</span>`:""}</div>
+    <div class="small muted">${esc(a.time)}</div>
+    ${a.signals.filter(s=>s.quote).map(s=>`<div class="q small" style="font-style:italic;color:var(--muted)">“${esc(s.quote)}”</div>`).join("")}
+  </div>`).join("") : `<p class="muted">${t("noAlerts")}</p>`;
+}
 
 applyLang();
 </script>

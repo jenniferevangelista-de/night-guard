@@ -10,6 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from .detector import MODEL, analyze
+from .family import APPS, apply_rules, contacts_across_apps, get_alerts, get_rules, set_rules
 from .helper import draft_help
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -24,6 +25,7 @@ class AnalyzeReq(BaseModel):
     text: str | None = None          # pasted chat, one message per line
     messages: list[dict] | None = None
     lang: str = "en"
+    app: str = "Other"
 
 
 class HelpReq(BaseModel):
@@ -43,7 +45,8 @@ def parse_paste(text):
             out.append({"from": "me", "text": ME_PREFIX.sub("", line).strip()})
             continue
         m = NAME_PREFIX.match(line)
-        out.append({"from": "them", "text": (m.group(2) if m else line).strip()})
+        out.append({"from": "them", "name": m.group(1).strip() if m else "",
+                    "text": (m.group(2) if m else line).strip()})
     return out
 
 
@@ -59,7 +62,24 @@ def api_analyze(req: AnalyzeReq):
         return {"severity": "none", "signals": [], "links": [], "summary": "", "messages": []}
     res = analyze(msgs, lang=req.lang)
     res["messages"] = msgs
+    contact = next((m.get("name", "") for m in msgs if m.get("from") != "me" and m.get("name")), "")
+    res["family_alert"] = apply_rules(res, app=req.app, contact=contact)
     return res
+
+
+@app.get("/api/family/rules")
+def api_get_rules():
+    return {"rules": get_rules(), "apps": APPS}
+
+
+@app.post("/api/family/rules")
+def api_set_rules(rules: dict):
+    return {"rules": set_rules(rules)}
+
+
+@app.get("/api/family/alerts")
+def api_alerts():
+    return {"alerts": get_alerts(), "cross_app_contacts": contacts_across_apps()}
 
 
 @app.get("/api/scenarios")

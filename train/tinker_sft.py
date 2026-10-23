@@ -6,9 +6,15 @@ Run from project root:  .venv\\Scripts\\python train\\tinker_sft.py
 
 import asyncio
 import os
+import sys
 from pathlib import Path
 
-import chz
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from guard.env import load_env  # noqa: E402
+
+load_env()
+
+import chz  # noqa: E402
 
 from tinker_cookbook.renderers import TrainOnWhat
 from tinker_cookbook.supervised import train

@@ -13,6 +13,13 @@ Chats never leave the device.
 | **Something felt off** | Paste a chat. Before showing results, Night Guard asks *"did anything feel off to you?"*, then highlights the exact phrases that match common pressure tricks (secrecy, moving to another app, free-stuff links, password requests…) with a calm one-line explanation. If nothing is found, it says so, and reminds the child that their feeling still counts. |
 | **Practice** | Short, pre-reviewed fictional scenarios (fake moderator, free Robux link, "don't tell your parents"). Choose a reply, then see why it works or not. |
 | **Tell someone** | Pick which quotes to share, and Gemma drafts a short, editable message to a trusted adult ("I didn't do anything wrong, but I need help"). Nothing is sent automatically. |
+| **Family** | Kids don't always recognize a bad intention, so parents set **family rules**: which signals are shared with them automatically (default: photo requests, meeting in person, password requests, secrecy, and any high-risk combination). The child is always told when that happens. Parents see the risk type, the app and the flagged phrase, never the whole chat. |
+
+### The gap no platform covers
+
+Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox parental controls each protect **their own app**. The classic pressure path starts in a game and moves to a private app. Night Guard records where each check happened, so the family sees:
+
+> ⚠️ Same contact seen in more than one app: **Alex_17 (Roblox → Instagram)**
 
 **The lazy part:** the tutor repeats less as you learn. Lessons you already know collapse to a single ✓ line, so the guard gets lazier as the kid gets wiser.
 
@@ -45,6 +52,26 @@ python -m venv .venv && .venv/Scripts/pip install fastapi uvicorn httpx
 ```
 
 Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
+
+## Fine-tuning with Tinker
+
+Gemma runs locally, but Tinker doesn't serve Gemma, so the fine-tuning experiment uses **Qwen3-8B** on
+[Tinker](https://thinkingmachines.ai/tinker/): LoRA rank 16, 800 fictional training chats (no sentence shared with the
+test set), 2 epochs, ~740k training tokens. Same 60-chat held-out test set.
+
+| | Qwen3-8B base | **Qwen3-8B + Tinker LoRA** |
+|---|---|---|
+| Answers in the app's JSON format | 6 to 28 / 60 (varies by run) | **60 / 60** |
+| Risky chats the app can act on | **0 / 30** | **30 / 30** |
+| False alarms | 2 / 30 (lenient parsing) | **1 / 30** |
+| Signal recall | 67% to 76% (lenient parsing) | **82%** |
+| Signal precision | 88% to 90% (lenient parsing) | 88% |
+| Latency on Tinker | 2.0 to 2.6 s | 4.8 to 6.6 s |
+
+The base model understands the risk but invents field names (`signal_id` instead of `id`), so the app can't use its
+answers. "Lenient parsing" guesses the renamed fields to give the base model a fair comparison. The fine-tuned model
+follows the format every time and finds more signals. Trade-off: it was slower on Tinker's sampler.
+Scripts: `train/make_train.py`, `train/tinker_sft.py`, `train/tinker_eval.py`.
 
 ## Durable evaluation with Temporal
 
