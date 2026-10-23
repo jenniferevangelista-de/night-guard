@@ -88,7 +88,7 @@ Tinker doesn't serve Gemma, so for the cloud demo I fine-tuned **Qwen3-8B** with
 | Avg time per check | 3.0 s | 5.0 s | 4.5 s |
 
 
-An answer only counts if every field matches the schema the app uses, and an invalid answer is an error, never a catch. The base model often renames fields (`signal_id` instead of `id`). Read leniently, it flagged 35 of the 35 risky chats it answered readably, so it often *sees* the pattern; it just can't answer in a form an app can use every time. Fine-tuning fixed the format on all 70 chats and found more signals, and v2 learned the three newer tactics. The online demo runs v2. Every raw answer is saved per case in the repo, so anyone can recount.
+An answer only counts if every field matches the schema the app uses, and an invalid answer is an error, never a catch. The base model often renames fields (`signal_id` instead of `id`). Read leniently, it flagged 35 of the 35 risky chats it answered readably, so it often *sees* the pattern; it just can't answer in a form an app can use every time. Fine-tuning fixed the format on all 70 chats and found more signals, and v2 learned the three newer tactics. The online demo runs v2. Two honest limits: the false-alarm gap between v1 and v2 (3 vs 2 of 34) is a single chat, and the LoRA is not faster than the base model; the win is answers an app can always use. Every raw answer is saved per case in the repo, so anyone can recount.
 
 ### Temporal: an evaluation that survives a crashing laptop
 
