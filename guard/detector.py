@@ -76,6 +76,7 @@ def _call_model(messages, timeout=120):
         "stream": False,
         "format": SCHEMA,
         "think": False,
+        "keep_alive": "30m",  # avoid a ~25 s cold reload between checks
         "options": {"temperature": 0, "num_ctx": 4096},
         "messages": [
             {"role": "system", "content": SYSTEM},

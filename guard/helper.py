@@ -40,6 +40,7 @@ def draft_help(quotes, who="Mom", note="", lang="en"):
         "model": MODEL,
         "stream": False,
         "think": False,
+        "keep_alive": "30m",
         # Same num_ctx as the detector so Ollama doesn't reload the model.
         "options": {"temperature": 0.2, "num_ctx": 4096},
         "messages": [{"role": "user", "content": PROMPT[lang].format(who=who, quotes=q, note=extra)}],
