@@ -1,0 +1,50 @@
+{
+  "model": "tinker://34d43b69-153f-51ac-a9d1-56c966058b0f:train:0/sampler_weights/final",
+  "n": 70,
+  "format_ok": 70,
+  "avg_latency_s": 4.18,
+  "strict": {
+    "risky_flagged": "36/36",
+    "false_alarms": "2/34",
+    "signal_precision": 0.88,
+    "signal_recall": 0.83,
+    "mistakes": [
+      [
+        "FALSE ALARM",
+        "s29",
+        [
+          "age_probe"
+        ]
+      ],
+      [
+        "FALSE ALARM",
+        "s31",
+        [
+          "gift_offer"
+        ]
+      ]
+    ]
+  },
+  "lenient": {
+    "risky_flagged": "36/36",
+    "false_alarms": "2/34",
+    "signal_precision": 0.88,
+    "signal_recall": 0.83,
+    "mistakes": [
+      [
+        "FALSE ALARM",
+        "s29",
+        [
+          "age_probe"
+        ]
+      ],
+      [
+        "FALSE ALARM",
+        "s31",
+        [
+          "gift_offer"
+        ]
+      ]
+    ]
+  }
+}

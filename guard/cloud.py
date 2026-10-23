@@ -15,7 +15,8 @@ from transformers import AutoTokenizer
 BASE_MODEL = "Qwen/Qwen3-8B"
 FT_PATH = os.environ.get(
     "NG_TINKER_MODEL_PATH",
-    "tinker://c8aba687-d187-5640-b9ab-9e58998bc9be:train:0/sampler_weights/final",
+    # v2: 14 signals, 1000 fictional chats (v1 was c8aba687-d187-5640-b9ab-9e58998bc9be)
+    "tinker://34d43b69-153f-51ac-a9d1-56c966058b0f:train:0/sampler_weights/final",
 )
 IM_END = 151645  # Qwen <|im_end|>
 

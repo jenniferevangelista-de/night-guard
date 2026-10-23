@@ -1,0 +1,58 @@
+﻿.venv\Scripts\python : Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to 
+enable higher rate limits and faster downloads.
+No linha:1 caractere:651
++ ... _v1_70.log; .venv\Scripts\python train\tinker_eval.py $v2 v2_70 *> tr ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Warning: You ar...ster downloads.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+{
+  "model": "tinker://34d43b69-153f-51ac-a9d1-56c966058b0f:train:0/sampler_weights/final",
+  "n": 70,
+  "format_ok": 70,
+  "avg_latency_s": 4.18,
+  "strict": {
+    "risky_flagged": "36/36",
+    "false_alarms": "2/34",
+    "signal_precision": 0.88,
+    "signal_recall": 0.83,
+    "mistakes": [
+      [
+        "FALSE ALARM",
+        "s29",
+        [
+          "age_probe"
+        ]
+      ],
+      [
+        "FALSE ALARM",
+        "s31",
+        [
+          "gift_offer"
+        ]
+      ]
+    ]
+  },
+  "lenient": {
+    "risky_flagged": "36/36",
+    "false_alarms": "2/34",
+    "signal_precision": 0.88,
+    "signal_recall": 0.83,
+    "mistakes": [
+      [
+        "FALSE ALARM",
+        "s29",
+        [
+          "age_probe"
+        ]
+      ],
+      [
+        "FALSE ALARM",
+        "s31",
+        [
+          "gift_offer"
+        ]
+      ]
+    ]
+  }
+}

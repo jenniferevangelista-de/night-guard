@@ -117,22 +117,23 @@ Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
 ## Fine-tuning with Tinker
 
 Gemma runs locally, but Tinker doesn't serve Gemma, so the fine-tuning experiment uses **Qwen3-8B** on
-[Tinker](https://thinkingmachines.ai/tinker/): LoRA rank 16, 800 fictional training chats (no sentence shared with the
-test set), 2 epochs, ~740k training tokens. Same 60-chat held-out test set.
+[Tinker](https://thinkingmachines.ai/tinker/): LoRA rank 16, 2 epochs, fictional training chats with no sentence
+shared with the test set. Two runs: **v1** (11 tactics, 800 chats, ~740k tokens) and **v2** (14 tactics, 1,000 chats,
+~1.23M tokens). All three models evaluated on the same 70-chat held-out test set (36 risky, 34 safe):
 
-| | Qwen3-8B base | **Qwen3-8B + Tinker LoRA** |
-|---|---|---|
-| Answers in the app's JSON format | 6 to 28 / 60 (varies by run) | **60 / 60** |
-| Risky chats the app can act on | **0 / 30** | **30 / 30** |
-| False alarms | 2 / 30 (lenient parsing) | **1 / 30** |
-| Signal recall | 67% to 76% (lenient parsing) | **82%** |
-| Signal precision | 88% to 90% (lenient parsing) | 88% |
-| Latency on Tinker | 2.0 to 2.6 s | 4.8 to 6.6 s |
+| | Qwen3-8B base | LoRA v1 | **LoRA v2 (online demo)** |
+|---|---|---|---|
+| Answers in the app's exact JSON format | 23 / 70 | 70 / 70 | **70 / 70** |
+| Risky chats the app can act on | **0 / 36** | 36 / 36 | **36 / 36** |
+| False alarms on safe chats | 3 / 34 (lenient parsing) | 3 / 34 | **2 / 34** |
+| Signal precision / recall | 0.88 / 0.76 (lenient parsing) | 0.84 / 0.79 | **0.88 / 0.83** |
+| Avg time per check on Tinker | 2.6 s | 6.7 s | 4.2 s |
 
-The base model understands the risk but invents field names (`signal_id` instead of `id`), so the app can't use its
-answers. "Lenient parsing" guesses the renamed fields to give the base model a fair comparison. The fine-tuned model
-follows the format every time and finds more signals. Trade-off: it was slower on Tinker's sampler.
-Scripts: `train/make_train.py`, `train/tinker_sft.py`, `train/tinker_eval.py`.
+The base model understands the risk but invents field names (`signal_id` instead of `id`), so the app can't use a
+single answer. "Lenient parsing" guesses the renamed fields to give the base model a fair comparison. Fine-tuning
+fixed the format every time and found more signals; v2 also learned the 3 newer tactics.
+Scripts: `train/make_train.py`, `train/tinker_sft.py`, `train/tinker_eval.py <model|base> <tag>`,
+`train/compare_tinker.py`; results in `train/tinker_eval_{base_70,v1_70,v2_70}.json`.
 
 ## Durable evaluation with Temporal
 

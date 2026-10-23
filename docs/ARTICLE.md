@@ -74,16 +74,17 @@ A 20-minute grooming window means "paste your chat here" is too late. Night Guar
 
 ### Fine-tuning with Tinker: teaching a model to speak the app's language
 
-Tinker doesn't serve Gemma, so for the cloud demo I fine-tuned **Qwen3-8B** with a LoRA (rank 16) on **Thinking Machines' Tinker**, using fictional training chats that share no sentence with the test set.
+Tinker doesn't serve Gemma, so for the cloud demo I fine-tuned **Qwen3-8B** with a LoRA (rank 16) on **Thinking Machines' Tinker**, using fictional training chats that share no sentence with the test set. Two runs: v1 (11 tactics, 800 chats) and v2 (14 tactics, 1,000 chats, ~1.23M tokens), all compared on the same 70 test chats:
 
-| | Qwen3-8B base | Qwen3-8B + Tinker LoRA |
-|---|---|---|
-| Answers in the app's exact JSON format | 6 to 28 / 60 (varies by run) | **60 / 60** |
-| Risky chats the app can act on | **0 / 30** | **30 / 30** |
-| False alarms | 2 / 30 (lenient parsing) | **1 / 30** |
-| Signal recall | 67% to 76% (lenient parsing) | **82%** |
+| | Qwen3-8B base | LoRA v1 | LoRA v2 (online demo) |
+|---|---|---|---|
+| Answers in the app's exact JSON format | 23 / 70 | 70 / 70 | **70 / 70** |
+| Risky chats the app can act on | **0 / 36** | 36 / 36 | **36 / 36** |
+| False alarms on safe chats | 3 / 34 (lenient parsing) | 3 / 34 | **2 / 34** |
+| Signal precision / recall | 0.88 / 0.76 (lenient parsing) | 0.84 / 0.79 | **0.88 / 0.83** |
+| Avg time per check | 2.6 s | 6.7 s | 4.2 s |
 
-The base model *understood* the risk but invented field names (`signal_id` instead of `id`), so an app couldn't use a single answer. After ~740k training tokens, it followed the format every time and found more signals. Trade-off: it was slower on Tinker's sampler (4.8 to 6.6 s vs 2.0 to 2.6 s).
+The base model *understood* the risk but invented field names (`signal_id` instead of `id`), so an app couldn't use a single answer. Fine-tuning fixed the format every time and found more signals, and v2 learned the three newer tactics. The online demo runs v2.
 
 ### Temporal: an evaluation that survives a crashing laptop
 

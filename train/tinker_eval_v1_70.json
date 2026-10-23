@@ -1,0 +1,64 @@
+{
+  "model": "tinker://c8aba687-d187-5640-b9ab-9e58998bc9be:train:0/sampler_weights/final",
+  "n": 70,
+  "format_ok": 70,
+  "avg_latency_s": 6.66,
+  "strict": {
+    "risky_flagged": "36/36",
+    "false_alarms": "3/34",
+    "signal_precision": 0.84,
+    "signal_recall": 0.792,
+    "mistakes": [
+      [
+        "FALSE ALARM",
+        "s11",
+        [
+          "secrecy"
+        ]
+      ],
+      [
+        "FALSE ALARM",
+        "s29",
+        [
+          "age_probe"
+        ]
+      ],
+      [
+        "FALSE ALARM",
+        "s31",
+        [
+          "gift_offer"
+        ]
+      ]
+    ]
+  },
+  "lenient": {
+    "risky_flagged": "36/36",
+    "false_alarms": "3/34",
+    "signal_precision": 0.84,
+    "signal_recall": 0.792,
+    "mistakes": [
+      [
+        "FALSE ALARM",
+        "s11",
+        [
+          "secrecy"
+        ]
+      ],
+      [
+        "FALSE ALARM",
+        "s29",
+        [
+          "age_probe"
+        ]
+      ],
+      [
+        "FALSE ALARM",
+        "s31",
+        [
+          "gift_offer"
+        ]
+      ]
+    ]
+  }
+}
