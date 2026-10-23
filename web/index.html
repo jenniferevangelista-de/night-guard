@@ -204,7 +204,7 @@ const T = {
     crossApp:"Same contact seen in more than one app:", crossAppHint:"Moving a kid from a game to a private app is a classic pressure pattern.",
     rulesTitle:"Family rules", rulesHelp:"Kids don't always recognize a bad intention. Choose what Night Guard tells you automatically. Your child is always told when it does.",
     tell:"Tell family", childDecides:"Child decides",
-    liveDemo:"Live demo: game chat",
+    liveDemo:"Live demo: game chat", listen:"Listen",
     shTitle:"👋 Start here (2 minutes)",
     sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
     sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
@@ -261,7 +261,7 @@ const T = {
     crossApp:"Mesmo contato visto em mais de um app:", crossAppHint:"Levar a criança de um jogo para um app privado é um padrão clássico de pressão.",
     rulesTitle:"Regras da família", rulesHelp:"A criança nem sempre percebe uma má intenção. Escolha o que o Night Guard te conta automaticamente. A criança sempre é avisada quando isso acontece.",
     tell:"Avisar família", childDecides:"Criança decide",
-    liveDemo:"Demo ao vivo: chat do jogo",
+    liveDemo:"Demo ao vivo: chat do jogo", listen:"Ouvir",
     shTitle:"👋 Comece aqui (2 minutos)",
     sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
     sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
@@ -358,13 +358,15 @@ function show(p){
 }
 document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{$("#paste").value=EX[lang][b.dataset.ex];});
 
-let DEMO = false;
+let DEMO = false, VOICE = false, voiceEl = null;
+// Calm voice (ElevenLabs, generated once from the fixed alert texts; no chat is ever sent).
+function say(id){ try{ if(voiceEl) voiceEl.pause(); voiceEl = new Audio(`/web/audio/${lang}/${id}.mp3`); voiceEl.play(); }catch(e){} }
 const demoStore = {  // public demo: this visitor's family rules and events live only in this browser
   get(k,d){try{return JSON.parse(localStorage.getItem("ng_demo_"+k))??d}catch(e){return d}},
   set(k,v){try{localStorage.setItem("ng_demo_"+k,JSON.stringify(v))}catch(e){}}
 };
 fetch("/api/health").then(r=>r.json()).then(h=>{
-  DEMO = !!h.demo;
+  DEMO = !!h.demo; VOICE = !!h.voice;
   $("#health").innerHTML = h.demo ? `☁️ ${esc(h.model)} · <b>${t("demoPill")}</b>` : `🔒 ${esc(h.model)} · <b>${t("local")}</b>`;
   if(h.demo){ const d=document.createElement("div"); d.className="famnote"; d.innerHTML=`<b>☁️ ${t("demoTitle")}</b><div class="small" style="margin-top:4px">${t("demoBody")}</div>`; document.querySelector("nav").before(d);
     document.querySelector("footer").dataset.t="footerDemo"; document.querySelector("footer").textContent=t("footerDemo");
@@ -422,7 +424,7 @@ function renderResult(res, rerender){
     const k = known(s.id), danger = /^(PERIGO|DANGER)/.test(s.kid||"");
     // The child sees the plain "danger" message first; the longer lesson only if not learned yet.
     return `<div class="sig ${k?"known":""} ${danger?"danger":""}">
-      <div class="kid">${danger?"🛑":"⚠️"} ${esc(s.kid||s.label)}</div>
+      <div class="kid">${danger?"🛑":"⚠️"} ${esc(s.kid||s.label)}${VOICE?` <button class="chip" data-say="${esc(s.id)}" title="${esc(t("listen"))}">🔊 ${esc(t("listen"))}</button>`:""}</div>
       ${s.quote?`<div class="q">“${esc(s.quote)}”</div>`:""}
       ${k?`<div class="small" style="color:var(--good);margin-top:6px">${t("youKnow")}</div>`:`<div class="small muted" style="margin-top:6px">${esc(s.lesson)}</div>`}</div>`;
   }).join("");
@@ -442,6 +444,7 @@ function renderResult(res, rerender){
       <span class="small muted">🔒 ${esc(res.model)} · ${res.latency_s}s · ${t("local")}</span>
     </div></div>`;
   $("#toTell").onclick=()=>{renderQuotes(); show("tell");};
+  $("#result").querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>say(b.dataset.say));
 }
 
 /* ---------- 2. Practice ---------- */

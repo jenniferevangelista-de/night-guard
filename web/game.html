@@ -77,7 +77,7 @@ const S = {
 };
 let lang = new URLSearchParams(location.search).get("lang") || "en";
 const msgs = [], $ = s=>document.querySelector(s);
-let guard = null, timers = [], DEMO = false;
+let guard = null, timers = [], DEMO = false, VOICE = false;
 
 async function analyze(body){
   const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
@@ -93,7 +93,8 @@ function startGuard(){
   if(document.documentElement.dataset.nightGuardExt) return;
   if(new URLSearchParams(location.search).get("guard")==="off") return; // let the screen guard do it
   if(guard) guard.destroy();
-  guard = NightGuardLive.create({analyze, app:"Roblox", lang, tellUrl:"/?tab=tell&lang="+lang});
+  guard = NightGuardLive.create({analyze, app:"Roblox", lang, tellUrl:"/?tab=tell&lang="+lang,
+                                 voiceBase: VOICE ? "/web/audio/"+lang : null});
 }
 function render(){
   $("#msgs").innerHTML = msgs.map(m=>`<div class="m ${m.from}" data-ng-from="${m.from}" data-ng-name="${m.name||""}"><span class="who">${m.from==="me"?(lang==="pt"?"Você":"You"):m.name}</span><span data-ng-text>${m.text.replace(/</g,"&lt;")}</span></div>`).join("");
@@ -113,9 +114,9 @@ $("#play").onclick = ()=>{ reset(); S[lang].script.forEach(([who,text],i)=>timer
 $("#reset").onclick = reset;
 $("#lang").onchange = e=>{ lang=e.target.value; applyLang(); reset(); startGuard(); };
 $("#f").onsubmit = e=>{ e.preventDefault(); const v=$("#inp").value.trim(); if(v){ add("me", v); $("#inp").value=""; } };
-fetch("/api/health").then(r=>r.json()).then(h=>{ DEMO=!!h.demo; $("#srv").textContent = S[lang].srv + h.model; }).catch(()=>{ $("#srv").textContent="⚠️ server offline"; });
 applyLang();
-setTimeout(startGuard, 400);
+fetch("/api/health").then(r=>r.json()).then(h=>{ DEMO=!!h.demo; VOICE=!!h.voice; $("#srv").textContent = S[lang].srv + h.model; startGuard(); })
+  .catch(()=>{ $("#srv").textContent="⚠️ server offline"; startGuard(); });
 </script>
 </body>
 </html>

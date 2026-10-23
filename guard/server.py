@@ -25,6 +25,12 @@ NAME_PREFIX = re.compile(r"^\s*([^:]{1,30}):\s*(.*)$")
 
 DEMO = BACKEND != "ollama"
 
+from .env import load_env  # noqa: E402
+from . import telemetry  # noqa: E402
+
+load_env()
+telemetry.init()  # Sentry agent tracing, only if SENTRY_DSN is set; no chat content is sent
+
 app = FastAPI(title="Night Guard")
 
 
@@ -61,6 +67,7 @@ def parse_paste(text):
 @app.get("/api/health")
 def health():
     return {"ok": True, "model": MODEL, "demo": BACKEND != "ollama",
+            "voice": (ROOT / "web" / "audio" / "en").is_dir(),
             "runs": "locally via Ollama" if BACKEND == "ollama" else "public demo on Render + Tinker"}
 
 

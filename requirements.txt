@@ -1,0 +1,9 @@
+# Local Night Guard (the real app). Also needs Ollama with gemma4:e4b.
+fastapi==0.161.1
+uvicorn==0.54.0
+httpx==0.28.1
+pydantic==2.14.1
+pillow==13.0.0        # screen guard screenshots (kept in memory only)
+temporalio==1.34.0    # durable evaluation
+sentry-sdk==2.73.0    # optional agent tracing, no chat content
+# Fine-tuning experiment only: pip install tinker-cookbook

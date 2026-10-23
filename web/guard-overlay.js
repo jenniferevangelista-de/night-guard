@@ -33,7 +33,11 @@
     const s = document.createElement("style"); s.id = "ng-style"; s.textContent = CSS; document.head.appendChild(s);
   }
 
-  function create({ analyze, app = "Other", lang = "en", tellUrl = null }) {
+  function create({ analyze, app = "Other", lang = "en", tellUrl = null, voiceBase = null }) {
+    // voiceBase: folder with the pre-generated spoken alerts (e.g. "/web/audio/pt"); the first new
+    // warning is read aloud, since a kid may not be looking at the corner of the screen.
+    let audio = null;
+    const say = id => { if (!voiceBase) return; try { if (audio) audio.pause(); audio = new Audio(`${voiceBase}/${id}.mp3`); audio.play().catch(() => {}); } catch (e) {} };
     ensureStyle();
     const t = TXT[lang] || TXT.en;
     const badge = document.createElement("div");
@@ -51,12 +55,15 @@
       const pop = document.createElement("div");
       pop.className = "ng-pop " + (res.severity === "high" ? "high" : "");
       pop.innerHTML = `<h3>${res.severity === "high" ? "🛑" : "⚠️"} ${esc(t.title[res.severity] || t.title.low)}</h3>
-        ${fresh.map(s => `<div class="ng-kid">${esc(s.kid || s.label)}</div>${s.quote ? `<div class="ng-q">“${esc(s.quote)}”</div>` : ""}`).join("")}
+        ${fresh.map(s => `<div class="ng-kid">${esc(s.kid || s.label)}${voiceBase ? ` <button class="ng-b ng-say" data-say="${esc(s.id)}" style="padding:2px 8px">🔊</button>` : ""}</div>${s.quote ? `<div class="ng-q">“${esc(s.quote)}”</div>` : ""}`).join("")}
         ${res.family_alert ? `<div class="ng-fam">👨‍👩‍👧 ${esc(t.fam)}</div>` : ""}
         <div class="ng-row"><button class="ng-a">${esc(t.ok)}</button>${tellUrl ? `<button class="ng-b">${esc(t.tell)}</button>` : ""}</div>`;
       pop.querySelector(".ng-a").onclick = () => pop.remove();
-      const tb = pop.querySelector(".ng-b"); if (tb) tb.onclick = () => window.open(tellUrl, "_blank");
+      const tb = pop.querySelector(".ng-row .ng-b"); if (tb) tb.onclick = () => window.open(tellUrl, "_blank");
+      pop.querySelectorAll(".ng-say").forEach(b => b.onclick = () => say(b.dataset.say));
       document.body.appendChild(pop);
+      const loudest = fresh.find(s => /^(PERIGO|DANGER)/.test(s.kid || "")) || fresh[0];
+      say(loudest.id);
     }
 
     async function run(messages) {

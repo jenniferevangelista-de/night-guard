@@ -107,7 +107,7 @@ children's data is used.
 
 ```bash
 ollama pull gemma4:e4b
-python -m venv .venv && .venv/Scripts/pip install fastapi uvicorn httpx
+python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
 .venv/Scripts/python -m uvicorn guard.server:app --port 8765
 # open http://localhost:8765
 ```

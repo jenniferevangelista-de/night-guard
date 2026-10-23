@@ -12,6 +12,7 @@ import time
 
 import httpx
 
+from . import telemetry
 from .signals import HIGH_ALONE, PARENT_STEPS, SIGNAL_IDS, SIGNALS
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
@@ -122,12 +123,22 @@ def severity(signal_ids):
 def analyze(messages, lang="en"):
     """Analyze one conversation. Returns a dict ready for the UI."""
     t0 = time.time()
-    try:
-        raw = _call_model(messages)
-    except Exception:
-        raw = None  # model down or unreadable: reported as "couldn't analyze", never as "no risk"
-    res = postprocess(raw, messages, lang)
-    res["latency_s"] = round(time.time() - t0, 2)
+    # Sentry agent trace: one agent run with one model call. Only counts and labels are recorded.
+    with telemetry.transaction("night-guard.check", backend=BACKEND, n_messages=len(messages), lang=lang) as tx:
+        with telemetry.span("gen_ai.chat", f"chat {MODEL}", model=MODEL, backend=BACKEND):
+            try:
+                raw = _call_model(messages)
+            except Exception as e:
+                raw = None  # model down or unreadable: reported as "couldn't analyze", never as "no risk"
+                if telemetry.ENABLED:
+                    telemetry.sentry_sdk.capture_message(f"model call failed: {type(e).__name__}", level="warning")
+        with telemetry.span("night_guard.postprocess", "check evidence and severity"):
+            res = postprocess(raw, messages, lang)
+        res["latency_s"] = round(time.time() - t0, 2)
+        if tx is not None:
+            tx.set_data("severity", res["severity"])
+            tx.set_data("signals", ",".join(s["id"] for s in res["signals"]))
+            tx.set_data("latency_s", res["latency_s"])
     return res
 
 
