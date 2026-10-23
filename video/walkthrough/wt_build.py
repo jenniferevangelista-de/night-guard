@@ -135,10 +135,16 @@ def mix():
         j = min(N, i + len(a)); buf[i:j] += a[: j - i] * g
     for s in segs:
         a = load(HERE / narr[s["id"]]["voice"]); add(voice, s["vstart"], a / (np.abs(a).max() + 1e-9))
+    spoken = [(s["vstart"], s["vstart"] + narr[s["id"]]["dur"] + 0.3) for s in segs]
     for a in ev["audio"]:                                   # the real spoken warnings, when the app played them
         p = ROOT / a["src"].lstrip("/")
-        if p.exists():
-            w = load(p); add(fx, a["t"] - off, w / (np.abs(w).max() + 1e-9), 0.85)
+        if not p.exists():
+            continue
+        w = load(p); t0 = a["t"] - off; t1 = t0 + len(w) / SR
+        if any(t0 < b and t1 > s0 for s0, b in spoken):
+            continue                                        # never talk over Snoozy: keep only warnings that fit a silence
+        add(fx, t0, w / (np.abs(w).max() + 1e-9), 0.85)
+        print("warning voice at", round(t0, 1), p.name)
     music = load(ROOT.parent / "codegames" / "pipeline" / "music" / "incompetech" / "Funkorama.mp3")
     while len(music) < N: music = np.concatenate([music, music])
     music = music[:N] / (np.abs(music).max() + 1e-9)

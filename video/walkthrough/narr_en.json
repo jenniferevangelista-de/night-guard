@@ -1,0 +1,68 @@
+[
+  {
+    "id": "home",
+    "line": "Hi, Snoozy again. This is the real Night Guard, running on the computer. At the top, the bar shows whether the guard is on. One click turns it on, another turns it off.",
+    "voice": "voz_en/w01.mp3",
+    "dur": 10.22
+  },
+  {
+    "id": "check",
+    "line": "In Something felt off, the kid pastes a chat or picks an example. Gemma checks it right there, without sending anything to the internet.",
+    "voice": "voz_en/w02.mp3",
+    "dur": 7.08
+  },
+  {
+    "id": "result",
+    "line": "First it asks what she thinks. Then it shows the danger in plain words, with the stranger's exact message, and what to do. And she can listen to the warning.",
+    "voice": "voz_en/w03.mp3",
+    "dur": 9.48
+  },
+  {
+    "id": "benign",
+    "line": "And a normal game chat? No false alarm.",
+    "voice": "voz_en/w04.mp3",
+    "dur": 2.9
+  },
+  {
+    "id": "practice",
+    "line": "In Practice, she tries short scenarios. Every right answer becomes a medal, she levels up, and the bar shows the guard getting lazier.",
+    "voice": "voz_en/w05.mp3",
+    "dur": 8.09
+  },
+  {
+    "id": "tell",
+    "line": "In Tell someone, she picks what to share and gets a ready message for Mom, Dad or a teacher. Nothing is sent on its own: she decides.",
+    "voice": "voz_en/w06.mp3",
+    "dur": 8.66
+  },
+  {
+    "id": "parents",
+    "line": "In the parents' area, the Night Guard shows only what matters: the risk, the app, the message and what to do now. Parents set the rules and can get a phone alert.",
+    "voice": "voz_en/w07.mp3",
+    "dur": 8.78
+  },
+  {
+    "id": "game",
+    "line": "In live mode, nobody pastes anything. The stranger writes in the game chat, and the guard warns the kid by itself, right away, out loud.",
+    "voice": "voz_en/w08.mp3",
+    "dur": 7.58
+  },
+  {
+    "id": "off",
+    "line": "Turned the guard off? It stops right away, even what was queued.",
+    "voice": "voz_en/w09.mp3",
+    "dur": 3.91
+  },
+  {
+    "id": "fault",
+    "line": "And if the model goes down, the badge says Guard paused. It never pretends everything is fine. Here the failure is simulated.",
+    "voice": "voz_en/w10.mp3",
+    "dur": 7.54
+  },
+  {
+    "id": "end",
+    "line": "All of this with an open model, on the family's own computer. Night Guard: a partner for parents, a friend for kids.",
+    "voice": "voz_en/w11.mp3",
+    "dur": 7.42
+  }
+]

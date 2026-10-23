@@ -66,52 +66,52 @@
     },
     {
       "id": "hero",
-      "line": "To the kid, it's a friend. Every trick she learns becomes a medal, until she's a Night Hero.",
+      "line": "To the kid, it's a friend that teaches little by little. Every trick she learns becomes a medal, until she's a Night Hero. And the more she knows, the less the guard has to work.",
       "voice": "n9.mp3",
       "start": 90.16,
-      "voice_dur": 6.22,
-      "end": 97.58
+      "voice_dur": 11.21,
+      "end": 102.57
     },
     {
       "id": "family",
       "line": "To parents, it's the Night Guard. One alert, not the whole chat. What happened, and what to do now, right on their phone.",
       "voice": "n10.mp3",
-      "start": 97.58,
+      "start": 102.57,
       "voice_dur": 7.34,
-      "end": 106.32
+      "end": 111.31
     },
     {
       "id": "tech",
       "line": "Under the hood, it's all open. Gemma 4 reads text and the screen on the computer itself. On Tinker, we fine-tuned a model that got the format right in seventy out of seventy chats. Temporal survives crashes, Sentry traces every check without reading the chat, ElevenLabs gives the warnings a voice, and the demo runs on Render.",
       "voice": "n11.mp3",
-      "start": 106.32,
+      "start": 111.31,
       "voice_dur": 21.19,
-      "end": 128.51
+      "end": 133.5
     },
     {
       "id": "results",
       "line": "In testing, it caught thirty six out of thirty six risky chats, in about four seconds.",
       "voice": "n12.mp3",
-      "start": 128.51,
+      "start": 133.5,
       "voice_dur": 5.59,
-      "end": 135.5
+      "end": 140.5
     },
     {
       "id": "peace",
       "line": "Peace for the kid. Peace for the parents. And the more the kid learns, the more the guard can rest.",
       "voice": "n13.mp3",
-      "start": 135.5,
+      "start": 140.5,
       "voice_dur": 6.36,
-      "end": 143.46
+      "end": 148.46
     },
     {
       "id": "end",
       "line": "Night Guard. A partner for parents. A friend for kids. And me? Back to my nap.",
       "voice": "n14.mp3",
-      "start": 143.46,
+      "start": 148.46,
       "voice_dur": 6.43,
-      "end": 152.9
+      "end": 157.89
     }
   ],
-  "duration": 153.2
+  "duration": 158.19
 }
