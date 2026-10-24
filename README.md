@@ -62,6 +62,11 @@ Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox p
 
 **The lazy part:** the tutor repeats less as you learn. Lessons you already know collapse to a single ✓ line, so the guard gets lazier as the kid gets wiser.
 
+
+## Architecture
+
+![Night Guard architecture](docs/images/architecture.png)
+
 ## Privacy model
 
 **Local app (the real Night Guard)**
@@ -188,7 +193,7 @@ Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
 .venv\Scripts\python -m pytest tests
 ```
 
-**59 automated tests passed** in the current full suite. They cover scoring (an error is never a catch), malformed model answers, window selection by process,
+**64 automated tests passed** in the current full suite. They cover scoring (an error is never a catch), malformed model answers, window selection by process,
 per-contact warnings, typed input, Sentry and parent allowlists, Temporal retries, the browser overlay (Node),
 link checks and the Backboard comparison client. Automated external-provider tests use simulated responses.
 The separate live Browserbase and SerpApi checks described above establish only the observed smoke-test behavior.

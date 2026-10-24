@@ -49,9 +49,11 @@ The online demo runs the **Tinker fine-tuned model** in the cloud so judges can 
 
 {% github jenniferevangelista-de/night-guard %}
 
-The current full suite has **59 passing tests** (`pytest tests`), including regression cases our auditor reported and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
+The current full suite has **64 passing tests** (`pytest tests`), including regression cases our auditor reported and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
 
 ## How I Built It
+
+![Night Guard architecture: chats are analyzed on the family's computer; only a phone alert (risk type), an optional link check (URL only) and agent traces (labels only) leave it](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/architecture.png)
 
 ### The detector: Gemma 4, on the kid's computer
 
