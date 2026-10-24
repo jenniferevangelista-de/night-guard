@@ -15,7 +15,7 @@
   </defs>
   <rect width="1720" height="1040" fill="#f7f4ec"/>
   <text x="40" y="58" font-size="34" font-weight="800" fill="#26326c">Night Guard architecture</text>
-  <text x="40" y="88" class="s">Chats are analyzed on the family's computer. Only the items on the right ever leave it, and never the chat.</text>
+  <text x="40" y="88" class="s">Local mode: chats stay on the family's computer. External flows are shown on the right.</text>
 
   <!-- local area -->
   <rect x="30" y="112" width="1200" height="660" rx="22" fill="#fbfaf6" stroke="#26326c" stroke-width="2.5" stroke-dasharray="10 8"/>
@@ -58,13 +58,14 @@
   <text x="876" y="262" class="s">"DANGER" warning in plain words</text>
   <text x="876" y="284" class="s">spoken voice (pre-recorded ElevenLabs)</text>
   <text x="876" y="306" class="s">practice, medals, Night Hero rank</text>
-  <text x="876" y="328" class="s">"Tell someone" message she edits</text>
-  <rect class="box" x="860" y="372" width="340" height="150" rx="14"/>
-  <text x="876" y="406" class="t">Parents (Auth0 sign-in)</text>
+  <text x="876" y="328" class="s">"Tell someone": editable template</text>
+  <rect class="box" x="860" y="372" width="340" height="174" rx="14"/>
+  <text x="876" y="406" class="t">Parents (optional Auth0)</text>
   <text x="876" y="434" class="s">risk, app, flagged phrase only</text>
   <text x="876" y="456" class="s">why it matters + what to do now</text>
   <text x="876" y="478" class="s">family rules, guard on/off</text>
   <text x="876" y="500" class="s">same name in two apps (a hint)</text>
+  <text x="876" y="522" class="s">No login gate unless configured</text>
 
   <path class="ln" d="M400 248 L428 290"/>
   <path class="ln" d="M400 352 L428 352"/>
@@ -75,7 +76,7 @@
   <path class="ln" d="M830 520 L858 447"/>
 
   <text x="54" y="660" class="s">Models stay local: the chat is never sent to a server by the local app.</text>
-  <text x="54" y="684" class="s">The free online demo uses the Tinker model in the cloud instead, and stores nothing.</text>
+  <text x="54" y="684" class="s">The online demo uses Tinker in the cloud instead; the app does not persist chats.</text>
 
   <!-- external -->
   <text x="1260" y="146" class="h">LEAVES THE COMPUTER, ONLY THIS</text>
@@ -93,10 +94,15 @@
   <text x="1271" y="504" class="t">Sentry agent tracing (when on)</text>
   <text x="1271" y="532" class="s">model call timings and labels; allowlist scrubber</text>
   <text x="1271" y="554" class="s">drops anything that could hold chat text</text>
+  <rect class="box" x="1255" y="600" width="440" height="120" rx="14"/>
+  <text x="1271" y="634" class="t">Auth0 (optional local login)</text>
+  <text x="1271" y="662" class="s">Sign-in redirects and identity data, not chat.</text>
+  <text x="1271" y="686" class="s">Disabled until configured. Not used in demo.</text>
 
   <path class="dl" d="M1200 420 C1228 420 1226 215 1253 215"/>
   <path class="dl" d="M1200 300 C1228 300 1226 370 1253 370"/>
   <path class="dl" d="M830 590 C1000 700 1180 700 1253 540"/>
+  <path class="dl" d="M1200 510 C1228 510 1226 660 1253 660"/>
 
   <!-- build and evaluation -->
   <rect x="30" y="800" width="1660" height="210" rx="22" fill="#eef1ff" stroke="#26326c" stroke-width="2"/>
@@ -109,8 +115,8 @@
   <rect class="box" x="460" y="852" width="370" height="136" rx="14"/>
   <text x="476" y="886" class="t">Render</text>
   <text x="476" y="914" class="s">public demo from a Blueprint,</text>
-  <text x="476" y="936" class="s">runs the Tinker model, stores</text>
-  <text x="476" y="958" class="s">nothing server-side</text>
+  <text x="476" y="936" class="s">runs the Tinker model; the app</text>
+  <text x="476" y="958" class="s">does not persist chat text</text>
   <rect class="box" x="850" y="852" width="410" height="136" rx="14"/>
   <text x="866" y="886" class="t">Temporal</text>
   <text x="866" y="914" class="s">durable evaluation of the fictional</text>
