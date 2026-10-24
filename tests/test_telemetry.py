@@ -26,7 +26,7 @@ def test_own_fixed_messages_are_kept():
     assert _allow({"message": "night-guard: model unavailable"})["message"] == "night-guard: model unavailable"
 
 
-def test_kuririn_003_r03_span_fields_are_allowlisted():
+def test_regression_span_fields_are_allowlisted():
     m = "SYNTHETIC_PRIVATE_CHAT_MARKER"
     out = _allow({"spans": [{"op": "gen_ai.chat", "description": m, "future_field": m, "data": {"prompt": m}},
                             {"op": "gen_ai.chat", "description": "chat gemma4:e4b", "data": {"latency_s": 4.1}}],

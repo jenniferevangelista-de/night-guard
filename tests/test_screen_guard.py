@@ -30,9 +30,9 @@ def test_same_words_from_another_contact_warn_again():
     assert a != b and a == c
 
 
-def test_kuririn_002_bank_window_is_not_discord():
+def test_regression_bank_window_is_not_discord():
     assert watched_app("Bank statement - Discord receipts - Chrome", "chrome.exe") is None
 
 
-def test_kuririn_003_r06_demo_title_needs_opt_in():
+def test_regression_demo_title_needs_opt_in():
     assert watched_app("BlockQuest chat (Night Guard live demo) - Fictional unrelated page", "chrome.exe") is None

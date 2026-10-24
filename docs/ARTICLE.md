@@ -49,7 +49,7 @@ The online demo runs the **Tinker fine-tuned model** in the cloud so judges can 
 
 {% github jenniferevangelista-de/night-guard %}
 
-The current full suite has **64 passing tests** (`pytest tests`), including regression cases our auditor reported and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
+The current full suite has **64 passing tests** (`pytest tests`), including regression cases for every bug found in review and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
 
 ## How I Built It
 
@@ -61,7 +61,7 @@ The core is `gemma4:e4b` running locally through **Ollama** on a laptop GPU (RTX
 
 I don't trust the model blindly. Every answer goes through checks before a kid or parent sees it:
 
-- **An unreadable answer is never "all clear".** If the model is down or answers in a broken format, the kid sees *"Couldn't analyze this chat. This is NOT an all-clear"*, never a green light. (Our auditor caught that the first version turned failures into "no risk". Fixed, and the evaluations now count a failed analysis as an error, never as a catch or as a correct "safe".)
+- **An unreadable answer is never "all clear".** If the model is down or answers in a broken format, the kid sees *"Couldn't analyze this chat. This is NOT an all-clear"*, never a green light. The evaluations also count a failed analysis as an error, never as a catch or as a correct "safe".
 - **Evidence is checked against the chat.** The quote must exist in a message from the contact; a paraphrased quote is replaced by the real message; the kid's own messages are never flagged.
 - **Two narrow tactics need their own words in the chat.** "Came back with a new account" only counts if the chat mentions being blocked or ignored, and "you're so mature" flattery only counts with maturity or age words. Before this, a classmate who lost his password and a compliment on a Minecraft build were flagged.
 
@@ -216,10 +216,6 @@ preserve per-case outputs, errors, coverage and signal metrics.
 Child safety is the clearest case for open models I know. A guard that reads a kid's private chats should **run on the family's own computer**, be **inspectable**, and be **free**. The best-known commercial monitor costs about US$14 a month and analyzes messages on its servers. Platforms protect only their own walls. Roblox open-sourced Sentinel in 2025 and announced an update and ROOST contribution in 2026, which is useful for platforms; Night Guard is the other half: an open, local tool that sits with the family and works across apps.
 
 Open weights made every part of this possible: Gemma reading text and screenshots on a laptop GPU, a Qwen LoRA fine-tuned in an afternoon, and anyone able to audit exactly which 14 tactics trigger a warning and what words a kid will see.
-
-## My Agent Session
-
-I built this in about three days with an AI coding agent (Claude) as the initial builder and a second AI (ChatGPT, Kuririn) as an independent auditor, plus me as the person who decided what a kid and a parent should actually see. At my request, Codex configured and tested the final Auth0, Browserbase, SerpApi and Backboard integrations and ran the live model comparison; Kuririn remains the independent reviewer. The auditor's review is why failures never show as "all clear", why the app does not persist demo chats on the server, and why the help message can't invent things. Each round goes through a separate private review repository: the builder delivers, the reviewer tests and writes a verdict, and only the reviewer can approve.
 
 ## The Lazy Payoff
 

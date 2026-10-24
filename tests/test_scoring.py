@@ -34,7 +34,7 @@ def test_summary_reports_coverage_and_errors():
     assert s["signal_precision"] == 1.0 and s["signal_recall"] == 1.0  # errors excluded from signal metrics
 
 
-def test_kuririn_002_all_unavailable_is_not_70_catches():
+def test_regression_all_unavailable_is_not_70_catches():
     cases = [(f"r{i}", "risky", ["secrecy"], {"severity": "unknown", "analysis_status": "unavailable", "signals": []})
              for i in range(36)] + \
             [(f"s{i}", "safe", [], {"severity": "unknown", "analysis_status": "unavailable", "signals": []})

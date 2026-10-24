@@ -174,20 +174,20 @@ def _failing(monkeypatch, bb=True, serp=False, bb_ok=None):
 
 
 @pytest.mark.parametrize("url", ["https://www.roblox.com/login", "https://discord.com/login"])
-def test_kuririn_006_r09_browser_failure_is_not_ok(monkeypatch, url):
+def test_regression_browser_failure_is_not_ok(monkeypatch, url):
     _failing(monkeypatch)
     r = lc.check_link(url, "en")
     assert r["level"] != "ok" and r["checked"] == [] and r["failed"] == ["Browserbase"]
     assert r["level"] == "error" and any("couldn't check" in x for x in r["reasons"])
 
 
-def test_kuririn_006_r09_both_providers_down(monkeypatch):
+def test_regression_both_providers_down(monkeypatch):
     _failing(monkeypatch, bb=True, serp=True)
     r = lc.check_link("https://www.roblox.com/login", "pt")
     assert r["level"] == "error" and set(r["failed"]) == {"Browserbase", "SerpApi"}
 
 
-def test_kuririn_006_r09_search_ok_but_page_not_seen_is_unknown(monkeypatch):
+def test_regression_search_ok_but_page_not_seen_is_unknown(monkeypatch):
     monkeypatch.setattr(lc, "enabled", lambda: {"browserbase": True, "serpapi": True})
     monkeypatch.setattr(lc, "open_in_browserbase", lambda u: (_ for _ in ()).throw(RuntimeError("down")))
     monkeypatch.setattr(lc, "search_reports", lambda h: [])
@@ -195,7 +195,7 @@ def test_kuririn_006_r09_search_ok_but_page_not_seen_is_unknown(monkeypatch):
     assert r["level"] == "unknown" and any("could not be checked" in x for x in r["reasons"])
 
 
-def test_kuririn_006_r09_recovery_official_page_inspected_is_ok(monkeypatch):
+def test_regression_recovery_official_page_inspected_is_ok(monkeypatch):
     _failing(monkeypatch, bb_ok={"final_url": "https://www.roblox.com/login", "asks_password": True})
     r = lc.check_link("https://www.roblox.com/login", "en")
     assert r["level"] == "ok" and r["failed"] == []

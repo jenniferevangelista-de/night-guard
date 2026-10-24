@@ -41,7 +41,7 @@ def test_valid_schema_is_strict():
     assert not valid_schema({"signals": []})  # summary missing
 
 
-def test_kuririn_002_minimal_cases():
+def test_regression_minimal_cases():
     """Exact inputs from the round-002 review (F03 and F07)."""
     chat = [{"from": "them", "text": "don't tell your parents"}]
     for raw in ({"signals": [{"id": "secrecy"}], "summary": "synthetic"},
@@ -51,7 +51,7 @@ def test_kuririn_002_minimal_cases():
     assert not valid_schema({}) and not valid_schema({"signals": [{"id": "unsupported"}]})
 
 
-def test_kuririn_003_r01_container_and_unhashable_ids():
+def test_regression_container_and_unhashable_ids():
     chat = [{"from": "them", "name": "Fictional contact", "text": "don't tell your parents"}]
     for raw in ({"signals": []}, {"signals": [], "summary": 7},
                 {"signals": [{"id": [], "message_index": 0, "quote": "synthetic"}], "summary": "synthetic"},
@@ -61,7 +61,7 @@ def test_kuririn_003_r01_container_and_unhashable_ids():
         assert (r["severity"], r["analysis_status"]) == ("unknown", "invalid_output")
 
 
-def test_kuririn_003_r02_broken_json_is_invalid_not_unavailable(monkeypatch):
+def test_regression_broken_json_is_invalid_not_unavailable(monkeypatch):
     import httpx
     from guard import detector
     monkeypatch.setattr(detector, "BACKEND", "ollama")
