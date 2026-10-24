@@ -49,11 +49,13 @@ The online demo runs the **Tinker fine-tuned model** in the cloud so judges can 
 
 {% github jenniferevangelista-de/night-guard %}
 
-The current full suite has **91 passing tests** (`pytest tests`), including the demo's request limits, regression cases for every bug found in review and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
+The current full suite has **91 passing tests** (`pytest tests`), including the demo's request limits, regression cases for every bug found in testing and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
 
 ## How I Built It
 
-![Night Guard architecture: chats are analyzed on the family's computer; only a phone alert (risk type), an optional link check (URL only) and agent traces (labels only) leave it](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/architecture.png)
+![Night Guard architecture: chats are analyzed on the family's computer; only a phone alert (risk type), an optional link check (URL only) and agent traces (labels only) leave it](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/6a41f3e82143544578689263d4143c54bd0c7319/docs/images/architecture.png)
+
+*Auth0 sign-in for the local Family controls is optional and only applies when configured; the public demo does not use Auth0.*
 
 ### The detector: Gemma 4, on the kid's computer
 
@@ -145,9 +147,9 @@ screenshot is shown above.
 These checks establish provider connectivity and the observed password detection on one fictional example,
 not scam-detection accuracy.
 
-### Auth0: only parents can open the local Family controls
+### Optional Auth0 sign-in for local Family controls
 
-The local Ollama app uses **Auth0** to sign parents in before they can read family alerts, change rules or stop
+When configured, the local Ollama app uses **Auth0** to sign parents in before they can read family alerts, change rules or stop
 the guard. The email must be verified and present in the family's `PARENT_EMAILS` list. It requires Auth0
 application settings and a session secret; without configuration, the local Family view has no login gate.
 The public demo does not use Auth0.
@@ -203,7 +205,7 @@ preserve per-case outputs, errors, coverage and signal metrics.
 - **The gap no platform covers:** Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox parental controls each protect their own app. The classic path starts in a game and moves to a private app. Night Guard points out a possible match: *"Same name seen in more than one app (possibly the same person): Alex_17 (Roblox → Instagram)"*. It's a hint to check, not proof, because names can repeat.
 - **What to do now**, by severity: talk calmly and without punishment (kids who get in trouble stop telling), keep screenshots, block and report, and for image requests, threats or money demands, report to SaferNet Brasil or the NCMEC CyberTipline and the police. Don't pay.
 - **Phone alerts** through ntfy (free, no account) with only the risk level, the app and the kind of risk.
-- **"Tell someone":** the kid picks what to share and gets a ready message for Mom, Dad or a teacher, built only from their own words and the flagged quotes, so nothing is invented.
+- **"Tell someone":** the kid picks what to share and gets a ready message for Mom, Dad or a teacher. It is assembled deterministically from their own words and the flagged quotes.
 
 ### Limits and next step
 
@@ -236,7 +238,7 @@ Open weights made every part of this possible: Gemma reading text and screenshot
   password field and returned a visually verified screenshot of the complete form.
 - **Best Use of SerpApi:** live domain-report search used by the link inspector, verified with one successful
   local query and a deployed API check. Missing search reports are never treated as proof of safety.
-- **Best Use of Auth0 for AI Agents:** parent authentication for local family controls, with a real verified,
+- **Best Use of Auth0 for AI Agents:** optional parent authentication for local family controls, with a real verified,
   allowlisted Google login and logout. Rejection of unlisted accounts is covered by unit tests.
 - **Best Use of Backboard:** three open-weight models compared live through one API key on the same 70
   fictional development chats, with a common format adapter, saved raw answers, shared scoring and explicit
