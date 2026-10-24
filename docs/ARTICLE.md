@@ -1,6 +1,6 @@
 ---
 title: "Night Guard: an open-model guard that watches out for kids in game chats, so tired parents don't have to read every message"
-published: false
+published: true
 tags: devchallenge, hf26challenge, ai, opensource
 ---
 
@@ -171,7 +171,7 @@ prompt/decoding setup used by the older Tinker baseline or schema-constrained Ol
 | Gemma 3 27B | 68/70 | 69/70 | 36/36 | 3/33 (1 error) | 0.938 | 0.849 |
 | Llama 3.3 70B | 69/70 | 69/70 | 36/36 | 3/33 (1 error) | 0.912 | 0.981 |
 | Mistral Small 3.1 24B | 70/70 | 70/70 | 36/36 | 3/34 | 0.852 | 0.981 |
-| Qwen 2.5 72B | — | — | — | — | Unavailable in live smoke | No full result |
+| Qwen 2.5 72B | n/a | n/a | n/a | n/a | Unavailable in live smoke | No full result |
 
 Strict-schema validity and usable coverage are separate. The shared scorer accepts a **partial** analysis when
 postprocessing retains valid evidence; an unusable analysis is an error, never a catch or a correct safe answer.
