@@ -29,7 +29,7 @@ The short film (2:30), narrated by Snoozy, the lazy night watchman:
 
 {% youtube DFyBdn8d7xU %}
 
-👉 **Try it:** https://night-guard-demo.onrender.com (fictional examples only; the free instance can take ~50 s to wake up)
+👉 **Try it:** https://night-guard-demo.onrender.com (fictional examples only; the free instance can take ~50 s to wake up, and it accepts a limited number of checks per hour so it stays free for everyone)
 
 Start with **① Watch the guard act on its own**: a fictional game chat where a stranger writes and Night Guard warns the kid by itself, without anyone pasting anything.
 
@@ -49,7 +49,7 @@ The online demo runs the **Tinker fine-tuned model** in the cloud so judges can 
 
 {% github jenniferevangelista-de/night-guard %}
 
-The current full suite has **64 passing tests** (`pytest tests`), including regression cases for every bug found in review and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
+The current full suite has **74 passing tests** (`pytest tests`), including the demo's request limits, regression cases for every bug found in review and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
 
 ## How I Built It
 

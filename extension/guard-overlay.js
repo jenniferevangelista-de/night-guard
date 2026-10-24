@@ -5,9 +5,9 @@
   if (window.NightGuardLive) return;
 
   const TXT = {
-    en: { on: "Guard on", paused: "Guard paused: can't analyze right now", ok: "Got it", tell: "Tell someone", fam: "Your family will know about this. You're not in trouble.",
+    en: { on: "Guard on", paused: "Guard paused: can't analyze right now", quota: "Guard paused: the demo's hourly limit is full", ok: "Got it", tell: "Tell someone", fam: "Your family will know about this. You're not in trouble.",
           title: { high: "Stop! This could be dangerous", medium: "Careful", low: "Heads up" } },
-    pt: { on: "Guarda ligado", paused: "Guarda pausado: não consigo analisar agora", ok: "Entendi", tell: "Contar pra alguém", fam: "Sua família vai ficar sabendo. Você não está encrencado.",
+    pt: { on: "Guarda ligado", paused: "Guarda pausado: não consigo analisar agora", quota: "Guarda pausado: o limite da demo nesta hora acabou", ok: "Entendi", tell: "Contar pra alguém", fam: "Sua família vai ficar sabendo. Você não está encrencado.",
           title: { high: "Pare! Isso pode ser perigoso", medium: "Cuidado", low: "Atenção" } },
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -55,9 +55,9 @@
     document.body.appendChild(badge);
     // The badge tells the truth: if analysis fails, it says the guard is paused, and it goes back
     // to "Guard on" after the next successful check. A failure is never shown as "all fine".
-    const setBadge = ok => {
+    const setBadge = (ok, why) => {
       badge.classList.toggle("ng-paused", !ok);
-      badge.innerHTML = ok ? `🛡️ <b>${esc(t.on)}</b>` : `⚠️ <b>${esc(t.paused)}</b>`;
+      badge.innerHTML = ok ? `🛡️ <b>${esc(t.on)}</b>` : `⚠️ <b>${esc(why || t.paused)}</b>`;
     };
     setBadge(true);
 
@@ -101,7 +101,7 @@
         const ok = res && ["ok", "partial"].includes(res.analysis_status || "ok") && res.severity && res.severity !== "unknown";
         setBadge(!!ok);
         if (ok && res.signals && res.severity !== "none") show(res, sent);
-      } catch (e) { if (!closed) setBadge(false); /* server offline: say so, never "all fine" */ }
+      } catch (e) { if (!closed) setBadge(false, e && e.status === 429 ? t.quota : null); /* server offline or quota full: say so, never "all fine" */ }
       finally { busy = false; }
       if (closed) { pending = null; return; }
       if (pending) { const p = pending; pending = null; run(p); }

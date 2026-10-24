@@ -76,7 +76,7 @@ let guard = null, timers = [], DEMO = false, VOICE = false;
 
 async function analyze(body){
   const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-  if(!r.ok) throw new Error("HTTP "+r.status);
+  if(!r.ok){ const err = new Error("HTTP "+r.status); err.status = r.status; throw err; }   // 429: the demo's quota is full
   const res = await r.json();
   if(DEMO && res.family_event){ // public demo: the visitor's own browser keeps family events
     try{ const k="ng_demo_events", ev=JSON.parse(localStorage.getItem(k)||"[]"); ev.unshift(res.family_event); localStorage.setItem(k,JSON.stringify(ev.slice(0,100))); }catch(e){}

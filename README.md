@@ -91,9 +91,12 @@ Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox p
   inspections. Exceeding a limit returns HTTP 429 and `Retry-After`, before any
   external call. Failed external attempts still consume quota. These counters
   apply to a single process and reset on restart. A multi-worker deployment needs
-  a shared proxy limiter, and a provider billing cap remains necessary. Client
-  identity uses the server's connection address; configure trusted proxy handling
-  at deployment, never by trusting arbitrary forwarded headers in the app.
+  a shared proxy limiter, and a provider billing cap remains necessary. The app
+  itself never reads forwarded headers; on Render, uvicorn is told through
+  `FORWARDED_ALLOW_IPS` to take the visitor address from the platform proxy, so the
+  per-client limit applies per visitor. A forged forwarded header can at most
+  rotate identities inside the global hourly cap. When a limit is hit, the kid's
+  screen says the demo's hourly limit is full, never "all clear".
 
 **If the model can't be reached or answers in an unreadable format**, Night Guard shows
 "Couldn't analyze this chat", never a green "nothing found". Every flagged phrase is checked against the chat:

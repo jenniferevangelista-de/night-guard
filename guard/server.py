@@ -44,6 +44,9 @@ def _deploy_info():
         except Exception:
             commit = ""
     info = {"commit": commit[:12]}
+    if BACKEND != "ollama":
+        # True when uvicorn was told which proxy to trust, so the demo's per-client limit is really per visitor.
+        info["proxy_aware"] = bool(os.environ.get("FORWARDED_ALLOW_IPS"))
     if BACKEND == "tinker":
         from .cloud import FT_PATH
         info["tinker_model"] = FT_PATH.split("tinker://")[-1].split(":")[0]  # run id, e.g. 34d43b69-... (v2)

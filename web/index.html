@@ -277,6 +277,10 @@ const T = {
     footerDemo:"Online demo: the text you check is sent to a fine-tuned model on Tinker to be analyzed and is not saved by this server. Family rules and alerts stay in your browser. Use fictional examples only. A helper, not a replacement for trusted adults.",
     unknownTitle:"Couldn't analyze this chat",
     unknownBody:"Something went wrong with the analysis, so this is NOT an all-clear. Try again in a moment. If the chat made you uncomfortable, you can still tell someone you trust.",
+    quotaTitle:"The demo's hourly limit is full",
+    quotaBody:"This free demo accepts a limited number of checks per hour so it stays free for everyone. Try again later. This is NOT an all-clear: if the chat made you uncomfortable, tell someone you trust.",
+    tooLongTitle:"This chat is too long for the demo",
+    tooLongBody:"The online demo checks up to 4,000 characters at a time. Paste the part that worried you.",
     local:"local", cloud:"cloud", modeUnknown:"analysis", sev:{none:"OK",low:"Low",medium:"Medium",high:"High risk"}
   },
   pt:{
@@ -343,6 +347,10 @@ const T = {
     footerDemo:"Demo online: o texto que você confere é enviado a um modelo ajustado no Tinker para análise e não é salvo por este servidor. Regras e alertas da família ficam no seu navegador. Use só exemplos fictícios. Uma ajuda, não substitui adultos de confiança.",
     unknownTitle:"Não consegui analisar esta conversa",
     unknownBody:"Algo deu errado na análise, então isto NÃO quer dizer que está tudo bem. Tente de novo daqui a pouco. Se a conversa te incomodou, você ainda pode contar para alguém de confiança.",
+    quotaTitle:"O limite da demo nesta hora acabou",
+    quotaBody:"Esta demo gratuita aceita um número limitado de conferências por hora para continuar gratuita para todo mundo. Tente de novo mais tarde. Isto NÃO quer dizer que está tudo bem: se a conversa te incomodou, conte para alguém de confiança.",
+    tooLongTitle:"Esta conversa é longa demais para a demo",
+    tooLongBody:"A demo online confere até 4.000 caracteres por vez. Cole a parte que te preocupou.",
     local:"local", cloud:"nuvem", modeUnknown:"análise", sev:{none:"OK",low:"Baixo",medium:"Médio",high:"Risco alto"}
   }
 };
@@ -438,11 +446,16 @@ $("#analyzeBtn").onclick = async ()=>{
     const body = {text,lang,app:$("#app").value};
     if(DEMO) body.family_rules = fam.rules;
     const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    if(!r.ok) throw new Error("HTTP "+r.status);
+    if(!r.ok){ const err = new Error("HTTP "+r.status); err.status = r.status; throw err; }
     last = await r.json(); last.answered = last.severity==="unknown" ? "skip" : null;
     if(DEMO && last.family_event){ const ev=demoStore.get("events",[]); ev.unshift(last.family_event); demoStore.set("events",ev.slice(0,100)); }
     renderResult(last);
-  }catch(e){ last=null; $("#result").innerHTML = unknownCard(); }
+  }catch(e){
+    last=null;
+    // The demo's quota (429) and size limit (422) get their own words; anything else is "couldn't analyze", never "all clear".
+    $("#result").innerHTML = e && e.status===429 ? noteCard("quotaTitle","quotaBody")
+                           : e && e.status===422 ? noteCard("tooLongTitle","tooLongBody") : unknownCard();
+  }
   btn.disabled=false;
 };
 
@@ -455,8 +468,9 @@ function chatHTML(res){
   }).join("")}</div>`;
 }
 
-function unknownCard(){
-  return `<div class="card"><div class="verdict"><span class="dot" style="background:var(--muted)"></span>${esc(t("unknownTitle"))}</div><p>${esc(t("unknownBody"))}</p></div>`;
+function unknownCard(){ return noteCard("unknownTitle","unknownBody"); }
+function noteCard(title, body){
+  return `<div class="card"><div class="verdict"><span class="dot" style="background:var(--muted)"></span>${esc(t(title))}</div><p>${esc(t(body))}</p></div>`;
 }
 
 let LINK_ON = null;

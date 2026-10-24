@@ -35,6 +35,16 @@ test("failure shows paused badge, never all clear", async () => {
   g.destroy();
 });
 
+test("demo quota full (HTTP 429) names the limit and is still not all clear", async () => {
+  body.length = 0;
+  const g = window.NightGuardLive.create({ analyze: async () => { const e = new Error("HTTP 429"); e.status = 429; throw e; } });
+  g.update([{ from: "them", name: "A", text: "hi" }]);
+  await tick();
+  assert.ok(body[0].classList.has("ng-paused"));
+  assert.match(body[0].innerHTML, /hourly limit/);
+  g.destroy();
+});
+
 test("invalid output also shows paused", async () => {
   body.length = 0;
   const g = window.NightGuardLive.create({ analyze: async () => ({ severity: "unknown", analysis_status: "invalid_output", signals: [] }) });
