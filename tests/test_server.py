@@ -101,3 +101,17 @@ def test_local_auth0_still_requires_parent_session(monkeypatch):
     local_client = TestClient(local)
     assert local_client.get("/api/auth/me").json() == {"enabled": True, "parent": None}
     assert local_client.get("/parents").status_code == 401
+
+
+def test_auth0_callback_url_can_be_pinned_and_is_printed(monkeypatch):
+    from types import SimpleNamespace
+
+    class OAuth:
+        def register(self, *args, **kwargs):
+            pass
+
+    mod = _configured_auth(monkeypatch, "ollama", lambda: SimpleNamespace(OAuth=OAuth))
+    assert "http://localhost:8765/auth/callback" in mod.setup_hint(8765)
+    assert "http://127.0.0.1:8765/auth/callback" in mod.setup_hint(8765)
+    monkeypatch.setattr(mod, "BASE_URL", "http://localhost:9000")
+    assert mod.setup_hint().count("/auth/callback") == 1 and "localhost:9000/auth/callback" in mod.setup_hint()

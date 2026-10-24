@@ -70,6 +70,8 @@ if auth.ENABLED and not DEMO:
     app.add_middleware(SessionMiddleware, secret_key=auth.SESSION_SECRET, same_site="lax", https_only=False)
 auth.add_routes(app)
 PARENTS_ONLY = [Depends(auth.require_parent)]
+if auth.ENABLED and not DEMO:
+    print(auth.setup_hint(int(os.environ.get("PORT", 8765))), flush=True)
 
 
 class Msg(BaseModel):
@@ -113,9 +115,23 @@ def parse_paste(text):
     return out
 
 
+def _model_status():
+    """Local app only: is Ollama running and is the model downloaded? (the usual reason a chat gets no answer)"""
+    if DEMO:
+        return {}
+    import httpx
+    from .detector import OLLAMA_URL
+    try:
+        names = [m.get("name", "") for m in httpx.get(f"{OLLAMA_URL}/api/tags", timeout=2).json().get("models", [])]
+    except Exception:
+        return {"model_ready": False, "model_problem": "ollama_down"}
+    have = any(n == MODEL or n.split(":")[0] == MODEL for n in names) if ":" not in MODEL else MODEL in names
+    return {"model_ready": have, "model_problem": None if have else "model_missing"}
+
+
 @app.get("/api/health")
 def health():
-    return {"ok": True, "model": MODEL, "demo": BACKEND != "ollama", **DEPLOY,
+    return {"ok": True, "model": MODEL, "demo": BACKEND != "ollama", **DEPLOY, **_model_status(),
             "voice": (ROOT / "web" / "audio" / "en").is_dir(),
             "runs": "locally via Ollama" if BACKEND == "ollama" else "public demo on Render + Tinker"}
 

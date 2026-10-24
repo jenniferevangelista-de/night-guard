@@ -188,12 +188,26 @@ Raw fictional answers: [Gemma](train/backboard_gemma-3-27b-it.json),
 
 ## Run it
 
+Install [Ollama](https://ollama.com), then:
+
 ```bash
-ollama pull gemma4:e4b
-python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
-.venv/Scripts/python -m uvicorn guard.server:app --port 8765
+ollama pull gemma4:e4b            # the chat/analysis gets no answer without this model (and Ollama running)
+python -m venv .venv
+# Windows:      .venv\\Scripts\\pip install -r requirements.txt
+# macOS/Linux:  .venv/bin/pip install -r requirements.txt
+cp .env.example .env              # optional: Auth0 login, see below
+# Windows:      .venv\\Scripts\\python -m uvicorn guard.server:app --port 8765
+# macOS/Linux:  .venv/bin/python -m uvicorn guard.server:app --port 8765
 # open http://localhost:8765
 ```
+
+Always use the same port (8765). The game demo is at `/game`; the top bar warns if Ollama is down or the model is missing.
+
+**Auth0 login (optional).** Fill the `AUTH0_*`, `SESSION_SECRET` and `PARENT_EMAILS` lines of `.env` (steps are in
+`.env.example`). In Auth0 > Applications > Settings, add `http://localhost:8765/auth/callback` and
+`http://127.0.0.1:8765/auth/callback` to *Allowed Callback URLs*, and `http://localhost:8765/` and
+`http://127.0.0.1:8765/` to *Allowed Logout URLs*. The server prints these on startup. If login shows
+"Callback URL mismatch", the address in the browser (host or port) isn't registered there.
 
 Restart the local server after editing `.env`; an existing process does not reload those settings automatically.
 

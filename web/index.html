@@ -232,7 +232,7 @@ const T = {
     liveDemo:"Live demo: game chat", listen:"Listen",
     lockTitle:"Parents area", lockHelp:"Sign in to see alerts, change family rules or turn the protection on or off. Kids never need a password to ask for help.",
     lockBtn:"Sign in", logout:"Sign out",
-    notParent:"That account isn't on this family's parent list (or its e-mail isn't verified). Ask the family to add it.",
+    authFailed:"Sign-in didn't complete. Open the app at the same address you registered in Auth0 (see .env.example) and try again.", notParent:"That account isn't on this family's parent list (or its e-mail isn't verified). Ask the family to add it.",
     shTitle:"👋 Start here (2 minutes)",
     sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
     sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
@@ -302,7 +302,7 @@ const T = {
     liveDemo:"Demo ao vivo: chat do jogo", listen:"Ouvir",
     lockTitle:"Área dos pais", lockHelp:"Entre para ver os alertas, mudar as regras da família ou ligar e desligar a proteção. A criança nunca precisa de senha para pedir ajuda.",
     lockBtn:"Entrar", logout:"Sair",
-    notParent:"Essa conta não está na lista de pais desta família (ou o e-mail não foi verificado). Peça para a família adicionar.",
+    authFailed:"O login não foi concluído. Abra o app no mesmo endereço cadastrado no Auth0 (veja .env.example) e tente de novo.", notParent:"Essa conta não está na lista de pais desta família (ou o e-mail não foi verificado). Peça para a família adicionar.",
     shTitle:"👋 Comece aqui (2 minutos)",
     sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
     sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
@@ -415,6 +415,7 @@ async function gateFamily(){
   const locked = me.enabled && !me.parent;
   $("#lockCard").style.display = locked ? "" : "none";
   if(locked && QS.get("auth")==="not_parent") $("#lockCard [data-t=lockHelp]").textContent = t("notParent");
+  if(locked && QS.get("auth")==="failed") $("#lockCard [data-t=lockHelp]").textContent = t("authFailed");
   [...$("#p-family").children].forEach(el=>{ if(el.id!=="lockCard" && el.id!=="parentBar") el.style.display = locked ? "none" : ""; });
   $("#parentBar").style.display = me.parent ? "" : "none";
   if(me.parent) $("#parentBar").innerHTML = `👤 ${esc(me.parent.name||me.parent.email||"")} · <a href="/auth/logout" style="color:var(--accent)">${esc(t("logout"))}</a>`;

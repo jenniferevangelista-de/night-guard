@@ -28,6 +28,7 @@
   .m .who{display:block;font-size:11px;color:var(--muted);font-weight:700}
   form{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line)}
   input{flex:1;background:#0b2219;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px}
+  form select{background:#0b2219;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px;max-width:110px}
   form button{background:var(--accent);border:0;border-radius:10px;padding:8px 12px;font-weight:800;cursor:pointer}
   @media (max-width:720px){.game{grid-template-columns:1fr}.world{min-height:160px}}
 </style>
@@ -49,7 +50,7 @@
     <div class="chat">
       <h2>💬 Server chat · Castle Raid</h2>
       <div class="msgs" id="msgs"></div>
-      <form id="f"><input id="inp" autocomplete="off"><button>Send</button></form>
+      <form id="f"><select id="as" title="Send as"><option value="me"></option><option value="Alex_17">Alex_17</option></select><input id="inp" autocomplete="off"><button>Send</button></form>
     </div>
   </div>
 </div>
@@ -58,13 +59,13 @@
 <script>
 const S = {
   en:{note:"Fictional live demo. Nobody pastes anything: a stranger writes in the game chat and Night Guard reacts by itself, the same way the browser extension does on web chats.",
-      ph:"Type as the kid…", play:"▶ Play scenario", reset:"Reset", srv:"Night Guard server: ",
+      ph:"Type a message…", asKid:"Kid", noOllama:" · ⚠️ Ollama is not running (start it, then reload)", noModel:" · ⚠️ model not installed: run  ollama pull {m}", play:"▶ Play scenario", reset:"Reset", srv:"Night Guard server: ",
       script:[["Leo","gg that boss was insane"],["me","lol i died 5 times"],["Alex_17","nice castle! you're way more mature than other kids your age"],
               ["me","haha thanks"],["Alex_17","how old r u btw? are your parents home?"],["me","11. no they're at work"],
               ["Alex_17","let's talk on snap instead, add me there"],["Alex_17","and don't tell your parents ok? they wouldn't get it"],
               ["Alex_17","send me a selfie so i know you're real"]]},
   pt:{note:"Demo ao vivo e fictícia. Ninguém cola nada: um estranho escreve no chat do jogo e o Night Guard reage sozinho, do mesmo jeito que a extensão faz em chats da web.",
-      ph:"Escreva como a criança…", play:"▶ Rodar cenário", reset:"Recomeçar", srv:"Servidor Night Guard: ",
+      ph:"Escreva uma mensagem…", asKid:"Criança", noOllama:" · ⚠️ Ollama não está rodando (inicie e recarregue)", noModel:" · ⚠️ modelo não instalado: rode  ollama pull {m}", play:"▶ Rodar cenário", reset:"Recomeçar", srv:"Servidor Night Guard: ",
       script:[["Leo","boa partida mano"],["me","kkk morri 5 vezes"],["Alex_17","que castelo! vc é muito mais maduro que a galera da sua idade"],
               ["me","kkk valeu"],["Alex_17","quantos anos vc tem? seus pais tão em casa?"],["me","11. não, tão trabalhando"],
               ["Alex_17","bora conversar no snap, me adiciona lá"],["Alex_17","e não conta pros seus pais tá? eles não iam entender"],
@@ -112,7 +113,7 @@ function add(name, text){
 function applyLang(){
   renderToggle();
   $("#lang").value = lang; $("#note").textContent = S[lang].note; $("#inp").placeholder = S[lang].ph;
-  $("#play").textContent = S[lang].play; $("#reset").textContent = S[lang].reset;
+  $("#as").options[0].textContent = S[lang].asKid; $("#play").textContent = S[lang].play; $("#reset").textContent = S[lang].reset;
 }
 function reset(){ timers.forEach(clearTimeout); timers=[]; msgs.length=0; render(); if(guard) guard.reset(); }
 // Turning the guard off in another tab (home page) applies here too.
@@ -121,9 +122,9 @@ $("#gToggle").onclick = ()=>{ try{ localStorage.setItem("ng_live_guard", guardOn
 $("#play").onclick = ()=>{ reset(); S[lang].script.forEach(([who,text],i)=>timers.push(setTimeout(()=>add(who,text), 900+i*2600))); };
 $("#reset").onclick = reset;
 $("#lang").onchange = e=>{ lang=e.target.value; applyLang(); reset(); startGuard(); };
-$("#f").onsubmit = e=>{ e.preventDefault(); const v=$("#inp").value.trim(); if(v){ add("me", v); $("#inp").value=""; } };
+$("#f").onsubmit = e=>{ e.preventDefault(); const v=$("#inp").value.trim(); if(v){ add($("#as").value, v); $("#inp").value=""; } };
 applyLang();
-fetch("/api/health").then(r=>r.json()).then(h=>{ DEMO=!!h.demo; VOICE=!!h.voice; $("#srv").textContent = S[lang].srv + h.model; startGuard(); })
+fetch("/api/health").then(r=>r.json()).then(h=>{ DEMO=!!h.demo; VOICE=!!h.voice; $("#srv").textContent = S[lang].srv + h.model + (h.model_ready===false ? (h.model_problem==="model_missing" ? S[lang].noModel : S[lang].noOllama).replace("{m}",h.model) : ""); startGuard(); })
   .catch(()=>{ $("#srv").textContent="⚠️ server offline"; startGuard(); });
 </script>
 </body>
