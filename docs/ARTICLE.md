@@ -25,6 +25,10 @@ It's not a bad-words filter and not sentiment analysis. Pressure can appear in f
 
 ## Demo
 
+The short film (2:30), narrated by Snoozy, the lazy night watchman:
+
+{% youtube DFyBdn8d7xU %}
+
 👉 **Try it:** https://night-guard-demo.onrender.com (fictional examples only; the free instance can take ~50 s to wake up)
 
 Start with **① Watch the guard act on its own**: a fictional game chat where a stranger writes and Night Guard warns the kid by itself, without anyone pasting anything.
@@ -34,6 +38,10 @@ Start with **① Watch the guard act on its own**: a fictional game chat where a
 Then **③ See what parents get**:
 
 ![The parents' view: risk level, app, flagged phrase, why it matters and what to do now](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/parents-en.jpg)
+
+Every feature, recorded live on the local app (about 3 minutes):
+
+{% youtube __upiNIIlt0 %}
 
 The online demo runs the **Tinker fine-tuned model** in the cloud so judges can try it without installing anything. The real Night Guard runs on the family's computer with **Gemma**, where chat analysis stays on the device. Optional external link inspection is a separate action described below.
 
