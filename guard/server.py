@@ -6,6 +6,7 @@ import re
 import subprocess
 import sys
 import time
+from contextlib import nullcontext
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Request
@@ -15,11 +16,12 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-from .detector import BACKEND, MODEL, analyze
+from .detector import BACKEND, MODEL, analyze, _format_chat
 from .family import (APPS, DEFAULT_RULES, apply_rules, contacts_across_apps, get_alerts, get_rules,
                      set_rules)
 from . import notify
 from .helper import draft_help
+from .demo_budget import DemoBudget
 
 ROOT = Path(__file__).resolve().parent.parent
 SCENARIOS = json.loads((Path(__file__).parent / "scenarios.json").read_text(encoding="utf-8"))
@@ -27,6 +29,8 @@ ME_PREFIX = re.compile(r"^\s*(me|eu|i|euzinho)\s*[:\-]\s*", re.I)
 NAME_PREFIX = re.compile(r"^\s*([^:]{1,30}):\s*(.*)$")
 
 DEMO = BACKEND != "ollama"
+_analysis_budget = DemoBudget(hourly=120, per_client=30, concurrent=2)
+_link_budget = DemoBudget(hourly=30, per_client=10, concurrent=2)
 
 
 def _deploy_info():
@@ -79,8 +83,8 @@ class Msg(BaseModel):
 class AnalyzeReq(BaseModel):
     text: str | None = Field(default=None, max_length=4000)   # pasted chat, one message per line
     messages: list[Msg] | None = Field(default=None, max_length=60)
-    lang: str = "en"
-    app: str = "Other"
+    lang: str = Field(default="en", max_length=12)
+    app: str = Field(default="Other", max_length=60)
     family_rules: dict | None = None   # public demo only: the visitor's own rules
 
 
@@ -114,11 +118,17 @@ def health():
 
 
 @app.post("/api/analyze")
-def api_analyze(req: AnalyzeReq):
+def api_analyze(req: AnalyzeReq, request: Request):
     msgs = [m.as_dict() for m in req.messages] if req.messages else parse_paste(req.text or "")
     if not msgs:
         return {"severity": "none", "signals": [], "links": [], "summary": "", "messages": []}
-    res = analyze(msgs, lang=req.lang)
+    # Bound the whole model input, including names and separators added by the
+    # detector. This also covers the structured messages used by the live demo.
+    if DEMO and (len(_format_chat(msgs)) + sum(len(m.get("name", "")) for m in msgs) > 4000):
+        raise HTTPException(422, "The demo accepts at most 4,000 chat characters per check.")
+    caller = request.client.host if request.client else "unknown"
+    with _analysis_budget.reserve(caller) if DEMO else nullcontext():
+        res = analyze(msgs, lang=req.lang)
     res["messages"] = msgs
     # The contact is whoever sent the flagged messages (not simply the first name in the chat:
     # in a group or game chat, a friend may have spoken first).
@@ -244,14 +254,18 @@ def link_status():
 
 
 @app.post("/api/link/check")
-def link_check_api(req: LinkReq):
+def link_check_api(req: LinkReq, request: Request):
     from . import link_check
     on = link_check.enabled()
     if not any(on.values()):
         raise HTTPException(503, "Link inspector is not configured.")
+    if DEMO:
+        caller = request.client.host if request.client else "unknown"
+        with _link_budget.reserve(caller):
+            return link_check.check_link(req.url, req.lang)
     now = time.time()
     _link_calls[:] = [c for c in _link_calls if now - c < 3600]
-    if len(_link_calls) >= (30 if DEMO else 200):          # protects the demo's free quota
+    if len(_link_calls) >= 200:
         raise HTTPException(429, "Too many link checks right now, try again later.")
     _link_calls.append(now)
     return link_check.check_link(req.url, req.lang)

@@ -85,6 +85,15 @@ Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox p
   on the demo server; this does not establish the retention policies of the hosting or model providers.
 - Family rules and alerts stay in each visitor's own browser, so one visitor never sees another's.
 - Meant for fictional examples only, and says so on screen.
+- The demo limits analyses to 4,000 combined chat characters, 30 attempts per
+  client per hour, 120 total attempts per hour, and two concurrent model calls.
+  Link checks allow 10 per client and 30 total per hour, with two concurrent
+  inspections. Exceeding a limit returns HTTP 429 and `Retry-After`, before any
+  external call. Failed external attempts still consume quota. These counters
+  apply to a single process and reset on restart. A multi-worker deployment needs
+  a shared proxy limiter, and a provider billing cap remains necessary. Client
+  identity uses the server's connection address; configure trusted proxy handling
+  at deployment, never by trusting arbitrary forwarded headers in the app.
 
 **If the model can't be reached or answers in an unreadable format**, Night Guard shows
 "Couldn't analyze this chat", never a green "nothing found". Every flagged phrase is checked against the chat:
@@ -193,7 +202,7 @@ Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
 .venv\Scripts\python -m pytest tests
 ```
 
-**64 automated tests passed** in the current full suite. They cover scoring (an error is never a catch), malformed model answers, window selection by process,
+**74 automated tests passed** in the current full suite. They cover demo quotas, concurrency and input limits, scoring (an error is never a catch), malformed model answers, window selection by process,
 per-contact warnings, typed input, Sentry and parent allowlists, Temporal retries, the browser overlay (Node),
 link checks and the Backboard comparison client. Automated external-provider tests use simulated responses.
 The separate live Browserbase and SerpApi checks described above establish only the observed smoke-test behavior.
