@@ -1,4 +1,4 @@
-﻿"""F01: an unreadable or unavailable analysis is an error, never a detection or a true negative."""
+﻿"""An unreadable or unavailable analysis is an error, never a detection or a true negative."""
 from guard.scoring import outcome, summarize
 
 

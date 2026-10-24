@@ -92,10 +92,11 @@ class AnalyzeReq(BaseModel):
 
 
 class HelpReq(BaseModel):
-    quotes: list[str]
-    who: str = "Mom"
-    note: str = ""
-    lang: str = "en"
+    quotes: list[str] = Field(max_length=60)
+    who: str = Field(default="Mom", max_length=100)
+    note: str = Field(default="", max_length=4000)
+    lang: str = Field(default="en", max_length=12)
+    app: str = Field(default="Other", max_length=60)
 
 
 def parse_paste(text):
@@ -144,8 +145,15 @@ def api_analyze(req: AnalyzeReq, request: Request):
                         rules=req.family_rules if DEMO else None, persist=not DEMO)
     res["family_event"] = event
     res["family_alert"] = event if event and event["shared"] else None
+    res["notification_status"] = "not_required"
     if res["family_alert"] and not DEMO:
-        notify.push_alert(res["family_alert"], lang=req.lang)  # phone push: risk type only, no chat
+        try:
+            res["notification_status"] = notify.push_alert(res["family_alert"], lang=req.lang)
+        except Exception:
+            # A notification failure must never hide the detected risk or the saved alert.
+            res["notification_status"] = "failed"
+    elif res["family_alert"]:
+        res["notification_status"] = "demo_only"
     return res
 
 
@@ -287,7 +295,7 @@ def api_scenarios():
 
 @app.post("/api/help")
 def api_help(req: HelpReq):
-    return {"message": draft_help(req.quotes, req.who, req.note, req.lang)}
+    return {"message": draft_help(req.quotes, req.who, req.note, req.lang, req.app)}
 
 
 @app.get("/", name="index")

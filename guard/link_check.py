@@ -170,9 +170,12 @@ def check_link(url, lang="en"):
         res["reasons"].append(t["unofficial"].format(host=final_host or host))
     if res["reports"] is not None:
         n = sum(1 for h in res["reports"] if h["mentions_scam"])
-        res["reasons"].append(t["reports"].format(n=n) if n else t["noreports"])
-        bad = bad or n > 0
-    # A provider that was asked and failed is reported, and never turned into a positive verdict (review R09).
+        # Scam pages often imitate an official brand, so search hits about the brand say nothing against the
+        # official site itself. For other hosts, reports of a scam are a reason not to open the link.
+        if not official:
+            res["reasons"].append(t["reports"].format(n=n) if n else t["noreports"])
+            bad = bad or n > 0
+    # A provider that was asked and failed is reported, and never turned into a positive verdict.
     failed = [n for n, k in (("Browserbase", "browserbase"), ("SerpApi", "serpapi")) if on[k] and n not in res["checked"]]
     res["failed"] = failed
     for n in failed:

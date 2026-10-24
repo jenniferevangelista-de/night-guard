@@ -162,7 +162,7 @@ def test_existing_browser_page_uses_screenshot_viewport_before_loading(monkeypat
     assert result["screenshot"].startswith("data:image/jpeg;base64,")
 
 
-# Review 006, R09: a provider failure is never shown as a positive inspection.
+# A provider failure is never shown as a positive inspection.
 def _failing(monkeypatch, bb=True, serp=False, bb_ok=None):
     def bad_browser(u):
         raise lc.httpx.ConnectError("synthetic offline")
@@ -199,3 +199,11 @@ def test_regression_recovery_official_page_inspected_is_ok(monkeypatch):
     _failing(monkeypatch, bb_ok={"final_url": "https://www.roblox.com/login", "asks_password": True})
     r = lc.check_link("https://www.roblox.com/login", "en")
     assert r["level"] == "ok" and r["failed"] == []
+
+
+def test_official_site_is_not_flagged_because_scams_imitate_it(monkeypatch):
+    r = run(monkeypatch, browser={"final_url": "https://www.roblox.com/login", "asks_password": True},
+            reports=[{"title": "roblox free robux scam", "snippet": "", "link": "", "mentions_scam": True}],
+            url="https://www.roblox.com/login")
+    assert r["level"] == "ok" and r["verdict"] == "Looks like the official site"
+    assert not any("scam" in x for x in r["reasons"])

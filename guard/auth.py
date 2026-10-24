@@ -67,11 +67,18 @@ def add_routes(app):
 
     @app.get("/auth/login")
     async def login(request: Request):
-        return await oauth.auth0.authorize_redirect(request, str(request.url_for("auth_callback")))
+        try:
+            return await oauth.auth0.authorize_redirect(request, str(request.url_for("auth_callback")))
+        except Exception:   # Auth0 unreachable or misconfigured: explain, don't show a raw server error
+            return RedirectResponse("/?tab=family&auth=failed")
 
     @app.get("/auth/callback", name="auth_callback")
     async def callback(request: Request):
-        token = await oauth.auth0.authorize_access_token(request)
+        try:
+            token = await oauth.auth0.authorize_access_token(request)
+        except Exception:   # declined, page refreshed, login expired or server restarted mid-login
+            request.session.clear()
+            return RedirectResponse("/?tab=family&auth=failed")
         info = token.get("userinfo") or {}
         if not is_parent(info):
             request.session.clear()

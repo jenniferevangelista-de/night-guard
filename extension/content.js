@@ -50,7 +50,8 @@ const ADAPTERS = [
     // Opening another conversation (new URL) starts a fresh warning memory for that contact.
     const convo = location.pathname + location.search;
     if (convo !== lastConvo) { lastConvo = convo; lastKey = ""; guard.reset(); }
-    const msgs = adapter.read(cfg.myName || "").filter(m => m.text.trim()).slice(-12);
+    const msgs = adapter.read(cfg.myName || "").filter(m => m.text.trim()).slice(-12)
+      .map(m => ({ ...m, text: m.text.slice(0, 2000), name: (m.name || "").slice(0, 60) }));   // server limits: 2,000 / 60
     const key = msgs.map(m => m.from + ":" + m.text).join("|");
     if (key !== lastKey) { lastKey = key; guard.update(msgs); }
   };

@@ -1,4 +1,4 @@
-﻿"""F09: the Sentry scrubber keeps only allowlisted fields; chat text never leaves."""
+﻿"""The Sentry scrubber keeps only allowlisted fields; chat text never leaves."""
 from guard.telemetry import _allow
 
 MARK = "ZZ_FICTIONAL_CHAT_MARKER_42"

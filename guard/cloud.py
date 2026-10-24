@@ -72,7 +72,7 @@ def _prompt(messages):
 def generate(messages, fine_tuned=True, max_tokens=400, temperature=0.0):
     client = _client(FT_PATH if fine_tuned else None)
     params = types.SamplingParams(max_tokens=max_tokens, temperature=temperature, stop=[IM_END])
-    res = client.sample(prompt=_prompt(messages), num_samples=1, sampling_params=params).result()
+    res = client.sample(prompt=_prompt(messages), num_samples=1, sampling_params=params).result(timeout=120)
     return _tokenizer().decode(res.sequences[0].tokens, skip_special_tokens=True).strip()
 
 

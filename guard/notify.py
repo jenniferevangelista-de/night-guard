@@ -7,7 +7,6 @@ ntfy topics are public by name, so a long random topic is generated and kept in 
 
 import json
 import secrets
-import threading
 from pathlib import Path
 
 import httpx
@@ -50,12 +49,18 @@ def _push(title, body, priority, tags):
 
 
 def push_alert(event, lang="en"):
-    """Fire-and-forget push for a shared family alert. No chat content is sent."""
+    """Report provider acceptance, never pretend a parent received or read an alert.
+
+    The bounded request returns disabled/accepted/failed. No conversation, quote
+    or contact name is sent. Provider acceptance is not a delivery receipt.
+    """
+    if not get_settings().get("enabled"):
+        return "disabled"
     t = TEXT.get(lang, TEXT["en"])
     kinds = " + ".join(s["label"] for s in event["signals"])
     body = f"{t['sev'].get(event['severity'], event['severity'])} · {event['app']} · {kinds}\n{t['open']}"
     prio = 5 if event["severity"] == "high" else 3
-    threading.Thread(target=_push, args=(f"🌙 {t['title']}", body, prio, "shield"), daemon=True).start()
+    return "accepted" if _push(f"🌙 {t['title']}", body, prio, "shield") else "failed"
 
 
 def push_test(lang="en"):

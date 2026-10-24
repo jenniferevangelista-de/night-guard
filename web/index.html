@@ -222,8 +222,14 @@ const T = {
     demoPill:"online demo", demoTitle:"Online demo: use the fictional examples only",
     demoBody:"This public demo runs a fine-tuned model in the cloud so judges can try it. The real Night Guard runs on the child's own computer, where chats never leave the device. Please don't paste real conversations here.",
     whereLabel:"Where did this happen?",
-    famNoteTitle:"Your family will know about this",
-    famNoteBody:"Your family set a rule for this kind of message, so Night Guard let them know. They see what kind of risk it was, not your whole chat. You're not in trouble.",
+    famNoteTitle:"Alert recorded for your family",
+    famNoteBody:"A family rule marked this for review. This does not mean an adult has seen it. You're not in trouble; tell an adult you trust.",
+    notifyRecorded:"This alert is in the family panel. No phone delivery is confirmed.",
+    notifyDisabled:"Phone alerts are off. Tell a trusted adult yourself.",
+    notifyAccepted:"The notification service accepted the alert. We cannot confirm it reached a phone or was read.",
+    notifyFailed:"The phone alert could not be sent. The alert remains in the family panel; tell a trusted adult yourself.",
+    notifyDemo:"Demo only: this alert stays in this browser. No parent was notified.",
+    readLesson:"Read the explanation again",
     famTitle:"Family alerts", famHelp:"You see the kind of risk, the app and the flagged phrase. Never the whole conversation.",
     noAlerts:"No alerts yet. Quiet week ✅",
     crossApp:"Same name seen in more than one app (possibly the same person):", crossAppHint:"Names can repeat, so check with your kid. Moving a kid from a game to a private app is a classic pressure pattern.",
@@ -233,6 +239,7 @@ const T = {
     lockTitle:"Parents area", lockHelp:"Sign in to see alerts, change family rules or turn the protection on or off. Kids never need a password to ask for help.",
     lockBtn:"Sign in", logout:"Sign out",
     notParent:"That account isn't on this family's parent list (or its e-mail isn't verified). Ask the family to add it.",
+    authFailed:"The parent sign-in didn't finish (it was declined, expired or interrupted). Nothing was changed. Press the button to try again.",
     shTitle:"👋 Start here (2 minutes)",
     sh1:"① Watch the guard act on its own", sh1d:"Opens a fictional game chat. Press ▶ Play: a stranger writes and Night Guard warns the kid by itself.",
     sh2:"② Try a chat yourself", sh2d:"Paste or pick an example below and see what the kid sees.",
@@ -262,11 +269,11 @@ const T = {
     noneBody:"I didn't spot common pressure tricks. You know the context better than me. If it still feels off, trust that feeling, and you can still tell someone.",
     lowTitle:"Something to notice", lowBody:"This could be totally innocent (a classmate, a friend you know). You know the context. Here's what caught my eye:",
     medTitle:"A few red flags here", highTitle:"This is a good moment to tell someone you trust",
-    youKnow:"You already know this one ✓", tellBtn:"Tell someone about this", gotIt:"Got it",
-    quizRight:"Your instinct was right.", quizMiss:"Good that you checked. Here's what I noticed.", quizCalm:"Agreed, nothing big here.",
-    lazyLabel:"Night Guard repeats less as you learn:", lessons:"lessons you know",
+    youKnow:"You practiced this topic ✓", tellBtn:"Tell someone about this", gotIt:"Got it",
+    quizRight:"Thank you for checking. These are possible signals, not proof of intent.", quizMiss:"Good that you checked. Here's what I noticed.", quizCalm:"No signals found in this check. If something feels wrong, ask for help.",
+    lazyLabel:"Your practice progress (protection stays on):", lessons:"topics practiced",
     ranks:["Rookie","Sidekick","Guardian","Shield Hero","Night Hero"],
-    nextRank:"Spot {n} more tricks to become {r}", maxRank:"You know every trick. Night Guard can rest a little 😴",
+    nextRank:"Complete {n} more practice topics to become {r}", maxRank:"You completed the available practice. Keep asking for help; protection stays on.",
     scnPick:"Pick a scenario", again:"Try another",
     tellTitle:"Tell someone", tellHelp:"Choose what you want to share. Nothing is sent automatically. You copy it and send it yourself.",
     noQuotes:"Check a chat first, or just write in your own words below.",
@@ -277,6 +284,8 @@ const T = {
     footerDemo:"Online demo: the text you check is sent to a fine-tuned model on Tinker to be analyzed and is not saved by this server. Family rules and alerts stay in your browser. Use fictional examples only. A helper, not a replacement for trusted adults.",
     unknownTitle:"Couldn't analyze this chat",
     unknownBody:"Something went wrong with the analysis, so this is NOT an all-clear. Try again in a moment. If the chat made you uncomfortable, you can still tell someone you trust.",
+    busyTitle:"The demo is busy",
+    busyBody:"Other people are checking chats right now. Wait a few seconds and press the button again. This is NOT an all-clear.",
     quotaTitle:"The demo's hourly limit is full",
     quotaBody:"This free demo accepts a limited number of checks per hour so it stays free for everyone. Try again later. This is NOT an all-clear: if the chat made you uncomfortable, tell someone you trust.",
     tooLongTitle:"This chat is too long for the demo",
@@ -292,8 +301,14 @@ const T = {
     demoPill:"demo online", demoTitle:"Demo online: use só os exemplos fictícios",
     demoBody:"Esta demo pública roda um modelo ajustado na nuvem para os jurados testarem. O Night Guard de verdade roda no computador da criança, onde as conversas nunca saem do aparelho. Não cole conversas reais aqui.",
     whereLabel:"Onde aconteceu?",
-    famNoteTitle:"Sua família vai ficar sabendo disso",
-    famNoteBody:"Sua família criou uma regra para esse tipo de mensagem, então o Night Guard avisou. Eles veem o tipo de risco, não a conversa inteira. Você não está encrencado.",
+    famNoteTitle:"Alerta registrado para sua família",
+    famNoteBody:"Uma regra da família marcou isto para revisão. Isso não significa que um adulto já viu. Você não está encrencado; conte para um adulto de confiança.",
+    notifyRecorded:"Este alerta está no painel da família. Não há confirmação de entrega no celular.",
+    notifyDisabled:"Os avisos no celular estão desligados. Conte você mesmo para um adulto de confiança.",
+    notifyAccepted:"O serviço de notificações aceitou o alerta. Não podemos confirmar que chegou ao celular ou foi lido.",
+    notifyFailed:"Não foi possível enviar o aviso ao celular. O alerta continua no painel da família; conte para um adulto de confiança.",
+    notifyDemo:"Somente demonstração: este alerta fica neste navegador. Nenhum responsável foi avisado.",
+    readLesson:"Ler a explicação novamente",
     famTitle:"Alertas da família", famHelp:"Você vê o tipo de risco, o app e o trecho marcado. Nunca a conversa inteira.",
     noAlerts:"Nenhum alerta ainda. Semana tranquila ✅",
     crossApp:"Mesmo nome visto em mais de um app (talvez a mesma pessoa):", crossAppHint:"Nomes podem se repetir, então confirme com a criança. Levar a criança de um jogo para um app privado é um padrão clássico de pressão.",
@@ -303,6 +318,7 @@ const T = {
     lockTitle:"Área dos pais", lockHelp:"Entre para ver os alertas, mudar as regras da família ou ligar e desligar a proteção. A criança nunca precisa de senha para pedir ajuda.",
     lockBtn:"Entrar", logout:"Sair",
     notParent:"Essa conta não está na lista de pais desta família (ou o e-mail não foi verificado). Peça para a família adicionar.",
+    authFailed:"O login dos pais não terminou (foi recusado, expirou ou foi interrompido). Nada foi alterado. Aperte o botão para tentar de novo.",
     shTitle:"👋 Comece aqui (2 minutos)",
     sh1:"① Veja o guarda agindo sozinho", sh1d:"Abre um chat de jogo fictício. Aperte ▶ Rodar: um estranho escreve e o Night Guard avisa a criança sozinho.",
     sh2:"② Teste uma conversa", sh2d:"Cole ou escolha um exemplo abaixo e veja o que a criança vê.",
@@ -332,11 +348,11 @@ const T = {
     noneBody:"Não vi truques de pressão comuns. Você conhece o contexto melhor que eu. Se ainda parecer estranho, confie nesse sentimento: você ainda pode contar para alguém.",
     lowTitle:"Algo para observar", lowBody:"Pode ser totalmente inocente (um colega, um amigo que você conhece). Você conhece o contexto. Isto me chamou atenção:",
     medTitle:"Alguns sinais de alerta aqui", highTitle:"É um bom momento para contar a alguém de confiança",
-    youKnow:"Esse você já sabe ✓", tellBtn:"Contar para alguém", gotIt:"Entendi",
-    quizRight:"Seu instinto estava certo.", quizMiss:"Que bom que você conferiu. Veja o que eu notei.", quizCalm:"Concordo, nada grave aqui.",
-    lazyLabel:"O Night Guard repete menos conforme você aprende:", lessons:"lições que você sabe",
+    youKnow:"Você praticou este assunto ✓", tellBtn:"Contar para alguém", gotIt:"Entendi",
+    quizRight:"Obrigado por conferir. São possíveis sinais, não uma prova de intenção.", quizMiss:"Que bom que você conferiu. Veja o que eu notei.", quizCalm:"Não encontrei sinais nesta análise. Se algo te incomodar, peça ajuda.",
+    lazyLabel:"Seu progresso nos exercícios (a proteção continua):", lessons:"assuntos praticados",
     ranks:["Aprendiz","Ajudante","Guardião","Herói do Escudo","Herói da Noite"],
-    nextRank:"Reconheça mais {n} truques pra virar {r}", maxRank:"Você conhece todos os truques. O Night Guard pode descansar um pouco 😴",
+    nextRank:"Complete mais {n} assuntos nos exercícios para virar {r}", maxRank:"Você completou os exercícios disponíveis. Continue pedindo ajuda; a proteção continua.",
     scnPick:"Escolha um cenário", again:"Tentar outro",
     tellTitle:"Contar para alguém", tellHelp:"Escolha o que quer compartilhar. Nada é enviado sozinho. Você copia e manda.",
     noQuotes:"Confira uma conversa primeiro, ou escreva com suas palavras abaixo.",
@@ -347,6 +363,8 @@ const T = {
     footerDemo:"Demo online: o texto que você confere é enviado a um modelo ajustado no Tinker para análise e não é salvo por este servidor. Regras e alertas da família ficam no seu navegador. Use só exemplos fictícios. Uma ajuda, não substitui adultos de confiança.",
     unknownTitle:"Não consegui analisar esta conversa",
     unknownBody:"Algo deu errado na análise, então isto NÃO quer dizer que está tudo bem. Tente de novo daqui a pouco. Se a conversa te incomodou, você ainda pode contar para alguém de confiança.",
+    busyTitle:"A demo está ocupada",
+    busyBody:"Outras pessoas estão conferindo conversas agora. Espere alguns segundos e aperte o botão de novo. Isto NÃO quer dizer que está tudo bem.",
     quotaTitle:"O limite da demo nesta hora acabou",
     quotaBody:"Esta demo gratuita aceita um número limitado de conferências por hora para continuar gratuita para todo mundo. Tente de novo mais tarde. Isto NÃO quer dizer que está tudo bem: se a conversa te incomodou, conte para alguém de confiança.",
     tooLongTitle:"Esta conversa é longa demais para a demo",
@@ -380,7 +398,7 @@ let last = null, scenarios = [];
 const $ = s=>document.querySelector(s), t = k=>T[lang][k];
 const esc = s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-function known(sig){ return (progress.practiced[sig]||0)>=1 || (progress.seen[sig]||0)>=2; }
+function known(sig){ return (progress.practiced[sig]||0)>=1; }
 
 function applyLang(){
   try{ renderBar(); }catch(e){}
@@ -415,6 +433,7 @@ async function gateFamily(){
   const locked = me.enabled && !me.parent;
   $("#lockCard").style.display = locked ? "" : "none";
   if(locked && QS.get("auth")==="not_parent") $("#lockCard [data-t=lockHelp]").textContent = t("notParent");
+  if(locked && QS.get("auth")==="failed") $("#lockCard [data-t=lockHelp]").textContent = t("authFailed");
   [...$("#p-family").children].forEach(el=>{ if(el.id!=="lockCard" && el.id!=="parentBar") el.style.display = locked ? "none" : ""; });
   $("#parentBar").style.display = me.parent ? "" : "none";
   if(me.parent) $("#parentBar").innerHTML = `👤 ${esc(me.parent.name||me.parent.email||"")} · <a href="/auth/logout" style="color:var(--accent)">${esc(t("logout"))}</a>`;
@@ -446,14 +465,14 @@ $("#analyzeBtn").onclick = async ()=>{
     const body = {text,lang,app:$("#app").value};
     if(DEMO) body.family_rules = fam.rules;
     const r = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    if(!r.ok){ const err = new Error("HTTP "+r.status); err.status = r.status; throw err; }
-    last = await r.json(); last.answered = last.severity==="unknown" ? "skip" : null;
+    if(!r.ok){ const err = new Error("HTTP "+r.status); err.status = r.status; err.retryAfter = Number(r.headers.get("Retry-After")) || 0; throw err; }
+    last = await r.json(); last.source_app = body.app; last.answered = last.severity==="unknown" ? "skip" : null;
     if(DEMO && last.family_event){ const ev=demoStore.get("events",[]); ev.unshift(last.family_event); demoStore.set("events",ev.slice(0,100)); }
     renderResult(last);
   }catch(e){
     last=null;
     // The demo's quota (429) and size limit (422) get their own words; anything else is "couldn't analyze", never "all clear".
-    $("#result").innerHTML = e && e.status===429 ? noteCard("quotaTitle","quotaBody")
+    $("#result").innerHTML = e && e.status===429 ? (e.retryAfter > 0 && e.retryAfter <= 5 ? noteCard("busyTitle","busyBody") : noteCard("quotaTitle","quotaBody"))
                            : e && e.status===422 ? noteCard("tooLongTitle","tooLongBody") : unknownCard();
   }
   btn.disabled=false;
@@ -496,6 +515,12 @@ async function checkLink(btn){
       <div class="small muted" style="margin-top:6px">${t("linkWith")} ${esc(j.checked.join(" · ") || "-")} · ${t("linkOnly")}</div></div>`;
   }catch(e){ out.innerHTML = `<div class="small" style="color:var(--bad);margin-top:6px">${t("linkErr")}</div>`; }
 }
+function familyNotice(res){
+  if(!res.family_alert) return "";
+  const key = {disabled:"notifyDisabled",accepted:"notifyAccepted",failed:"notifyFailed",demo_only:"notifyDemo"}[res.notification_status] || "notifyRecorded";
+  return `<div class="famnote"><b>👨‍👩‍👧 ${esc(t("famNoteTitle"))}</b><p class="small">${esc(t("famNoteBody"))}</p><p class="small">${esc(t(key))}</p></div>`;
+}
+
 function renderResult(res, rerender){
   if(res.severity==="unknown"){ $("#result").innerHTML = unknownCard(); return; }
   if(res.answered===null && res.messages.length){
@@ -519,7 +544,7 @@ function renderResult(res, rerender){
     return `<div class="sig ${k?"known":""} ${danger?"danger":""}">
       <div class="kid">${danger?"🛑":"⚠️"} ${esc(s.kid||s.label)}${VOICE?` <button class="chip" data-say="${esc(s.id)}" title="${esc(t("listen"))}">🔊 ${esc(t("listen"))}</button>`:""}</div>
       ${s.quote?`<div class="q">“${esc(s.quote)}”</div>`:""}
-      ${k?`<div class="small" style="color:var(--good);margin-top:6px">${t("youKnow")}</div>`:`<div class="small muted" style="margin-top:6px">${esc(s.lesson)}</div>`}</div>`;
+      ${k?`<details class="small" style="margin-top:6px"><summary>${esc(t("youKnow"))} · ${esc(t("readLesson"))}</summary><p>${esc(s.lesson)}</p></details>`:`<div class="small muted" style="margin-top:6px">${esc(s.lesson)}</div>`}</div>`;
   }).join("");
   const kidActions = res.severity!=="none" ? `<div class="row" style="margin-top:10px">
       <span class="pill">🙊 ${t("actNoReply")}</span><span class="pill">🚫 ${t("actBlock")}</span><span class="pill">🗣️ ${t("actTell")}</span></div>` : "";
@@ -527,7 +552,7 @@ function renderResult(res, rerender){
     <div class="verdict"><span class="dot" style="background:${color}"></span>${esc(title)}</div>
     ${fb?`<div class="small muted" style="margin-top:4px">${esc(fb)}</div>`:""}
     ${chatHTML(res)}
-    ${res.family_alert?`<div class="famnote"><b>👨‍👩‍👧 ${t("famNoteTitle")}</b><div class="small" style="margin-top:4px">${t("famNoteBody")}</div></div>`:""}
+    ${familyNotice(res)}
     ${res.severity==="none"?`<p>${t("noneBody")}</p>`:""}
     ${res.severity==="low"?`<p class="muted">${t("lowBody")}</p>`:""}
     ${sigs}
@@ -543,19 +568,21 @@ function renderResult(res, rerender){
 }
 
 /* ---------- 2. Practice ---------- */
-fetch("/api/scenarios").then(r=>r.json()).then(s=>{scenarios=s; renderScenarios();});
+fetch("/api/scenarios").then(r=>r.json()).then(s=>{scenarios=s; renderScenarios(); renderLazy();});
 const ALL_SIGNALS = ["secrecy","platform_move","personal_info","age_probe","photo_request","gift_offer","credential_request","suspicious_link","meet_offline","pressure","isolation","flattery","returning_after_block","sextortion"];
-// Hero ranks: the child levels up by learning to spot the tricks (practice or real checks).
-const RANKS = [[0,"🐣"],[3,"🧢"],[6,"🛡️"],[10,"🦸"],[14,"🌙"]];
-function heroRank(n){ let i=0; RANKS.forEach(([min],k)=>{ if(n>=min) i=k; }); return i; }
+// Ranks record completed practice, never exposure or a guarantee of safety.
+const RANKS = [[0,"🐣"],[0.25,"🧢"],[0.5,"🛡️"],[0.75,"🦸"],[1,"🌙"]];
+function heroRank(n,total){ let i=0; RANKS.forEach(([min],k)=>{ if(total>0 && n/total>=min) i=k; }); return i; }
 let lastRank = null;
 function renderLazy(){
-  const n = ALL_SIGNALS.filter(known).length, r = heroRank(n);
-  $("#lazyBar").style.width = (n/ALL_SIGNALS.length*100)+"%";
-  $("#lazyTxt").textContent = `${n}/${ALL_SIGNALS.length} ${t("lessons")}`;
+  const skills = [...new Set(scenarios.map(s=>s.skill))];
+  const total = skills.length || ALL_SIGNALS.length;
+  const n = skills.filter(known).length, r = heroRank(n,total);
+  $("#lazyBar").style.width = (n/total*100)+"%";
+  $("#lazyTxt").textContent = `${n}/${total} ${t("lessons")}`;
   const next = RANKS[r+1];
   $("#hero").innerHTML = `<span style="font-size:30px">${RANKS[r][1]}</span><div><b>${esc(t("ranks")[r])}</b>
-    <div class="small muted">${next ? esc(t("nextRank").replace("{n}", next[0]-n).replace("{r}", t("ranks")[r+1])) : esc(t("maxRank"))}</div></div>`;
+    <div class="small muted">${next ? esc(t("nextRank").replace("{n}", Math.ceil(next[0]*total)-n).replace("{r}", t("ranks")[r+1])) : esc(t("maxRank"))}</div></div>`;
   $("#heroPill").textContent = `${RANKS[r][1]} ${t("ranks")[r]}`;
   if(lastRank!==null && r>lastRank){ $("#hero").animate([{transform:"scale(1)"},{transform:"scale(1.08)"},{transform:"scale(1)"}],{duration:600}); }
   lastRank = r;
@@ -595,7 +622,7 @@ $("#draftBtn").onclick = async ()=>{
   const btn=$("#draftBtn"); btn.disabled=true;
   $("#draftOut").innerHTML = `<div class="card muted"><span class="spin">🌙</span> ${t(DEMO === null ? "checkingUnknown" : DEMO ? "checkingCloud" : "checking")}</div>`;
   try{
-    const r = await fetch("/api/help",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({quotes:chosen,who:$("#who").value,note,lang})});
+    const r = await fetch("/api/help",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({quotes:chosen,who:$("#who").value,note,lang,app:last?.source_app || "Other"})});
     const {message} = await r.json();
     $("#draftOut").innerHTML = `<div class="card"><div class="small muted">${t("edit")}</div>
       <textarea id="msg" style="min-height:120px;margin-top:6px">${esc(message)}</textarea>

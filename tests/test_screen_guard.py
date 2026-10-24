@@ -1,4 +1,4 @@
-"""F04 + F06: the screen guard picks windows by process, and repeated warnings are per contact."""
+"""The screen guard picks windows by process, and repeated warnings are per contact."""
 import sys
 
 import pytest

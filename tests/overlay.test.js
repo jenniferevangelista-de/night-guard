@@ -1,4 +1,4 @@
-﻿// F05 + F06 for the browser overlay: a failed analysis shows "paused", and the same words from a
+﻿// Browser overlay: a failed analysis shows "paused", and the same words from a
 // different contact warn again. Runs with plain Node (node --test tests/overlay.test.js), fake DOM.
 const test = require("node:test");
 const assert = require("node:assert");
@@ -37,7 +37,7 @@ test("failure shows paused badge, never all clear", async () => {
 
 test("demo quota full (HTTP 429) names the limit and is still not all clear", async () => {
   body.length = 0;
-  const g = window.NightGuardLive.create({ analyze: async () => { const e = new Error("HTTP 429"); e.status = 429; throw e; } });
+  const g = window.NightGuardLive.create({ analyze: async () => { const e = new Error("HTTP 429"); e.status = 429; e.retryAfter = 3600; throw e; } });
   g.update([{ from: "them", name: "A", text: "hi" }]);
   await tick();
   assert.ok(body[0].classList.has("ng-paused"));
@@ -73,7 +73,7 @@ test("same words from another contact warn again; same message does not", async 
   g.destroy();
 });
 
-// R07 (review 004): turning the guard off must stop queued and in-flight work.
+// Turning the guard off must stop queued and in-flight work.
 function manualTimers() {
   const q = [];
   global.setTimeout = f => { q.push(f); return q.length; };

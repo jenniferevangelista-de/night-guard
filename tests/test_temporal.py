@@ -1,4 +1,4 @@
-﻿"""F02: when the model is down, the Temporal activity fails so the retry policy runs (no silent "safe")."""
+﻿"""When the model is down, the Temporal activity fails so the retry policy runs (no silent "safe")."""
 import pytest
 from temporalio.exceptions import ApplicationError
 from temporalio.testing import ActivityEnvironment

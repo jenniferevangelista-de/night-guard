@@ -14,7 +14,7 @@ Parents can't read every chat their kids have in Roblox, Discord or TikTok. Mean
 
 It talks to two different people in two different ways:
 
-- **To the kid, it's a friend that turns them into a hero.** It warns in plain words and says "danger" when it is one: *"DANGER: someone asked you to hide this from your family. It's like a stranger on the street saying 'come with me, but don't tell your mom'. You don't go, and you tell an adult."* A calm voice can read it aloud. The kid levels up from Rookie to Night Hero as they learn to spot the tricks, and the guard repeats less as they learn.
+- **To the kid, it's a friend that turns them into a hero.** It warns in plain words and says "danger" when it is one: *"DANGER: someone asked you to hide this from your family. It's like a stranger on the street saying 'come with me, but don't tell your mom'. You don't go, and you tell an adult."* A calm voice can read it aloud. The kid earns practice progress from completed exercises, while previously practiced explanations can be reopened. Repeated exposure to warnings does not certify learning, and protection stays on.
 - **To the parents, it's the Night Guard 🌙.** They get the risk level, the app and the flagged phrase (never the whole chat), why it matters, and what to do right now. Optionally, a push on their phone.
 
 The intended lazy payoff is **less repetitive review for parents and shorter, useful explanations for kids**. The guard highlights events for the family and repeats fewer lessons as the child practices. Time saved and real-world protection have not been measured.
@@ -49,7 +49,7 @@ The online demo runs the **Tinker fine-tuned model** in the cloud so judges can 
 
 {% github jenniferevangelista-de/night-guard %}
 
-The current full suite has **74 passing tests** (`pytest tests`), including the demo's request limits, regression cases for every bug found in review and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
+The current full suite has **91 passing tests** (`pytest tests`), including the demo's request limits, regression cases for every bug found in review and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
 
 ## How I Built It
 
@@ -73,7 +73,7 @@ I don't trust the model blindly. Every answer goes through checks before a kid o
 | Risky chats flagged | 30/30 | **36/36** |
 | False alarms on safe chats | 4/30 (13%) | **3/34 (9%)** |
 | Signal precision / recall | 89% / 87% | 88% / 87% |
-| Avg time per check | 3.8 s (historical run) | 3.41 s (`eval/last_results.json`) |
+| Avg time per check | 3.8 s (historical run) | 3.41 s (local run; the result file is not versioned) |
 
 The three remaining false alarms are on purpose hard cases: an in-game "secret" about a leaked Halloween event, a classmate saying "see you at school", and "how old r u now" on a birthday. Honesty note: two newer hard cases were fixed **after** I saw them fail, so they're no longer a blind test. The 60-chat and 70-chat columns are different development evaluations, and the 70 cases have already informed changes. The 36/36 result applies to these fictional patterns, not an independent holdout or real-world protection.
 
@@ -199,7 +199,7 @@ preserve per-case outputs, errors, coverage and signal metrics.
 
 ### What the family gets
 
-- **Family rules:** for each tactic, "Tell family" or "Child decides". Photo requests, meeting in person, password requests, secrecy, coming back after a block and sextortion go to the family by default. The kid is always told when that happens: *"Your family will know about this. You're not in trouble."*
+- **Family rules:** for each tactic, "Tell family" or "Child decides". Photo requests, meeting in person, password requests, secrecy, coming back after a block and sextortion go to the family by default. The kid is always told when that happens: *"An alert was recorded for your family. Tell a trusted adult; this is not a delivery confirmation. You're not in trouble."*
 - **The gap no platform covers:** Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox parental controls each protect their own app. The classic path starts in a game and moves to a private app. Night Guard points out a possible match: *"Same name seen in more than one app (possibly the same person): Alex_17 (Roblox → Instagram)"*. It's a hint to check, not proof, because names can repeat.
 - **What to do now**, by severity: talk calmly and without punishment (kids who get in trouble stop telling), keep screenshots, block and report, and for image requests, threats or money demands, report to SaferNet Brasil or the NCMEC CyberTipline and the police. Don't pay.
 - **Phone alerts** through ntfy (free, no account) with only the risk level, the app and the kind of risk.
@@ -221,7 +221,7 @@ Open weights made every part of this possible: Gemma reading text and screenshot
 
 - **Parents** can review flagged events with suggested next steps, and stay the ones who talk and decide. Reduced review effort is an intended benefit, not a measured result.
 - **Kids** get short explanations and practice choices, and can ask an adult for help. Progress in the app does not establish readiness for future situations.
-- **The guard** gets lazier over time: lessons a kid already knows collapse into a single ✓ line. *"You know every trick. Night Guard can rest a little 😴."*
+- **The guard** can repeat fewer explanations after completed practice, while leaving every explanation available to reopen. Completing an exercise does not prove future safety and never switches protection off.
 
 ## Prize Categories
 

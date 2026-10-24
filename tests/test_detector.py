@@ -1,4 +1,4 @@
-﻿"""F03: a malformed model answer never becomes "no risk"."""
+﻿"""A malformed model answer never becomes "no risk"."""
 from guard.detector import postprocess, valid_schema
 
 CHAT = [{"from": "them", "name": "Alex_17", "text": "send me a photo of you, just us"},
@@ -42,7 +42,7 @@ def test_valid_schema_is_strict():
 
 
 def test_regression_minimal_cases():
-    """Exact inputs from the round-002 review (F03 and F07)."""
+    """Exact inputs that once produced a silent safe verdict."""
     chat = [{"from": "them", "text": "don't tell your parents"}]
     for raw in ({"signals": [{"id": "secrecy"}], "summary": "synthetic"},
                 {"signals": [{"id": "unsupported", "message_index": 0, "quote": "don't tell"}], "summary": "synthetic"}):

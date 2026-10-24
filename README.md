@@ -25,8 +25,8 @@ on the child's computer with Gemma. Free instance: the first visit after a quiet
 |---|---|
 | **Something felt off** | Paste a chat. Before showing results, Night Guard asks *"did anything feel off to you?"*, then highlights the exact phrases that match common pressure tricks (secrecy, moving to another app, free-stuff links, password requests…) with a calm one-line explanation. If nothing is found, it says so, and reminds the child that their feeling still counts. |
 | **Practice** | Short, pre-reviewed fictional scenarios (fake moderator, free Robux link, "don't tell your parents"). Choose a reply, then see why it works or not. |
-| **Tell someone** | Pick which quotes to share, and Gemma drafts a short, editable message to a trusted adult ("I didn't do anything wrong, but I need help"). Nothing is sent automatically. |
-| **Family** | Kids don't always recognize a bad intention, so parents set **family rules**: which signals are shared with them automatically (default: photo requests, meeting in person, password requests, secrecy, and any high-risk combination). The child is always told when that happens. Parents see the risk type, the app and the flagged phrase, never the whole chat. |
+| **Tell someone** | Pick which quotes to share. A fixed template turns those quotes and the kid's own words into a short, editable message to a trusted adult ("I didn't do anything wrong, but I need help"). No model is involved, and nothing is sent automatically. |
+| **Family** | Kids don't always recognize a bad intention, so parents set **family rules**: which signals are shared with them automatically (default: photo requests, meeting in person, password requests, secrecy, coming back after a block, sextortion, and any high-risk combination). The child is always told when that happens. Parents see the risk type, the app and the flagged phrase, never the whole chat. |
 
 ### Proactive: it doesn't wait for the child to paste anything
 
@@ -60,7 +60,7 @@ Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox p
 
 > ⚠️ Same name seen in more than one app (possibly the same person): **Alex_17 (Roblox → Instagram)**
 
-**The lazy part:** the tutor repeats less as you learn. Lessons you already know collapse to a single ✓ line, so the guard gets lazier as the kid gets wiser.
+**The lazy part:** after completing an exercise, its explanation can collapse into a practice marker and can always be reopened. Seeing warnings repeatedly does not certify learning, and practice never reduces protection.
 
 
 ## Architecture
@@ -70,7 +70,7 @@ Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox p
 ## Privacy model
 
 **Local app (the real Night Guard)**
-- Analysis and message drafting run **locally** (Ollama + `gemma4:e4b`). Chat text never leaves the computer.
+- Analysis runs **locally** (Ollama + `gemma4:e4b`). Help messages come from fixed templates, not from the model. Chat text never leaves the computer.
 - Full conversations are never stored. For family alerts, only the flagged phrase, risk type, app and contact name
   are saved on that computer (`data/`, git-ignored). Learning progress lives in the browser's localStorage.
 - The Family area is a local, single-family view. Optional Auth0 login is implemented for the local Ollama app:
@@ -145,7 +145,7 @@ Final eligibility is determined by the challenge judges.
 | Risky chats flagged | 30/30 | **36/36** |
 | False alarms on safe chats | 4/30 (13%) | **3/34 (9%)** |
 | Signal precision / recall | 89% / 87% | 88% / 87% |
-| Avg latency (text) | 3.8 s (historical run) | 3.41 s (`eval/last_results.json`) |
+| Avg latency (text) | 3.8 s (historical run) | 3.41 s (local run; the result file is not versioned) |
 | Reading a chat from a screenshot (vision) | n/a | ~7 s warm, ~23 s cold |
 
 Why it isn't a bad-words filter or sentiment analysis: groomers are usually **nice** ("you're so mature", "free
@@ -199,13 +199,18 @@ Restart the local server after editing `.env`; an existing process does not relo
 
 Evaluate: `python eval/make_dataset.py && python -m eval.run_eval`
 
+## Notification state
+
+A family alert is a recorded event, not proof that a parent saw it. The API distinguishes phone alerts disabled, provider acceptance, send failure and browser-only demonstration. Provider acceptance is never described as receipt or reading. The child is still encouraged to contact a trusted adult. Notification tests use simulated responses and send no real alerts. Help-message templates use the selected source app, or a neutral online-chat description when unknown.
+
 ## Tests
 
 ```bash
+.venv\Scripts\python -m pip install -r requirements-dev.txt
 .venv\Scripts\python -m pytest tests
 ```
 
-**74 automated tests passed** in the current full suite. They cover demo quotas, concurrency and input limits, scoring (an error is never a catch), malformed model answers, window selection by process,
+**91 automated tests passed** in the current full suite. They cover demo quotas, concurrency and input limits, scoring (an error is never a catch), malformed model answers, window selection by process,
 per-contact warnings, typed input, Sentry and parent allowlists, Temporal retries, the browser overlay (Node),
 link checks and the Backboard comparison client. Automated external-provider tests use simulated responses.
 The separate live Browserbase and SerpApi checks described above establish only the observed smoke-test behavior.

@@ -52,9 +52,9 @@ SCHEMA = {"type": "object", "properties": {"messages": {"type": "array", "items"
     "required": ["name", "text"]}}}, "required": ["messages"]}
 
 TXT = {
-    "en": {"on": "🛡️ Guard on", "watch": "watching {app}", "paused": "⚠️ Guard paused: can't analyze right now", "ok": "Got it", "fam": "Your family will know about this. You're not in trouble.",
+    "en": {"on": "🛡️ Guard on", "watch": "watching {app}", "paused": "⚠️ Guard paused: can't analyze right now", "ok": "Got it", "fam": "An alert was recorded for your family. Tell a trusted adult; this is not a delivery confirmation. You're not in trouble.",
            "title": {"high": "🛑 Stop! This could be dangerous", "medium": "⚠️ Careful", "low": "⚠️ Heads up"}},
-    "pt": {"on": "🛡️ Guarda ligado", "watch": "vigiando {app}", "paused": "⚠️ Guarda pausado: não consigo analisar agora", "ok": "Entendi", "fam": "Sua família vai ficar sabendo. Você não está encrencado.",
+    "pt": {"on": "🛡️ Guarda ligado", "watch": "vigiando {app}", "paused": "⚠️ Guarda pausado: não consigo analisar agora", "ok": "Entendi", "fam": "Um alerta foi registrado para sua família. Conte para um adulto de confiança; isso não confirma entrega. Você não está encrencado.",
            "title": {"high": "🛑 Pare! Isso pode ser perigoso", "medium": "⚠️ Cuidado", "low": "⚠️ Atenção"}},
 }
 

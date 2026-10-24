@@ -1,4 +1,4 @@
-﻿"""F08 + F10: typed input on /api/analyze and the parent allowlist."""
+﻿"""Typed input on /api/analyze and the parent allowlist."""
 from fastapi.testclient import TestClient
 
 from guard import auth
@@ -101,3 +101,33 @@ def test_local_auth0_still_requires_parent_session(monkeypatch):
     local_client = TestClient(local)
     assert local_client.get("/api/auth/me").json() == {"enabled": True, "parent": None}
     assert local_client.get("/parents").status_code == 401
+
+
+def test_auth0_failures_show_a_message_and_never_open_a_parent_session(monkeypatch):
+    from types import SimpleNamespace
+    from fastapi import FastAPI
+    from starlette.middleware.sessions import SessionMiddleware
+
+    class Client:
+        async def authorize_redirect(self, request, redirect_uri):
+            raise RuntimeError("auth provider unreachable")
+
+        async def authorize_access_token(self, request):
+            raise RuntimeError("login declined, expired or interrupted")
+
+    class OAuth:
+        auth0 = Client()
+
+        def register(self, *args, **kwargs):
+            pass
+
+    local_auth = _configured_auth(monkeypatch, "ollama", lambda: SimpleNamespace(OAuth=OAuth))
+    local_auth.oauth = OAuth()
+    app = FastAPI()
+    app.add_middleware(SessionMiddleware, secret_key="test-only")
+    local_auth.add_routes(app)
+    client = TestClient(app, follow_redirects=False)
+    for path in ("/auth/login", "/auth/callback?error=access_denied"):
+        r = client.get(path)
+        assert r.status_code in (302, 307) and r.headers["location"] == "/?tab=family&auth=failed"
+    assert client.get("/api/auth/me").json()["parent"] is None
