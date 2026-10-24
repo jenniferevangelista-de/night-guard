@@ -685,7 +685,7 @@ function renderGuard(){
   if(!nState) return;
   if(!nState.available){ $("#nSteps").innerHTML=""; $("#nStatus").textContent = t("nDemo"); $("#nStatus").style.fontWeight="400"; $("#nBtn").style.display="none"; return; }
   // The topic works like a password for the family's phone alerts: hidden until a parent asks to see it.
-  const tp = nState.topic || "", masked = tp.replace(/-(.{4}).*$/, "-$1••••••••");
+  const tp = nState.topic || "", masked = tp.replace(/-.*$/, "-••••••••••••••••");
   $("#nSteps").innerHTML = `<li>${esc(t("nStep1"))}</li><li>${esc(t("nStep2"))} <code id="nTopic" style="color:var(--accent)">${esc(TOPIC_SHOWN ? tp : masked)}</code> <button class="chip" id="nShow">${t(TOPIC_SHOWN ? "nHide" : "nShowTopic")}</button></li><li>${esc(t("nStep3"))}</li>`;
   $("#nShow").onclick = ()=>{ TOPIC_SHOWN = !TOPIC_SHOWN; renderGuard(); };
   $("#nStatus").textContent = (nState.enabled ? t("nOn") : t("nOff")) + (nState.test_sent ? " · " + t("nSent") : "");

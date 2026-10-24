@@ -27,6 +27,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SCENARIOS = json.loads((Path(__file__).parent / "scenarios.json").read_text(encoding="utf-8"))
 ME_PREFIX = re.compile(r"^\s*(me|eu|i|euzinho)\s*[:\-]\s*", re.I)
 NAME_PREFIX = re.compile(r"^\s*([^:]{1,30}):\s*(.*)$")
+# Exported chats start lines with a time or date, e.g. "[10:32] Max: hi" or "12/10/2026, 10:32 - Max: hi".
+TS_PREFIX = re.compile(r"^\s*(?:\[?\d{1,2}/\d{1,2}/\d{2,4},?\s+)?[\[(]?\d{1,2}:\d{2}(?::\d{2})?(?:\s?[AaPp][Mm])?[\])]?\s*(?:[-–]\s*)?")
 
 DEMO = BACKEND != "ollama"
 _analysis_budget = DemoBudget(hourly=120, per_client=30, concurrent=2)
@@ -63,7 +65,22 @@ telemetry.init()  # Sentry agent tracing, only if SENTRY_DSN is set; no chat con
 
 from . import auth  # noqa: E402  (reads Auth0 settings from .env, so it comes after load_env)
 
-app = FastAPI(title="Night Guard")
+# The public demo has no use for the interactive API docs, so they are not served there.
+app = FastAPI(title="Night Guard", docs_url=None if DEMO else "/docs",
+              redoc_url=None if DEMO else "/redoc", openapi_url=None if DEMO else "/openapi.json")
+
+
+@app.middleware("http")
+async def _security_headers(request: Request, call_next):
+    resp = await call_next(request)
+    resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+    resp.headers.setdefault("X-Frame-Options", "DENY")
+    resp.headers.setdefault("Referrer-Policy", "no-referrer")
+    if DEMO:
+        resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
+    return resp
+
+
 if auth.ENABLED and not DEMO:
     from starlette.middleware.sessions import SessionMiddleware
 
@@ -105,6 +122,9 @@ def parse_paste(text):
     for line in text.splitlines():
         if not line.strip():
             continue
+        stripped = TS_PREFIX.sub("", line, count=1)
+        if stripped != line and NAME_PREFIX.match(stripped):
+            line = stripped      # only drop a leading time when a "Name:" follows it
         if ME_PREFIX.match(line):
             out.append({"from": "me", "text": ME_PREFIX.sub("", line).strip()})
             continue
@@ -270,6 +290,10 @@ def link_check_api(req: LinkReq, request: Request):
     on = link_check.enabled()
     if not any(on.values()):
         raise HTTPException(503, "Link inspector is not configured.")
+    try:
+        link_check.domain_of(link_check.normalize(req.url))
+    except ValueError:
+        raise HTTPException(422, "That does not look like a valid link.")   # before any quota is used
     if DEMO:
         caller = request.client.host if request.client else "unknown"
         with _link_budget.reserve(caller):

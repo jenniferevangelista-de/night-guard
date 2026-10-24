@@ -131,3 +131,22 @@ def test_auth0_failures_show_a_message_and_never_open_a_parent_session(monkeypat
         r = client.get(path)
         assert r.status_code in (302, 307) and r.headers["location"] == "/?tab=family&auth=failed"
     assert client.get("/api/auth/me").json()["parent"] is None
+
+
+def test_security_headers_are_sent():
+    h = client.get("/api/health").headers
+    assert h["x-content-type-options"] == "nosniff" and h["x-frame-options"] == "DENY"
+
+
+def test_pasted_exports_with_timestamps_keep_names_and_the_child():
+    from guard.server import parse_paste
+    out = parse_paste("[10:32] Max: send me a pic\n12/10/2026, 10:33 - Me: no\n10:34 Max: why not\nmeet at 5:30 ok")
+    assert [(m["from"], m.get("name"), m["text"]) for m in out] == [
+        ("them", "Max", "send me a pic"), ("me", None, "no"), ("them", "Max", "why not")]
+
+
+def test_invalid_link_is_rejected_without_a_server_error(monkeypatch):
+    from guard import link_check
+    monkeypatch.setattr(link_check, "enabled", lambda: {"browserbase": True, "serpapi": False})
+    for bad in ("http://[::1", "https://[bad"):
+        assert client.post("/api/link/check", json={"url": bad}).status_code == 422
