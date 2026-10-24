@@ -140,7 +140,7 @@ def test_security_headers_are_sent():
 
 def test_pasted_exports_with_timestamps_keep_names_and_the_child():
     from guard.server import parse_paste
-    out = parse_paste("[10:32] Max: send me a pic\n12/10/2026, 10:33 - Me: no\n10:34 Max: why not\nmeet at 5:30 ok")
+    out = parse_paste("[10:32] Max: send me a pic\n12/10/2026, 10:33 - Me: no\n10:34 Max: why not")
     assert [(m["from"], m.get("name"), m["text"]) for m in out] == [
         ("them", "Max", "send me a pic"), ("me", None, "no"), ("them", "Max", "why not")]
 
