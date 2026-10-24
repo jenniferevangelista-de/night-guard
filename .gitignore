@@ -19,3 +19,7 @@ video/review_en/
 video/walkthrough/*.mp4
 video/walkthrough/rec_*/
 video/walkthrough/_*
+
+# Local tool settings and private review notes
+.claude/
+audit/
