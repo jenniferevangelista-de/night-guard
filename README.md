@@ -167,7 +167,7 @@ The same 70 development chats (36 risky, 34 safe), without retraining or changes
 | Gemma 3 27B | 68/70 | 69/70 | 36/36 | 3/33 (1 error) | 0.938 / 0.849 |
 | Llama 3.3 70B | 69/70 | 69/70 | 36/36 | 3/33 (1 error) | 0.912 / 0.981 |
 | Mistral Small 3.1 24B | 70/70 | 70/70 | 36/36 | 3/34 | 0.852 / 0.981 |
-| Qwen 2.5 72B | — | — | — | — | Unavailable in live smoke; no full result |
+| Qwen 2.5 72B | n/a | n/a | n/a | n/a | Unavailable in live smoke; no full result |
 
 Coverage follows the existing shared scorer: usable partial analyses count, while unusable outputs are errors,
 never detections or correct safe answers. Gemma had one partial risky answer with two valid items and one
