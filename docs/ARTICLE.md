@@ -230,19 +230,21 @@ Open weights made every part of this possible: Gemma reading text and screenshot
 
 ## Prize Categories
 
-| Category | What I built | Where to see it |
-|---|---|---|
-| **Best Use of Gemma** | `gemma4:e4b` runs on the family's computer: it reads the chat and, through screenshots, the game window | The detector: Gemma 4, on the kid's computer; Proactive |
-| **Best Use of Tinker** | Qwen3-8B LoRA fine-tune. 70/70 answers in the app's schema, against 11/70 for the base model | Fine-tuning with Tinker |
-| **Best Use of Render** | The public demo runs the fine-tuned model, deployed from a Blueprint | Render: one click for the judges |
-| **Best Use of Temporal** | Evaluation as a durable workflow, crash-tested by stopping the model mid-run | Temporal: an evaluation that survives a crashing laptop |
-| **Best Use of ElevenLabs** | Spoken child warnings in English and Portuguese, voiced once and shipped as audio files | ElevenLabs: a calm voice for kids |
-| **Best Use of Sentry Agent Tracing** | Agent runs and model calls traced, with an allowlist so no chat text is ever sent | Sentry: tracing the agent without reading the chats |
-| **Best Use of Browserbase** | Link inspector opens a link in an isolated cloud browser and finds password fields. Live local run, and the deployed API returned a screenshot | Browserbase + SerpApi |
-| **Best Use of SerpApi** | The same inspector searches reports about the link's domain. Missing reports are never treated as "safe" | Browserbase + SerpApi |
-| **Best Use of Auth0 for AI Agents** | Parent sign-in for the local Family controls, with a verified and allowlisted Google login. It runs on the family's computer, not on the public demo | Optional Auth0 sign-in |
-| **Best Use of Backboard** | Three open-weight models compared on the same 70 fictional chats through one API key. A Qwen timeout is disclosed | Backboard: compare open-weight models |
-| **Overall prize** | The whole project: a friend for the kid, a night guard for the parents, with every failure shown as "couldn't analyze", never as "all clear" | The whole post |
+Each row: what the category asks for, what I built, and the section that shows it.
+
+| Category | What it asks | What I built | Where to see it |
+|---|---|---|---|
+| **Gemma** | Use Gemma: run it locally, fine-tune it or serve it | `gemma4:e4b` on the family's computer reads the chat and, through screenshots, the game window | The detector: Gemma 4; Proactive |
+| **Tinker** | Fine-tune a model and show a clear improvement over a baseline | Qwen3-8B LoRA: 70/70 answers in the app's schema, against 11/70 for the base model | Fine-tuning with Tinker |
+| **Render** | Use Render as the AI runtime or to host the front end | The public demo runs the fine-tuned model, deployed from a Blueprint | Render: one click for the judges |
+| **Temporal** | Make an agent durable: survive failures and retry | The evaluation runs as a workflow; stopping the model mid-run lost nothing | Temporal: an evaluation that survives a crashing laptop |
+| **ElevenLabs** | Give an open-source agent a voice | Spoken child warnings in English and Portuguese, shipped as audio files | ElevenLabs: a calm voice for kids |
+| **Sentry Agent Tracing** | Show the agent's work with traces or screenshots | Agent runs and model calls traced, with an allowlist so no chat text is sent | Sentry: tracing the agent without reading the chats |
+| **Browserbase** | Give an agent a real browser | The link inspector opens a link in an isolated cloud browser (Playwright over CDP, not Stagehand) and finds password fields | Browserbase + SerpApi |
+| **SerpApi** | Give an agent live web search | The same inspector searches reports about the link's domain; no reports is never read as "safe" | Browserbase + SerpApi |
+| **Auth0 for AI Agents** | Sign users in to an agent | Verified, allowlisted Google login for the Family controls. Local app only, not the public demo | Optional Auth0 sign-in |
+| **Backboard** | Compare open-weight models through one API key | Three models on the same 70 fictional chats through one key. A Qwen timeout is disclosed | Backboard: compare open-weight models |
+| **Overall prize** | Writing, theme, creativity, technical execution | A friend for the kid, a night guard for the parents; a failure is shown as "couldn't analyze", never "all clear" | The whole post |
 
 These entries describe the implemented uses and their observed evidence. Final category eligibility is for
 the judges under the [challenge criteria](https://dev.to/challenges/hf26).
