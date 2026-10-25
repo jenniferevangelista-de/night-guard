@@ -132,6 +132,14 @@ conversation. A URL can itself contain personal information, so use fictional li
   HTTP 401 and the login route redirected (302). Logout returned home and restored the locked Family view and
   sign-in button. Unlisted-account rejection is covered by unit tests, not a live rejected-account check.
 
+- **ElevenLabs:** every child warning (14 tactics, English and Portuguese) was voiced once with the Sarah voice
+  (`tools/make_voice.py`) and ships as audio files in `web/audio/`. The live game demo and the screen guard read the
+  most serious new warning aloud. Only the fixed warning texts were ever sent to ElevenLabs, never a chat.
+- **Sentry:** optional agent tracing (set `SENTRY_DSN`). Events carry numbers and labels only, and an allowlist
+  scrubber drops everything else, including message text, names and quotes. A test checks this.
+- **Temporal:** the evaluation runs as a workflow with automatic retries. In a 60-conversation crash test,
+  stopping Ollama mid-run did not lose completed work (`eval/temporal_report.json`).
+
 Browserbase, SerpApi, Auth0 and Backboard now have code and successful live checks supporting their additional
 category entries in the article, which lists ten implemented partner uses.
 Final eligibility is determined by the challenge judges.
