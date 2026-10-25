@@ -211,7 +211,7 @@ A family alert is a recorded event, not proof that a parent saw it. The API dist
 .venv\Scripts\python -m pytest tests
 ```
 
-**91 automated tests passed** in the current full suite. They cover demo quotas, concurrency and input limits, scoring (an error is never a catch), malformed model answers, window selection by process,
+**94 automated tests passed** in the current full suite. They cover demo quotas, concurrency and input limits, scoring (an error is never a catch), malformed model answers, window selection by process,
 per-contact warnings, typed input, Sentry and parent allowlists, Temporal retries, the browser overlay (Node),
 link checks and the Backboard comparison client. Automated external-provider tests use simulated responses.
 The separate live Browserbase and SerpApi checks described above establish only the observed smoke-test behavior.
