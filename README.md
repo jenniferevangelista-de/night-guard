@@ -85,6 +85,7 @@ Instagram supervision, Discord Family Center, TikTok Family Pairing and Roblox p
   on the demo server; this does not establish the retention policies of the hosting or model providers.
 - Family rules and alerts stay in each visitor's own browser, so one visitor never sees another's.
 - Meant for fictional examples only, and says so on screen.
+- Timings: the free instance can take about 50 s to wake up, and an online check measured about 7 s when warm (the 3 to 5 s figures below are the offline evaluation, without the web hop).
 - The demo limits analyses to 4,000 combined chat characters, 30 attempts per
   client per hour, 120 total attempts per hour, and two concurrent model calls.
   Link checks allow 10 per client and 30 total per hour, with two concurrent

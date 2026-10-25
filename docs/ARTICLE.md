@@ -29,7 +29,7 @@ The short film (2:30), narrated by Snoozy, the lazy night watchman:
 
 {% youtube DFyBdn8d7xU %}
 
-👉 **Try it:** https://night-guard-demo.onrender.com (fictional examples only; the free instance can take ~50 s to wake up, and it accepts a limited number of checks per hour so it stays free for everyone)
+👉 **Try it:** https://night-guard-demo.onrender.com (fictional examples only; the free instance can take ~50 s to wake up, a check takes about 7 to 15 s online, and it accepts a limited number of checks per hour so it stays free for everyone)
 
 Start with **① Watch the guard act on its own**: a fictional game chat where a stranger writes and Night Guard warns the kid by itself, without anyone pasting anything.
 
