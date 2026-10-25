@@ -10,7 +10,7 @@ Chat analysis stays on the device in local mode. Optional link checks send the s
 (fictional examples only; it runs the Tinker fine-tuned model in the cloud so anyone can try it. The real app runs
 on the child's computer with Gemma. Free instance: the first visit after a quiet period takes ~50 s to wake up.)
 
-**Watch it:** [2:30 film](https://youtu.be/DFyBdn8d7xU) and [3-minute tour of every feature](https://youtu.be/__upiNIIlt0). How they were made: [docs/VIDEOS.md](docs/VIDEOS.md).
+**Watch it:** [2:30 film](https://youtu.be/DFyBdn8d7xU) and [3-minute tour of every feature](https://youtu.be/__upiNIIlt0). How they were made: [docs/VIDEOS.md](https://github.com/jenniferevangelista-de/night-guard/blob/main/docs/VIDEOS.md).
 
 > ## 🚧 Next step: mobile apps and in-game chat
 > Today, on a **Windows computer**, Night Guard reacts **on its own, as messages arrive**: a Chrome extension
@@ -240,6 +240,8 @@ shared with the test set. Two runs: **v1** (11 tactics, 800 chats, ~740k tokens)
 | False alarms on safe chats | 0 / 11 valid (23 invalid) | 3 / 34 | **2 / 34** |
 | Signal precision / recall | n/a (no valid risky answer) | 0.84 / 0.79 | **0.88 / 0.83** |
 | Avg time per check on Tinker | 3.0 s | 5.0 s | 4.5 s |
+
+Latency values are the aggregate figures stored in the current result JSON files. Older run logs report different timings; per-case timings were not retained, so these averages cannot be independently recomputed.
 
 
 `valid_schema` reports strict format conformity separately from usable coverage. The common postprocessor

@@ -1,0 +1,216 @@
+{
+  "checked_at_utc": "2026-10-25T14:18:19.848146+00:00",
+  "method": "Full FFmpeg decoding of all shipped MP3 files; no provider or model calls.",
+  "files": [
+    {
+      "file": "web/audio/en/age_probe.mp3",
+      "bytes": 129610,
+      "sha256": "9d9ff6084bdaaa184dca8fcbfcbe7644b57c8da264f85b794998611027ee4c08",
+      "decode_ok": true,
+      "duration_seconds": 8.071837
+    },
+    {
+      "file": "web/audio/en/credential_request.mp3",
+      "bytes": 131282,
+      "sha256": "fcab496f1bc1c37d77b7dcb33a4c4a35c3524f19bc33a39ec9c9bdd72042871f",
+      "decode_ok": true,
+      "duration_seconds": 8.176327
+    },
+    {
+      "file": "web/audio/en/family.mp3",
+      "bytes": 108712,
+      "sha256": "3be781a59bb8911e5e6824ec662e598ddf38a6a96adca65f3f34730a89b6c0bb",
+      "decode_ok": true,
+      "duration_seconds": 6.765714
+    },
+    {
+      "file": "web/audio/en/flattery.mp3",
+      "bytes": 96173,
+      "sha256": "30a63b4c1fb7b544ddb29b9ee91ae5c78ed5374f218bc94daa7a85d06cadb1af",
+      "decode_ok": true,
+      "duration_seconds": 5.982041
+    },
+    {
+      "file": "web/audio/en/gift_offer.mp3",
+      "bytes": 95337,
+      "sha256": "71277079dafb8575b6702ad1731fba9dcd832bd0ec171b7ed6d4cd84133580c5",
+      "decode_ok": true,
+      "duration_seconds": 5.929796
+    },
+    {
+      "file": "web/audio/en/isolation.mp3",
+      "bytes": 123758,
+      "sha256": "5e38e713a82966c77c36b90323d83e4ee981ae541a0bae6fe94ec7c810fb1769",
+      "decode_ok": true,
+      "duration_seconds": 7.706122
+    },
+    {
+      "file": "web/audio/en/meet_offline.mp3",
+      "bytes": 150508,
+      "sha256": "caf4b60ad7208dec13b77882d1aec357a049cb36d7bb5e8df6d540f3aef20658",
+      "decode_ok": true,
+      "duration_seconds": 9.377959
+    },
+    {
+      "file": "web/audio/en/personal_info.mp3",
+      "bytes": 117071,
+      "sha256": "b6d9e201fac5e54e44ac9f45ecb18678baaa517f2d1cfe99611f5180a35c4222",
+      "decode_ok": true,
+      "duration_seconds": 7.288163
+    },
+    {
+      "file": "web/audio/en/photo_request.mp3",
+      "bytes": 141313,
+      "sha256": "48e8dd5d7efea6075c76ba03f70bf382de6fc758ec2a027ccdcb4870bed94d68",
+      "decode_ok": true,
+      "duration_seconds": 8.803265
+    },
+    {
+      "file": "web/audio/en/platform_move.mp3",
+      "bytes": 138387,
+      "sha256": "2f48b29572940e0216513dd2321924a83a69497d3c35e4f281ac65c091005c1e",
+      "decode_ok": true,
+      "duration_seconds": 8.620408
+    },
+    {
+      "file": "web/audio/en/pressure.mp3",
+      "bytes": 140895,
+      "sha256": "d22dc1357ca0465b0482b72308afbf2727f43d5a577aac6f7a6f728c12b29376",
+      "decode_ok": true,
+      "duration_seconds": 8.777143
+    },
+    {
+      "file": "web/audio/en/returning_after_block.mp3",
+      "bytes": 120833,
+      "sha256": "34cd1d63f677c659bdd275f6518f21814c9def4363cee94a2a28d14f1feadf41",
+      "decode_ok": true,
+      "duration_seconds": 7.523265
+    },
+    {
+      "file": "web/audio/en/secrecy.mp3",
+      "bytes": 170570,
+      "sha256": "3850dc560bcfc5ed1327f9d30ddb839b99de682c15c628706810bed34bbc0821",
+      "decode_ok": true,
+      "duration_seconds": 10.631837
+    },
+    {
+      "file": "web/audio/en/sextortion.mp3",
+      "bytes": 140059,
+      "sha256": "97c49a9bc6017c47b75a9357043c25e08049e3c0a54a0db2379e74733b42a7ad",
+      "decode_ok": true,
+      "duration_seconds": 8.724898
+    },
+    {
+      "file": "web/audio/en/suspicious_link.mp3",
+      "bytes": 142985,
+      "sha256": "09be2e4e2045a79827c45fb294f3f1847d0344be756ebf2ac3c6b75c4dd923dd",
+      "decode_ok": true,
+      "duration_seconds": 8.907755
+    },
+    {
+      "file": "web/audio/pt/age_probe.mp3",
+      "bytes": 163047,
+      "sha256": "53a71444287b0e09c6d83d3da8f7def9a521d5b876c2a4652653b733b63822ec",
+      "decode_ok": true,
+      "duration_seconds": 10.161633
+    },
+    {
+      "file": "web/audio/pt/credential_request.mp3",
+      "bytes": 148836,
+      "sha256": "0a90a4c5d40a90d73313fe694fbf87e91632aa06b4f6f197bc4d43d6b7b658c9",
+      "decode_ok": true,
+      "duration_seconds": 9.273469
+    },
+    {
+      "file": "web/audio/pt/family.mp3",
+      "bytes": 131700,
+      "sha256": "bd94d1ea8efdc1451cb579689af1bc95c373bad519cac31d72d47298ef4d42d2",
+      "decode_ok": true,
+      "duration_seconds": 8.202449
+    },
+    {
+      "file": "web/audio/pt/flattery.mp3",
+      "bytes": 128774,
+      "sha256": "849f65f562e2fc566d50f0f561a3877548eb373d525855f3bbd9eb75c8f626b7",
+      "decode_ok": true,
+      "duration_seconds": 8.019592
+    },
+    {
+      "file": "web/audio/pt/gift_offer.mp3",
+      "bytes": 107458,
+      "sha256": "1c8bc3f91a8a618fbf7da1487790d5d251e6858b65549f5e468d4191f6386b47",
+      "decode_ok": true,
+      "duration_seconds": 6.687347
+    },
+    {
+      "file": "web/audio/pt/isolation.mp3",
+      "bytes": 104950,
+      "sha256": "2479e11106aef24b90da4f7faa64309e88e6d1b3351f82292f04e77d8d9f1ed1",
+      "decode_ok": true,
+      "duration_seconds": 6.530612
+    },
+    {
+      "file": "web/audio/pt/meet_offline.mp3",
+      "bytes": 170570,
+      "sha256": "beb5c9f59af31c593a2f2ed40b29ccab921d58d1d197b631dc96d564acd3053c",
+      "decode_ok": true,
+      "duration_seconds": 10.631837
+    },
+    {
+      "file": "web/audio/pt/personal_info.mp3",
+      "bytes": 142149,
+      "sha256": "defa3b770bfbc53877f906dc93290013d5222cd4f3d4b82e7d66a51faa65f8d4",
+      "decode_ok": true,
+      "duration_seconds": 8.85551
+    },
+    {
+      "file": "web/audio/pt/photo_request.mp3",
+      "bytes": 149672,
+      "sha256": "5172886c851b6c6d0897bee20c3a6cd093fb39aa53c148f8ab088c1a1020445d",
+      "decode_ok": true,
+      "duration_seconds": 9.325714
+    },
+    {
+      "file": "web/audio/pt/platform_move.mp3",
+      "bytes": 155523,
+      "sha256": "2ece72e645f5fd2c58b8e96d88610313aca5bcb2585716c6c969a164e0b392f5",
+      "decode_ok": true,
+      "duration_seconds": 9.691429
+    },
+    {
+      "file": "web/audio/pt/pressure.mp3",
+      "bytes": 147582,
+      "sha256": "721e30c909f7223cd3852fa502b27f962668b259137cc793493b6bc4842ea8d9",
+      "decode_ok": true,
+      "duration_seconds": 9.195102
+    },
+    {
+      "file": "web/audio/pt/returning_after_block.mp3",
+      "bytes": 134625,
+      "sha256": "d9c207e325678cd5ee9507dcaa3ca64498b9745f4ffbd4f5ebca9bb7f0e47167",
+      "decode_ok": true,
+      "duration_seconds": 8.385306
+    },
+    {
+      "file": "web/audio/pt/secrecy.mp3",
+      "bytes": 182273,
+      "sha256": "1290418e42f3ec52c946bffbc125b48849190e94b78dae15f6cae5dce03caeb9",
+      "decode_ok": true,
+      "duration_seconds": 11.363265
+    },
+    {
+      "file": "web/audio/pt/sextortion.mp3",
+      "bytes": 154270,
+      "sha256": "d1f69cf34b9b29f3a7978520dda758c43bb88b2432179c6ebcff171296f8e9dc",
+      "decode_ok": true,
+      "duration_seconds": 9.613061
+    },
+    {
+      "file": "web/audio/pt/suspicious_link.mp3",
+      "bytes": 165136,
+      "sha256": "148d3fe157a953e561af2f014083715cc436e2f155b5547f9846c559bd91a431",
+      "decode_ok": true,
+      "duration_seconds": 10.292245
+    }
+  ]
+}

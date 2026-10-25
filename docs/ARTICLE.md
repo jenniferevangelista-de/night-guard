@@ -24,7 +24,7 @@ The intended lazy payoff is **less repetitive review for parents and shorter, us
 
 ### What it is not
 
-It's not a bad-words filter and not sentiment analysis. Pressure can appear in friendly wording ("you're so mature for your age", "free Robux for you"). Night Guard uses an open model to read the **messages provided to each check** and match it against 14 tactics documented by child-safety research, like Public Safety Canada's 2025 guidance on gaming platforms, NCMEC and Thorn. The live overlay supplies the **12 most recent messages**, not the full chat history.
+It's not a bad-words filter and not sentiment analysis. Pressure can appear in friendly wording ("you're so mature for your age", "free Robux for you"). Night Guard uses an open model to read the **messages provided to each check** and match it against 14 app-defined tactic labels. Examples of these behaviors are documented in [Public Safety Canada's 2025 guidance on gaming platforms](https://www.publicsafety.gc.ca/cnt/cntrng-crm/chld-sxl-xplttn-ntrnt/wbnr/wbnr-2025-en.aspx), [NCMEC's sextortion guidance](https://www.missingkids.org/theissues/sextortion), and [Thorn's Online Grooming Report (2022)](https://info.thorn.org/hubfs/Research/2022_Online_Grooming_Report.pdf). The live overlay supplies the **12 most recent messages**, not the full chat history.
 
 ## Demo
 
@@ -50,9 +50,11 @@ The online demo runs the **Tinker fine-tuned model** in the cloud so judges can 
 
 ## Code
 
-{% github jenniferevangelista-de/night-guard %}
+{% github jenniferevangelista-de/night-guard no-readme %}
 
-The current full suite has **94 passing tests** (`pytest tests`), including the demo's request limits, regression cases for every bug found in testing and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks.
+[Video production notes and credits](https://github.com/jenniferevangelista-de/night-guard/blob/main/docs/VIDEOS.md).
+
+The current full suite has **94 passing tests** (`pytest tests`), including the demo's request limits, regression cases for every bug found in testing and simulated tests for the link inspector and Backboard client. Separate live Auth0, Browserbase and SerpApi checks are described below; automated tests do not replace those integration checks. [The offline test run and validation of all 30 audio assets](https://github.com/jenniferevangelista-de/night-guard/blob/main/docs/validation/2026-10-25.md) are recorded in the repository.
 
 ## How I Built It
 
@@ -101,6 +103,8 @@ Tinker doesn't serve Gemma, so for the cloud demo I fine-tuned **Qwen3-8B** with
 | False alarms on safe chats | 0 / 11 valid (23 invalid) | 3 / 34 | **2 / 34** |
 | Signal precision / recall | n/a (no valid risky answer) | 0.84 / 0.79 | **0.88 / 0.83** |
 | Avg time per check | 3.0 s | 5.0 s | 4.5 s |
+
+Latency values are the aggregate figures stored in the current result JSON files. Older run logs report different timings; per-case timings were not retained, so these averages cannot be independently recomputed.
 
 
 Strict format conformity (`valid_schema`) is reported separately from usable coverage. The common postprocessor retains valid evidence in a partial answer; an unusable answer is an error, never a catch or a correct safe result. These saved Tinker runs contain no partial answers, so strict-schema and usable-coverage totals coincide: 11/70 for base and 70/70 for each LoRA. The base model often renames fields (`signal_id` instead of `id`). Read leniently, it flagged 35 of the 35 risky chats it answered readably, so it often *sees* the pattern; its unrecognized fields made those answers unusable under the original schema. Fine-tuning produced schema-valid answers on all 70 development chats and found more signals, including the three newer tactics in v2. The online demo runs v2. Two honest limits: the false-alarm gap between v1 and v2 (3 vs 2 of 34) is a single chat, and the LoRA is not faster than the base model; this is a measured format improvement on the evaluated cases, not a guarantee for future inputs. Every raw answer is saved per case in the repo, so anyone can recount.
@@ -218,7 +222,7 @@ preserve per-case outputs, errors, coverage and signal metrics.
 
 ## Why Does Open Innovation Matter?
 
-Child safety is the clearest case for open models I know. A guard that reads a kid's private chats should **run on the family's own computer**, be **inspectable**, and be **free**. The best-known commercial monitor costs about US$14 a month and analyzes messages on its servers. Platforms protect only their own walls. Roblox open-sourced Sentinel in 2025 and announced an update and ROOST contribution in 2026, which is useful for platforms; Night Guard is the other half: an open, local tool that sits with the family and works across apps.
+Child safety is the clearest case for open models I know. A guard that reads a kid's private chats should **run on the family's own computer**, be **inspectable**, and be **free**. For comparison, [Bark Premium](https://support.bark.us/en/articles/13460996-pricing) lists US$14 a month before tax. Platforms protect only their own walls. Roblox [open-sourced Sentinel in 2025](https://about.roblox.com/newsroom/2025/08/open-sourcing-roblox-sentinel-preemptive-risk-detection) and [announced an update and ROOST contribution in 2026](https://about.roblox.com/newsroom/2026/08/roblox-open-source-safety-models-roost), which is useful for platforms; Night Guard is the other half: an open, local tool that sits with the family and works across apps.
 
 Open weights made every part of this possible: Gemma reading text and screenshots on a laptop GPU, a Qwen LoRA fine-tuned in an afternoon, and anyone able to audit exactly which 14 tactics trigger a warning and what words a kid will see.
 
