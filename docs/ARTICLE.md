@@ -2,6 +2,7 @@
 title: "Night Guard: an open-model guard that watches out for kids in game chats, so tired parents don't have to read every message"
 published: true
 tags: devchallenge, hf26challenge, ai, opensource
+ai_disclosure_level: some_ai
 ---
 
 *This is a submission for the [Hacktoberfest 2026 Week 3 Challenge: Slow and Steady](https://dev.to/challenges/hacktoberfest-week3-2026-10-19).*
