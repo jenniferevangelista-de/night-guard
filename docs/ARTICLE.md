@@ -7,6 +7,8 @@ ai_disclosure_level: some_ai
 
 *This is a submission for the [Hacktoberfest 2026 Week 3 Challenge: Slow and Steady](https://dev.to/challenges/hacktoberfest-week3-2026-10-19).*
 
+*Looking for the prize categories? One table at the end ([Prize Categories](#prize-categories)) lists each one, what I built for it and which section shows it.*
+
 ## What I Built
 
 Parents can't read every chat their kids have in Roblox, Discord or TikTok. Meanwhile the US National Center for Missing & Exploited Children received **more than 50,000 reports of financial sextortion in 2025, about 137 a day** ([NCMEC, 2026](https://us.missingkids.org/blog/2026/ncmec-releases-new-sextortion-data-2025)). And it can be fast: in a Swansea University study of chats between groomers and researchers posing as children, the time from first contact to the first sexual request ranged from **18 minutes to 82 hours** ([Irish Examiner, 2016](https://www.irishexaminer.com/breakingnews/world/paedophiles-can-groom-child-online-in-less-than-20-minutes-753583.html)).
@@ -228,22 +230,19 @@ Open weights made every part of this possible: Gemma reading text and screenshot
 
 ## Prize Categories
 
-- **Best Use of Gemma:** local text detector and screen-reading vision guard (`gemma4:e4b`).
-- **Best Use of Tinker:** Qwen3-8B LoRA fine-tune with a measured improvement over the base model.
-- **Best Use of Render:** public demo deployed from a Blueprint, running the fine-tuned model.
-- **Best Use of Temporal:** durable evaluation workflow, crash-tested.
-- **Best Use of ElevenLabs:** spoken child warnings in two languages.
-- **Best Use of Sentry Agent Tracing:** agent runs and model calls traced with no chat content.
-- **Best Use of Browserbase:** isolated link inspection with a live local run showing password detection,
-  screenshot capture and session cleanup on the fictional BlockQuest page. The deployed API also detected the
-  password field and returned a visually verified screenshot of the complete form.
-- **Best Use of SerpApi:** live domain-report search used by the link inspector, verified with one successful
-  local query and a deployed API check. Missing search reports are never treated as proof of safety.
-- **Best Use of Auth0 for AI Agents:** optional parent authentication for local family controls, with a real verified,
-  allowlisted Google login and logout. Rejection of unlisted accounts is covered by unit tests.
-- **Best Use of Backboard:** three open-weight models compared live through one API key on the same 70
-  fictional development chats, with a common format adapter, saved raw answers, shared scoring and explicit
-  errors. Qwen's smoke timeout is disclosed and has no full comparison result.
+| Category | What I built | Where to see it |
+|---|---|---|
+| **Best Use of Gemma** | `gemma4:e4b` runs on the family's computer: it reads the chat and, through screenshots, the game window | The detector: Gemma 4, on the kid's computer; Proactive |
+| **Best Use of Tinker** | Qwen3-8B LoRA fine-tune. 70/70 answers in the app's schema, against 11/70 for the base model | Fine-tuning with Tinker |
+| **Best Use of Render** | The public demo runs the fine-tuned model, deployed from a Blueprint | Render: one click for the judges |
+| **Best Use of Temporal** | Evaluation as a durable workflow, crash-tested by stopping the model mid-run | Temporal: an evaluation that survives a crashing laptop |
+| **Best Use of ElevenLabs** | Spoken child warnings in English and Portuguese, voiced once and shipped as audio files | ElevenLabs: a calm voice for kids |
+| **Best Use of Sentry Agent Tracing** | Agent runs and model calls traced, with an allowlist so no chat text is ever sent | Sentry: tracing the agent without reading the chats |
+| **Best Use of Browserbase** | Link inspector opens a link in an isolated cloud browser and finds password fields. Live local run, and the deployed API returned a screenshot | Browserbase + SerpApi |
+| **Best Use of SerpApi** | The same inspector searches reports about the link's domain. Missing reports are never treated as "safe" | Browserbase + SerpApi |
+| **Best Use of Auth0 for AI Agents** | Parent sign-in for the local Family controls, with a verified and allowlisted Google login. It runs on the family's computer, not on the public demo | Optional Auth0 sign-in |
+| **Best Use of Backboard** | Three open-weight models compared on the same 70 fictional chats through one API key. A Qwen timeout is disclosed | Backboard: compare open-weight models |
+| **Overall prize** | The whole project: a friend for the kid, a night guard for the parents, with every failure shown as "couldn't analyze", never as "all clear" | The whole post |
 
 These entries describe the implemented uses and their observed evidence. Final category eligibility is for
 the judges under the [challenge criteria](https://dev.to/challenges/hf26).
