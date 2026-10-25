@@ -10,6 +10,8 @@ Chat analysis stays on the device in local mode. Optional link checks send the s
 (fictional examples only; it runs the Tinker fine-tuned model in the cloud so anyone can try it. The real app runs
 on the child's computer with Gemma. Free instance: the first visit after a quiet period takes ~50 s to wake up.)
 
+**Watch it:** [2:30 film](https://youtu.be/DFyBdn8d7xU) and [3-minute tour of every feature](https://youtu.be/__upiNIIlt0). How they were made: [docs/VIDEOS.md](docs/VIDEOS.md).
+
 > ## 🚧 Next step: mobile apps and in-game chat
 > Today, on a **Windows computer**, Night Guard reacts **on its own, as messages arrive**: a Chrome extension
 > watches web chats (Discord web, WhatsApp Web, experimental), and a **screen guard** uses Gemma's vision to read the
