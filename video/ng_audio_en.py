@@ -69,10 +69,11 @@ v = load(SARAH_FILE); add(voice, SARAH_AT, v / (np.abs(v).max() + 1e-9) * 0.9)
 v = load(FAMILY_FILE); add(voice, FAMILY_AT, v / (np.abs(v).max() + 1e-9) * 0.9)   # tell your parents
 
 def pop(): t = tt(0.18); return np.sin(2 * np.pi * (700 + 900 * t) * t) * np.exp(-t * 28) * 0.5
-def thud(): t = tt(0.35); return np.sin(2 * np.pi * (90 + 120 * np.exp(-t * 25)) * t) * np.exp(-t * 12) + lpf(rng.normal(0, 1, len(t)), 3) * np.exp(-t * 40) * 0.5
-def poofs(): t = tt(0.9); return lpf(rng.normal(0, 1, len(t)), 6) * np.sin(np.pi * t / 0.9) ** 2 * 0.9
+# No noise in any effect (no hiss, static or "shhh"): every sound below is made of pure tones.
+def thud(): t = tt(0.35); return np.sin(2 * np.pi * (90 + 120 * np.exp(-t * 25)) * t) * np.exp(-t * 12)
+def poofs(): t = tt(0.4); return np.sin(2 * np.pi * (260 * t + 743 * t * t)) * np.minimum(1, t / 0.01) * np.exp(-t * 8) * 0.6   # soft rising "bloop"
 def chime(f0=1320): t = tt(0.6); return sum(np.sin(2 * np.pi * f0 * m * t) / m for m in (1, 2, 3)) * np.exp(-t * 5) * 0.25
-def swish(): t = tt(0.3); return lpf(rng.normal(0, 1, len(t)), 2) * np.sin(np.pi * t / 0.3) ** 2 * 0.35
+def swish(): t = tt(0.25); return np.sin(2 * np.pi * (500 * t + 2000 * t * t)) * np.sin(np.pi * t / 0.25) ** 2 * 0.3   # tonal swoosh, 500 to 1500 Hz
 def alarm(): t = tt(0.5); return np.sign(np.sin(2 * np.pi * 660 * t)) * (np.sin(2 * np.pi * 4 * t) > 0) * np.exp(-t * 3) * 0.15
 def tick(): t = tt(0.05); return np.sin(2 * np.pi * 2400 * t) * np.exp(-t * 120) * 0.4
 
