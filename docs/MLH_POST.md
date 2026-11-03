@@ -57,7 +57,7 @@ Two rules I kept from day one:
   Start with "Watch the guard act on its own", a fictional game chat where a stranger writes and the guard reacts without anyone pasting anything. The free instance can take about 50 s to wake up.
 - Code (MIT): https://github.com/jenniferevangelista-de/night-guard
 
-{% youtube DFyBdn8d7xU %}
+{% youtube 2dqkL0UDC7k %}
 
 ![The live game chat: a stranger asks for secrecy and a selfie, and the guard warns the kid on its own](https://raw.githubusercontent.com/jenniferevangelista-de/night-guard/main/docs/images/live-alert-en.jpg)
 
