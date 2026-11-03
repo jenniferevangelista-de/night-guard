@@ -1,6 +1,6 @@
 ---
 title: "What a week of building a kid-safety guard on a laptop GPU taught me about measuring small models"
-published: false
+published: true
 tags: mlhacks, devchallenge, hackathon, ai
 ai_disclosure_level: some_ai
 ---
