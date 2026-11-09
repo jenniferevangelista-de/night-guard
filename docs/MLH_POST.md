@@ -24,6 +24,10 @@ Night Guard flags three pressure tactics in those three lines (flattery, moving 
 
 This is the full story: how a small open model does that on a laptop, how I measured it, and the one bug that could have told a child "you're safe" when the model had actually failed to read the chat.
 
+Watch it first, in 2:30, narrated by Snoozy, the lazy night watchman:
+
+{% youtube 2dqkL0UDC7k %}
+
 ## What I Built
 
 Parents can't read every chat their kids have in Roblox, Discord or TikTok. Meanwhile the US National Center for Missing & Exploited Children received **more than 50,000 reports of financial sextortion in 2025, about 137 a day** ([NCMEC, 2026](https://us.missingkids.org/blog/2026/ncmec-releases-new-sextortion-data-2025)). And it can be fast: in a Swansea University study of chats between groomers and researchers posing as children, the time from first contact to the first sexual request ranged from **18 minutes to 82 hours** ([Irish Examiner, 2016](https://www.irishexaminer.com/breakingnews/world/paedophiles-can-groom-child-online-in-less-than-20-minutes-753583.html)).
@@ -95,9 +99,7 @@ Reading about a guard is one thing. Watching a stranger walk into it is another.
 
 ## Demo
 
-The short film (2:30), narrated by Snoozy, the lazy night watchman:
-
-{% youtube 2dqkL0UDC7k %}
+The short film is at the top of this post. Here is how to try it yourself:
 
 👉 **Try it:** https://night-guard-demo.onrender.com (fictional examples only; the free instance can take ~50 s to wake up, a check takes about 7 to 15 s online, and it accepts a limited number of checks per hour so it stays free for everyone)
 
