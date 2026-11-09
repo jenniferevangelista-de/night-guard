@@ -3,6 +3,7 @@ title: "This kid-safety guard won a Hacktoberfest prize, and it runs on a laptop
 published: true
 tags: mlhacks, devchallenge, hackathon, ai
 ai_disclosure_level: some_ai
+cover_image: https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/lmloj3tjf8hho5ld2xdm.png
 ---
 
 _This is a submission for the [MLH x DEV Writing Challenge](https://dev.to/mlh-hackathon)_
