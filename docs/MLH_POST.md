@@ -22,7 +22,7 @@ Night Guard flags three pressure tactics in those three lines (flattery, moving 
 
 > **36/36** risky chats flagged · **3/34** false alarms · **70/70** valid analyses · about **3.4 s** per check, on a laptop GPU.
 
-This is the full story: how a small open model does that on a laptop, how I measured it, and the one bug that could have made it tell a child "all clear" when it had read nothing at all.
+This is the full story: how a small open model does that on a laptop, how I measured it, and the one bug that could have told a child "you're safe" when the model had actually failed to read the chat.
 
 ## What I Built
 
@@ -210,7 +210,7 @@ The weekly format meant shipping something complete in a few days and then impro
 
 ### What I learned
 
-1. **Measure errors separately from answers.** This is the bug from the top of the post. An early version could turn an unreadable model answer into "no risk", which on a safe chat looks like a correct answer. In other words, the guard could say "all clear" after reading nothing. For a safety tool that is the worst possible bug. Now coverage is its own number (Gemma 4 local: **70/70** usable answers), and errors are never catches.
+1. **Measure errors separately from answers.** This is the bug from the top of the post. An early version could turn an unreadable model answer into "no risk", which on a safe chat looks like a correct answer. In other words, when the model failed, the guard could still tell the kid "you're safe". For a safety tool that is the worst possible bug. Now coverage is its own number (Gemma 4 local: **70/70** usable answers), and errors are never catches.
 2. **A small local model can be good enough for this job.** `gemma4:e4b`, zero-shot, on the laptop GPU: **36/36** risky chats flagged, **3/34** false alarms, about **3.4 s** per check.
 3. **False alarms tell you what the test set is missing.** The ones that remain read like grooming out of context. For this tool, a false alarm the kid can dismiss costs less than a missed photo request.
 4. **Be honest about what the numbers mean.** All 70 chats are fictional, written for testing, and I changed the prompt after seeing some of them. These are development numbers, not proof that it works on real chats.
